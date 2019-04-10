@@ -34,6 +34,8 @@ It works well with both IOS and Android.
 git clone git@github.com:ATF19/react-native-shop-ui.git
 cd react-native-shop-ui
 npm install
+npm install react-native-woocommerce-api --save
+
 ```
 
 > For iOS users:
