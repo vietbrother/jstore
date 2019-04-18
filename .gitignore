@@ -97,17 +97,17 @@ freeline/
 freeline_project_description.json
 
 ### ReactNative.Gradle Stack ###
-.gradle
+#.gradle
 /build/
 
 # Ignore Gradle GUI config
-gradle-app.setting
+#gradle-app.setting
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
-!gradle-wrapper.jar
+#!gradle-wrapper.jar
 
 # Cache of project
-.gradletasknamecache
+#.gradletasknamecache
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties

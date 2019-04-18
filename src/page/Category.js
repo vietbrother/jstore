@@ -20,7 +20,8 @@ export default class Category extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            items: []
+            items: [],
+            isLoading: true,
         };
     }
 
@@ -75,22 +76,14 @@ export default class Category extends Component {
                 // data will contain the body content from the request
                 console.log("get data");
                 console.log(data);
+                this.setState({items: data, loading: false});
             })
             .catch(error => {
                 // error will return any errors that occur
                 console.log(error);
             });
-        global.WooCommerceAPI.get('products/categories', {})
-            .then(data => {
-                // data will contain the body content from the request
-                console.log("get category");
-                console.log(data);
-            })
-            .catch(error => {
-                // error will return any errors that occur
-                console.log(error);
-            });
-        this.setState({items: products});
+
+        //this.setState({items: products});
     }
 
     render() {

@@ -50,9 +50,6 @@ react-native run-ios
 react-native run-android
 ```
 
-## Download a demo
-
-> You can download the demo APK by [Clicking here](https://www.dropbox.com/s/42l8vvq61xx6bzh/shop.apk "Download Shop APK")
 
 ## Screenshots
 
@@ -63,7 +60,7 @@ Click [here](screenshots/README.md)
 Updating the codebase will require changes to the `.js` files in the [src/](./src/) folder. Individual pages can be edited by editing the `.js` files in [src/page/](./src/page/). Re-usable components can be edited by editing the `.js` files in [src/component/](./src/component/).
 
 To contribute your changes to the main repository, create a pull request from your fork [here](https://github.com/ATF19/react-native-shop-ui/compare?expand=1) (click the `compare across forks` link make your repository the source repository)
-
-## Contact
-
-> If you have any problem you can contact me at: **atef.najar@icloud.com**
+> crash app release 
+- https://medium.com/@impaachu/react-native-android-release-build-crash-on-device-14f2c9eacf18
+> build release error
+- https://medium.com/beesightsoft/react-native-build-release-error-uncompiled-png-file-passed-as-argument-431f0f7baa72

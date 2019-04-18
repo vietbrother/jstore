@@ -277,40 +277,46 @@ var menuItems = [
 
 
 const menusSecondaryItems = [
+  // {
+  //   id: 190,
+  //   title: 'Đăng nhập',
+  //   icon: 'ios-person',
+  //   key: 'login'
+  // },
   {
-    id: 190,
-    title: 'Đăng nhập',
+    id: 24,
+    title: 'Đăng xuất',
     icon: 'ios-person',
     key: 'login'
   },
-  {
-    id: 519,
-    title: 'Đăng ký',
-    icon: 'ios-person-add',
-    key: 'signup'
-  },
+  // {
+  //   id: 519,
+  //   title: 'Đăng ký',
+  //   icon: 'ios-person-add',
+  //   key: 'signup'
+  // },
   {
     id: 19,
     title: 'Danh sách yêu thích',
     icon: 'heart',
     key: 'wishlist'
   },
-  {
-    id: 20,
-    title: 'Địa chỉ cửa hàng',
-    icon: 'ios-pin',
-    key: 'map'
-  },
+  // {
+  //   id: 20,
+  //   title: 'Địa chỉ cửa hàng',
+  //   icon: 'ios-pin',
+  //   key: 'map'
+  // },
   {
     id: 21,
     title: 'Liên hệ',
     icon: 'md-phone-portrait',
     key: 'contact'
   },
-  {
-    id: 23,
-    key: 'newsletter',
-    title: 'Nhận thông báo',
-    icon: 'md-paper',
-  }
+  // {
+  //   id: 23,
+  //   key: 'newsletter',
+  //   title: 'Nhận thông báo',
+  //   icon: 'md-paper',
+  // }
 ];

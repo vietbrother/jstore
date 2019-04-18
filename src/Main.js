@@ -47,6 +47,7 @@ export default class Main extends Component {
   };
 
   render() {
+    console.disableYellowBox = true;
     return(
       <Root>
         <Router>

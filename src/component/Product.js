@@ -19,7 +19,7 @@ export default class product extends Component {
         <Card transparent>
             <CardItem cardBody>
               <Button transparent style={style.button} onPress={() => this.pressed()}>
-                <Image source={{uri: this.props.product.image}} style={style.image}/>
+                <Image source={{uri: this.props.product.images[0].src}} style={style.image}/>
                 <View style={style.border} />
               </Button>
             </CardItem>
@@ -32,7 +32,7 @@ export default class product extends Component {
                     <Text
                       style={{fontSize: 16}}
                       numberOfLines={1}
-                    >{this.props.product.title}</Text>
+                    >{this.props.product.name}</Text>
                     <View style={{flex: 1, width: '100%', alignItems: 'center'}}>
                       <View style={style.line} />
                       <Text style={style.price}>{this.props.product.price}</Text>

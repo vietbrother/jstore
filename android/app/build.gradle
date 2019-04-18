@@ -90,13 +90,16 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+	compileSdkVersion 28
+    buildToolsVersion '28.0.3'
+	
+    /*compileSdkVersion 27
+    buildToolsVersion '27.0.3'*/
 
     defaultConfig {
         applicationId "com.shop"
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         ndk {
@@ -111,6 +114,7 @@ android {
                 keyAlias MYAPP_RELEASE_KEY_ALIAS
                 keyPassword MYAPP_RELEASE_KEY_PASSWORD
             }
+			
         }
     }
     splits {
@@ -146,7 +150,8 @@ android {
 dependencies {
     compile project(':react-native-maps')
     compile fileTree(dir: "libs", include: ["*.jar"])
-    compile "com.android.support:appcompat-v7:23.0.1"
+    //compile "com.android.support:appcompat-v7:23.0.1"
+	compile "com.android.support:appcompat-v7:28.0.0"
     compile "com.facebook.react:react-native:+"  // From node_modules
 }
 
