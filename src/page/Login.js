@@ -12,6 +12,8 @@ import Colors from '../Colors';
 import Text from '../component/Text';
 import Navbar from '../component/Navbar';
 
+import {StyleSheet, Image} from 'react-native';
+
 export default class Login extends Component {
     constructor(props) {
         super(props);
@@ -52,7 +54,8 @@ export default class Login extends Component {
                     paddingLeft: 50,
                     paddingRight: 50
                 }}>
-                    <View style={{marginBottom: 35, width: '100%'}}>
+                    <View style={{marginBottom: 15, width: '100%'}}>
+                        <Image source={require('../images/logo.png')}/>
                         <Text style={{
                             fontSize: 24,
                             fontWeight: 'bold',
@@ -60,8 +63,7 @@ export default class Login extends Component {
                             width: '100%',
                             color: Colors.navbarBackgroundColor
                         }}>J-STORE </Text>
-                        <Text style={{fontSize: 18, textAlign: 'left', width: '100%', color: '#687373'}}>Đăng nhập để
-                            tiếp tục </Text>
+                        <Text style={{fontSize: 18, textAlign: 'left', width: '100%', color: '#687373'}}>Thực phẩm sạch Nhật Bản </Text>
                     </View>
                     <Item>
                         <Icon active name='ios-person' style={{color: "#687373"}}/>
@@ -78,15 +80,15 @@ export default class Login extends Component {
                         textAlign: 'center',
                         marginTop: 10
                     }}>{this.state.errorText}</Text> : null}
-                    <View style={{alignItems: 'center'}}>
+                    <View style={{alignItems: 'center', width: '100%'}}>
                         <Button onPress={() => this.login()}
-                                style={{backgroundColor: Colors.navbarBackgroundColor, marginTop: 20}}>
+                                style={styles.buttonLogin}>
                             <Text style={{color: '#fdfdfd'}}> Đăng nhập </Text>
                         </Button>
                     </View>
-                    <View style={{alignItems: 'center'}}>
+                    <View style={{alignItems: 'center', width: '100%'}}>
                         <Button onPress={() => Actions.signup()}
-                                style={{backgroundColor: Colors.navbarBackgroundColor, marginTop: 20}}>
+                                style={styles.buttonLogin}>
                             <Text style={{color: '#fdfdfd'}}> Đăng ký </Text>
                         </Button>
                     </View>
@@ -105,7 +107,7 @@ export default class Login extends Component {
         var pass = this.state.password;
         let statusLogin;
         try {
-            await fetch('http://103.94.18.249/jstore/api/user/generate_auth_cookie/?username='+ user + '&password='+ pass +'&insecure=cool')
+            await fetch('http://103.94.18.249/jstore/api/user/generate_auth_cookie/?username=' + user + '&password=' + pass + '&insecure=cool')
                 .then((response) => response.json())
                 .then((responseJson) => {
                     statusLogin = responseJson.status;
@@ -128,3 +130,13 @@ export default class Login extends Component {
 
 
 }
+
+const styles = StyleSheet.create({
+    buttonLogin: {
+        backgroundColor: Colors.navbarBackgroundColor,
+        marginTop: 20,
+        width: '100%',
+        justifyContent: 'center',
+        borderRadius: 10
+    }
+});

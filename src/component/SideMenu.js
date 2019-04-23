@@ -4,13 +4,14 @@
 
 // React native and others libraries imports
 import React, { Component } from 'react';
-import { ScrollView, LayoutAnimation, UIManager, Linking } from 'react-native';
+import {ScrollView, LayoutAnimation, UIManager, Linking, Image} from 'react-native';
 import { View, List, ListItem, Body, Left, Right, Icon, Item, Input, Button, Grid, Col } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 
 // Our custom files and classes import
 import SideMenuSecondLevel from './SideMenuSecondLevel';
 import Text from './Text';
+import Colors from "../Colors";
 
 export default class SideMenu extends Component {
   constructor(props) {
@@ -38,15 +39,26 @@ export default class SideMenu extends Component {
     if(!this.state.subMenu) {
       return(
         <View>
-          <View style={{paddingLeft: 15, paddingRight: 15}}>
-            <Item error={this.state.searchError}>
-                <Input
-                  placeholder='Tìm kiếm...'
-                  onChangeText={(text) => this.setState({search: text, searchError: false})}
-                  onSubmitEditing={() => this.search()}
-                />
-                <Icon active name='ios-search-outline' onPress={() => this.search()} />
-            </Item>
+          {/*<View style={{paddingLeft: 15, paddingRight: 15}}>*/}
+            {/*<Item error={this.state.searchError}>*/}
+                {/*<Input*/}
+                  {/*placeholder='Tìm kiếm...'*/}
+                  {/*onChangeText={(text) => this.setState({search: text, searchError: false})}*/}
+                  {/*onSubmitEditing={() => this.search()}*/}
+                {/*/>*/}
+                {/*<Icon active name='ios-search-outline' onPress={() => this.search()} />*/}
+            {/*</Item>*/}
+          {/*</View>*/}
+          <View style={{marginTop: 15, marginBottom: 15, width: '100%', alignItems: 'center'}}>
+            <Image source={require('../images/logo.png')}/>
+            <Text style={{
+              fontSize: 18,
+              fontWeight: 'bold',
+              textAlign: 'center',
+              width: '100%',
+              color: Colors.navbarBackgroundColor
+            }}>J-STORE </Text>
+            {/*<Text style={{fontSize: 12, textAlign: 'left', width: '100%', color: '#687373'}}>Thực phẩm sạch Nhật Bản </Text>*/}
           </View>
           <View style={{paddingRight: 15}}>
             <List>
