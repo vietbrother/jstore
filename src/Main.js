@@ -52,7 +52,7 @@ export default class Main extends Component {
       <Root>
         <Router>
           <Scene key="root">
-            <Scene key="home" component={Home} hideNavBar />
+            <Scene initial key="home" component={Home} hideNavBar />
             <Scene key="search" component={Search} modal hideNavBar />
             <Scene key="cart" component={Cart} modal hideNavBar />
             <Scene key="wishlist" component={WishList} modal hideNavBar />
@@ -62,7 +62,7 @@ export default class Main extends Component {
             <Scene key="category" component={Category} hideNavBar />
             <Scene key="product" component={Product} hideNavBar />
             <Scene key="imageGallery" component={ImageGallery} modal hideNavBar />
-            <Scene initial key="login" component={Login} hideNavBar />
+            <Scene key="login" component={Login} hideNavBar />
             <Scene key="signup" component={Signup} hideNavBar />
             <Scene key="checkout" component={Checkout} hideNavBar />
           </Scene>

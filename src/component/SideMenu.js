@@ -4,7 +4,7 @@
 
 // React native and others libraries imports
 import React, { Component } from 'react';
-import {ScrollView, LayoutAnimation, UIManager, Linking, Image} from 'react-native';
+import {ScrollView, LayoutAnimation, UIManager, Linking, Image, AsyncStorage} from 'react-native';
 import { View, List, ListItem, Body, Left, Right, Icon, Item, Input, Button, Grid, Col } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 
@@ -171,24 +171,51 @@ export default class SideMenu extends Component {
 
   renderSecondaryList() {
     let secondaryItems = [];
-    menusSecondaryItems.map((item, i) => {
-      secondaryItems.push(
+    try {
+      const value = AsyncStorage.getItem('cookie');
+      if (value !== null) {
+        // We have data!!
+        console.log(value);
+        menusSecondaryItems.map((item, i) => {
+          secondaryItems.push(
+              <ListItem
+                  last
+                  icon
+                  key={item.id}
+                  button={true}
+                  onPress={Actions[item.key]}
+              >
+                <Left>
+                  <Icon style={{fontSize: 18}} name={item.icon} />
+                </Left>
+                <Body style={{marginLeft: -15}}>
+                <Text style={{fontSize: 16}}>{item.title}</Text>
+                </Body>
+              </ListItem>
+          );
+        });
+        return secondaryItems;
+      }
+    } catch (error) {
+      // Error retrieving data
+      console.error(error);
+    }
+
+    secondaryItems.push(
         <ListItem
-          last
-          icon
-          key={item.id}
-          button={true}
-          onPress={Actions[item.key]}
+            last
+            icon
+            button={true}
+            onPress={Actions.login()}
         >
           <Left>
-            <Icon style={{fontSize: 18}} name={item.icon} />
+            <Icon style={{fontSize: 18}} name={'ios-person'} />
           </Left>
           <Body style={{marginLeft: -15}}>
-            <Text style={{fontSize: 16}}>{item.title}</Text>
+          <Text style={{fontSize: 16}}>Đăng nhập</Text>
           </Body>
         </ListItem>
-      );
-    });
+    );
     return secondaryItems;
   }
 

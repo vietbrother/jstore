@@ -12,7 +12,7 @@ import Colors from '../Colors';
 import Text from '../component/Text';
 import Navbar from '../component/Navbar';
 
-import {StyleSheet, Image} from 'react-native';
+import {StyleSheet, Image, AsyncStorage,} from 'react-native';
 
 export default class Login extends Component {
     constructor(props) {
@@ -25,6 +25,19 @@ export default class Login extends Component {
         };
     }
 
+    componentWillMount(){
+        try {
+            const value = AsyncStorage.getItem('cookie');
+            if (value !== null) {
+                // We have data!!
+                console.log(value);
+                AsyncStorage.removeItem('cookie');
+            }
+        } catch (error) {
+            // Error retrieving data
+            console.error(error);
+        }
+    }
 
     render() {
         var left = (
@@ -88,7 +101,7 @@ export default class Login extends Component {
                     </View>
                     <View style={{alignItems: 'center', width: '100%'}}>
                         <Button onPress={() => Actions.signup()}
-                                style={styles.buttonLogin}>
+                                style={styles.buttonSignup}>
                             <Text style={{color: '#fdfdfd'}}> Đăng ký </Text>
                         </Button>
                     </View>
@@ -111,6 +124,12 @@ export default class Login extends Component {
                 .then((response) => response.json())
                 .then((responseJson) => {
                     statusLogin = responseJson.status;
+                    try {
+                        AsyncStorage.setItem('cookie', responseJson.cookie);
+                    } catch (error) {
+                        // Error saving data
+                        console.error(error);
+                    }
                 })
                 .catch((error) => {
                     console.error(error);
@@ -134,6 +153,14 @@ export default class Login extends Component {
 const styles = StyleSheet.create({
     buttonLogin: {
         backgroundColor: Colors.navbarBackgroundColor,
+        marginTop: 20,
+        width: '100%',
+        justifyContent: 'center',
+        borderRadius: 10
+    } ,
+    buttonSignup: {
+        backgroundColor:"transparent",
+        color: "#bcbec1",
         marginTop: 20,
         width: '100%',
         justifyContent: 'center',
