@@ -27,11 +27,11 @@ export default class Login extends Component {
 
     componentWillMount(){
         try {
-            const value = AsyncStorage.getItem('cookie');
-            if (value !== null) {
+            let userSessionKeyLogin = AsyncStorage.getItem('cookieUserFromApi');
+            if (userSessionKeyLogin !== null) {
                 // We have data!!
-                console.log(value);
-                AsyncStorage.removeItem('cookie');
+                console.log(userSessionKeyLogin);
+                AsyncStorage.removeItem('cookieUserFromApi');
             }
         } catch (error) {
             // Error retrieving data
@@ -39,6 +39,27 @@ export default class Login extends Component {
         }
     }
 
+    async removeSessionKey() {
+        try {
+            let userSessionKeyLogin = await AsyncStorage.getItem('cookieUserFromApi');
+            if (userSessionKeyLogin !== null) {
+                // We have data!!
+                console.log(userSessionKeyLogin);
+                await AsyncStorage.removeItem('cookieUserFromApi');
+            }
+        } catch (error) {
+            // Handle errors here
+            console.error(error);
+        }
+    }
+    async setSessionKey() {
+        try {
+            await AsyncStorage.setItem('cookieUserFromApi', responseJson.cookie);
+        } catch (error) {
+            // Handle errors here
+            console.error(error);
+        }
+    }
     render() {
         var left = (
             <Left style={{flex: 1}}>
@@ -101,7 +122,7 @@ export default class Login extends Component {
                     </View>
                     <View style={{alignItems: 'center', width: '100%'}}>
                         <Button onPress={() => Actions.signup()}
-                                style={styles.buttonSignup}>
+                                style={styles.buttonLogin}>
                             <Text style={{color: '#fdfdfd'}}> Đăng ký </Text>
                         </Button>
                     </View>
@@ -125,7 +146,7 @@ export default class Login extends Component {
                 .then((responseJson) => {
                     statusLogin = responseJson.status;
                     try {
-                        AsyncStorage.setItem('cookie', responseJson.cookie);
+                        AsyncStorage.setItem('cookieUserFromApi', responseJson.cookie);
                     } catch (error) {
                         // Error saving data
                         console.error(error);
@@ -156,7 +177,8 @@ const styles = StyleSheet.create({
         marginTop: 20,
         width: '100%',
         justifyContent: 'center',
-        borderRadius: 10
+        borderRadius: 10,
+        fontSize: 14,
     } ,
     buttonSignup: {
         backgroundColor:"transparent",
@@ -164,6 +186,9 @@ const styles = StyleSheet.create({
         marginTop: 20,
         width: '100%',
         justifyContent: 'center',
-        borderRadius: 10
+        borderBottomColor: 'white',
+        borderLeftColor: 'white',
+        borderRightColor: 'white',
+        borderTopColor: 'white'
     }
 });

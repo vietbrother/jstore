@@ -182,10 +182,10 @@ export default class Checkout extends Component {
     renderCheckoutButton() {
         let items = [];
         try {
-            const value = AsyncStorage.getItem('cookie');
-            if (value !== null) {
+            let userSessionKeyLogin = AsyncStorage.getItem('cookieUserFromApi');
+            if (userSessionKeyLogin !== null) {
                 // We have data!!
-                console.log(value);
+                console.log(userSessionKeyLogin);
                 items.push(<View style={{marginTop: 20, marginBottom: 10, paddingBottom: 7}}>
                     <Button onPress={() => this.checkout()} style={{backgroundColor: Colors.navbarBackgroundColor}}
                             block iconLeft>
