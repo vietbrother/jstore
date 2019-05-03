@@ -64,3 +64,9 @@ To contribute your changes to the main repository, create a pull request from yo
 - https://medium.com/@impaachu/react-native-android-release-build-crash-on-device-14f2c9eacf18
 > build release error
 - https://medium.com/beesightsoft/react-native-build-release-error-uncompiled-png-file-passed-as-argument-431f0f7baa72
+
+> woocommerce-api 
+- https://github.com/sabarnix/woocommerce-api 
+- https://github.com/minhcasi/react-native-woocommerce/blob/master/example/Product.js
+- http://woocommerce.github.io/woocommerce-rest-api-docs/#list-all-products
+- https://stackoverflow.com/questions/48163307/woocommerce-rest-api-product-filters-how-it-works

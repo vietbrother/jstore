@@ -36,8 +36,10 @@ export default class SideMenu extends Component {
     async getSessionKey() {
         try {
             const value = await AsyncStorage.getItem('cookieUserFromApi');
+            console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             console.log(value);
             this.setState({sessionKey: value});
+            console.log("state : " + this.state.sessionKey);
         } catch (error) {
             // Handle errors here
             console.error(error);
@@ -225,7 +227,7 @@ export default class SideMenu extends Component {
                 onPress={Actions['login']}
             >
                 <Left>
-                    <Icon style={{fontSize: 18}} name={'ios-person'}/>
+                    <Icon style={{fontSize: 18}} name={'ios-log-in'}/>
                 </Left>
                 <Body style={{marginLeft: -15}}>
                 <Text style={{fontSize: 16}}>Đăng nhập</Text>
@@ -340,7 +342,7 @@ const menusSecondaryItems = [
     {
         id: 24,
         title: 'Đăng xuất',
-        icon: 'ios-person',
+        icon: 'ios-log-out',
         key: 'login'
     },
     // {

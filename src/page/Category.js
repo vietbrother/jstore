@@ -15,6 +15,7 @@ import SideMenu from '../component/SideMenu';
 import SideMenuDrawer from '../component/SideMenuDrawer';
 import Product from '../component/Product';
 
+import Api from "../WooCommerce/Api";
 
 export default class Category extends Component {
     constructor(props) {
@@ -71,21 +72,52 @@ export default class Category extends Component {
             // {id: 29, title: 'White Shirt', categoryId: 2, categoryTitle: 'WOMEN', price: '12$', image: 'http://res.cloudinary.com/atf19/image/upload/c_scale,w_300/v1500284127/pexels-photo-497848_yenhuf.jpg', description: "Hello there, i'm a cool product with a heart of gold."},
             // {id: 16, title: 'Tie', categoryId: 1, categoryTitle: 'KIDS', price: '2$', image: 'http://res.cloudinary.com/atf19/image/upload/c_scale,w_300/v1500284127/pexels-photo-497848_yenhuf.jpg', description: "Hello there, i'm a cool product with a heart of gold."},
         ];
-        global.WooCommerceAPI.get('products', {})
+        console.log("this.props.id : " + this.props.id);
+        global.WooCommerceAPI.get('products', {
+            //per_page: 20,
+            //page: 1,
+            category: this.props.id
+        })
             .then(data => {
-                // data will contain the body content from the request
-                console.log("get data");
+                console.log("API-----------------");
                 console.log(data);
                 this.setState({items: data, loading: false});
-            })
-            .catch(error => {
-                // error will return any errors that occur
-                console.log(error);
-            });
+            }).catch(error => {
+            // error will return any errors that occur
+            console.log(error);
+        });
+        // global.WooCommerceAPI.get('products', {
+        //     category: this.props.id
+        // })
+        //     .then(data => {
+        //         // data will contain the body content from the request
+        //         console.log("get data");
+        //         console.log(data);
+        //         this.setState({items: data, loading: false});
+        //     })
+        //     .catch(error => {
+        //         // error will return any errors that occur
+        //         console.log(error);
+        //     });
+
+        // global.WooCommerceAPI.get('products?category=' + this.props.id, {})
+        //     .then(data => {
+        //         // data will contain the body content from the request
+        //         console.log("get data");
+        //         console.log(data);
+        //         this.setState({items: data, loading: false});
+        //     })
+        //     .catch(error => {
+        //         // error will return any errors that occur
+        //         console.log(error);
+        //     });
 
         //this.setState({items: products});
     }
 
+    fetchDataToList(data){
+        this.setState({items: data, loading: false});
+    }
     render() {
         var left = (
             <Left style={{flex: 1}}>
@@ -119,7 +151,7 @@ export default class Category extends Component {
 
     renderProducts() {
         let items = [];
-        let stateItems = this.state.items
+        let stateItems = this.state.items;
         for (var i = 0; i < stateItems.length; i += 2) {
             if (stateItems[i + 1]) {
                 items.push(

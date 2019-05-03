@@ -197,29 +197,31 @@ export default class Product extends Component {
                             {/*</Col>*/}
                         {/*</Grid>*/}
                         <Grid>
-                            <Col>
+                            <Col size={2}>
                                 <View style={{flex: 1, justifyContent: 'center'}}>
                                     <Text>Số lượng:</Text>
                                 </View>
                             </Col>
-                            <Col size={3}>
+                            <Col size={2}>
                                 <View style={{flex: 1, flexDirection: 'row'}}>
-                                    <Button style={{flex: 1}} icon light
+                                    <Button style={{flex: 1}} icon transparent
+                                            style={{backgroundColor: '#fdfdfd'}}
                                             onPress={() => this.setState({quantity: this.state.quantity > 1 ? this.state.quantity - 1 : 1})}>
-                                        <Icon name='remove-circle-outline'/>
+                                        <Icon style={{color: Colors.navbarBackgroundColor}} name='ios-remove-circle-outline'/>
                                     </Button>
                                     <View style={{
                                         flex: 4,
                                         justifyContent: 'center',
                                         alignItems: 'center',
-                                        paddingLeft: 30,
-                                        paddingRight: 30
+                                        paddingLeft: 15,
+                                        paddingRight: 15
                                     }}>
                                         <Text style={{fontSize: 18}}>{this.state.quantity}</Text>
                                     </View>
-                                    <Button style={{flex: 1}} icon light
+                                    <Button style={{flex: 1}} icon transparent
+                                            style={{backgroundColor: '#fdfdfd'}}
                                             onPress={() => this.setState({quantity: this.state.quantity + 1})}>
-                                        <Icon name='add-circle-outline'/>
+                                        <Icon style={{color: Colors.navbarBackgroundColor}} name='ios-add-circle-outline'/>
                                     </Button>
                                 </View>
                             </Col>
