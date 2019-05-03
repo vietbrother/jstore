@@ -26,17 +26,7 @@ export default class Login extends Component {
     }
 
     componentWillMount(){
-        try {
-            let userSessionKeyLogin = AsyncStorage.getItem('cookieUserFromApi');
-            if (userSessionKeyLogin !== null) {
-                // We have data!!
-                console.log(userSessionKeyLogin);
-                AsyncStorage.removeItem('cookieUserFromApi');
-            }
-        } catch (error) {
-            // Error retrieving data
-            console.error(error);
-        }
+        this.removeSessionKey();
     }
 
     async removeSessionKey() {

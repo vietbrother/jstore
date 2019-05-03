@@ -206,7 +206,7 @@ export default class Product extends Component {
                                 <View style={{flex: 1, flexDirection: 'row'}}>
                                     <Button style={{flex: 1}} icon light
                                             onPress={() => this.setState({quantity: this.state.quantity > 1 ? this.state.quantity - 1 : 1})}>
-                                        <Icon name='ios-remove-outline'/>
+                                        <Icon name='remove-circle-outline'/>
                                     </Button>
                                     <View style={{
                                         flex: 4,
@@ -219,7 +219,7 @@ export default class Product extends Component {
                                     </View>
                                     <Button style={{flex: 1}} icon light
                                             onPress={() => this.setState({quantity: this.state.quantity + 1})}>
-                                        <Icon name='ios-add'/>
+                                        <Icon name='add-circle-outline'/>
                                     </Button>
                                 </View>
                             </Col>

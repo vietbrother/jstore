@@ -28,6 +28,11 @@ export default class SideMenu extends Component {
         UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
 
+    componentDidMount(){
+        this.getSessionKey();
+    }
+
+
     async getSessionKey() {
         try {
             const value = await AsyncStorage.getItem('cookieUserFromApi');
