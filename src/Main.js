@@ -27,6 +27,8 @@ import Checkout from './page/Checkout';
 
 // import WooCommerceAPI from 'react-native-woocommerce-api';
 import WooCommerceAPI from './WooCommerce/WooCommerceAPI';
+import OrderItem from "./component/OrderItem";
+import Orders from "./page/Orders";
 
 export default class Main extends Component {
 
@@ -79,6 +81,8 @@ export default class Main extends Component {
             <Scene key="login" component={Login} hideNavBar />
             <Scene key="signup" component={Signup} hideNavBar />
             <Scene key="checkout" component={Checkout} hideNavBar />
+            <Scene key="orders" component={Orders} hideNavBar />
+            <Scene key="orderItem" component={OrderItem} hideNavBar />
           </Scene>
         </Router>
       </Root>

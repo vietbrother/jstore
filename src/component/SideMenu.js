@@ -90,14 +90,14 @@ export default class SideMenu extends Component {
                                 <Body>
                                 <Text>Trang chủ</Text>
                                 </Body>
-                                <Right>
-                                    <Icon name="ios-arrow-forward"/>
-                                </Right>
+                                {/*<Right>*/}
+                                    {/*<Icon name="ios-arrow-forward"/>*/}
+                                {/*</Right>*/}
                             </ListItem>
-                            {this.renderMenuItems()}
+                            {/*{this.renderMenuItems()}*/}
                         </List>
                     </View>
-                    <View style={styles.line}/>
+                    {/*<View style={styles.line}/>*/}
                     <View style={{paddingRight: 15}}>
                         <List>
                             {this.state.sessionKey == null ? this.renderSecondaryListNologin() : this.renderSecondaryList()}
@@ -253,74 +253,7 @@ const styles = {
 };
 
 var menuItems = [
-    // {
-    //   id: 1,
-    //   title: 'MEN',
-    //   subMenu: [
-    //     {
-    //       id: 5,
-    //       title: 'NEW IN'
-    //     },
-    //     {
-    //       id: 6,
-    //       title: 'JACKETS'
-    //     },
-    //     {
-    //       id: 7,
-    //       title: 'BLAZERS'
-    //     },
-    //     {
-    //       id: 8,
-    //       title: 'TROUSERS'
-    //     },
-    //     {
-    //       id: 9,
-    //       title: 'JEANS'
-    //     },
-    //     {
-    //       id: 10,
-    //       title: 'SHORTS'
-    //     },
-    //     {
-    //       id: 11,
-    //       title: 'SHOES'
-    //     }
-    //   ]
-    // },
-    // {
-    //   id: 2,
-    //   title: 'WOMEN',
-    //   subMenu: [
-    //     {
-    //       id: 12,
-    //       title: 'NEW IN'
-    //     },
-    //     {
-    //       id: 13,
-    //       title: 'JACKETS'
-    //     },
-    //     {
-    //       id: 14,
-    //       title: 'BLAZERS'
-    //     },
-    //     {
-    //       id: 15,
-    //       title: 'TROUSERS'
-    //     },
-    //     {
-    //       id: 16,
-    //       title: 'JEANS'
-    //     },
-    //     {
-    //       id: 17,
-    //       title: 'SHORTS'
-    //     },
-    //     {
-    //       id: 18,
-    //       title: 'SHOES'
-    //     }
-    //   ]
-    // },
+
     {
         id: 3,
         title: 'Rau củ quả'
@@ -333,24 +266,12 @@ var menuItems = [
 
 
 const menusSecondaryItems = [
-    // {
-    //   id: 190,
-    //   title: 'Đăng nhập',
-    //   icon: 'ios-person',
-    //   key: 'login'
-    // },
     {
-        id: 24,
-        title: 'Đăng xuất',
-        icon: 'ios-log-out',
-        key: 'login'
+        id: 20,
+        title: 'Quản lý đơn hàng',
+        icon: 'ios-basket',
+        key: 'orders'
     },
-    // {
-    //   id: 519,
-    //   title: 'Đăng ký',
-    //   icon: 'ios-person-add',
-    //   key: 'signup'
-    // },
     {
         id: 19,
         title: 'Danh sách yêu thích',
@@ -369,10 +290,11 @@ const menusSecondaryItems = [
         icon: 'md-phone-portrait',
         key: 'contact'
     },
-    // {
-    //   id: 23,
-    //   key: 'newsletter',
-    //   title: 'Nhận thông báo',
-    //   icon: 'md-paper',
-    // }
+    {
+        id: 24,
+        title: 'Đăng xuất',
+        icon: 'ios-log-out',
+        key: 'login'
+    },
+
 ];

@@ -389,10 +389,10 @@ export default class Product extends Component {
                 });
             } else {
                 Toast.show({
-                    text: 'This product already exist in your wishlist !',
+                    text: 'Sản phảm đã có trong danh sách yêu thích!',
                     position: 'bottom',
                     type: 'danger',
-                    buttonText: 'Dismiss',
+                    buttonText: 'Ẩn',
                     duration: 3000
                 });
             }

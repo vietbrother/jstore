@@ -36,6 +36,7 @@ export default class Login extends Component {
                 // We have data!!
                 console.log(userSessionKeyLogin);
                 await AsyncStorage.removeItem('cookieUserFromApi');
+                await AsyncStorage.removeItem('userId');
             }
         } catch (error) {
             // Handle errors here
@@ -137,6 +138,7 @@ export default class Login extends Component {
                     statusLogin = responseJson.status;
                     try {
                         AsyncStorage.setItem('cookieUserFromApi', responseJson.cookie);
+                        AsyncStorage.setItem('userId', responseJson.user.id);
                     } catch (error) {
                         // Error saving data
                         console.error(error);

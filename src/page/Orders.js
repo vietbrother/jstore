@@ -14,64 +14,43 @@ import Navbar from '../component/Navbar';
 import SideMenu from '../component/SideMenu';
 import SideMenuDrawer from '../component/SideMenuDrawer';
 import Product from '../component/Product';
+import OrderItem from '../component/OrderItem';
+import OrderBlock from '../component/OrderBlock';
+import {AsyncStorage} from "react-native";
 
 
-export default class Category extends Component {
+export default class Orders extends Component {
     constructor(props) {
         super(props);
         this.state = {
             items: [],
             isLoading: true,
+            userId: ''
         };
     }
 
+    componentDidMount() {
+        this.getUserId();
+    }
+
+    async getUserId() {
+        try {
+            const value = await AsyncStorage.getItem('userId');
+            console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            console.log(value);
+            this.setState({userId: value});
+            console.log("userId : " + this.state.userId);
+        } catch (error) {
+            // Handle errors here
+            console.error(error);
+        }
+    }
+
     componentWillMount() {
-        var products = [
-            {
-                id: 1,
-                title: 'Sashimi',
-                categoryId: 5,
-                categoryTitle: 'Rau củ quả',
-                price: '22$',
-                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhXMSlJykAZMO8Um0ymIvY-tWMDHLqwrhyb5pSnl7FDWOvkHrQ',
-                description: "Hello there, i'm a cool product with a heart of gold."
-            },
-            {
-                id: 2,
-                title: 'Cá hồi',
-                categoryId: 2,
-                categoryTitle: 'Hải sản',
-                price: '12$',
-                image: 'http://103.94.18.249/jstore/wp-content/uploads/2019/04/recipe2-300x188.jpg',
-                description: "Hello there, i'm a cool product with a heart of gold."
-            },
-            // {id: 10, title: 'Black Leather Hat', categoryId: 1, categoryTitle: 'KIDS', price: '2$', image: 'http://res.cloudinary.com/atf19/image/upload/c_crop,g_face,h_250,x_248/v1500465308/fashion-men-s-individuality-black-and-white-157675_wnctss.jpg', description: "Hello there, i'm a cool product with a heart of gold."},
-            // {id: 15, title: 'Long Sleeves T-Shirt', categoryId: 5, categoryTitle: 'MEN', price: '120$', image: 'http://res.cloudinary.com/atf19/image/upload/c_crop,h_250,x_100,y_50/v1500465308/pexels-photo-500034_uvxwcq.jpg', description: "Hello there, i'm a cool product with a heart of gold."},
-            {
-                id: 11,
-                title: 'Rong biển',
-                categoryId: 5,
-                categoryTitle: 'Rau củ quả',
-                price: '22$',
-                image: 'http://103.94.18.249/jstore/wp-content/uploads/2019/04/recipe-300x188.jpg',
-                description: "Hello there, i'm a cool product with a heart of gold."
-            },
-            {
-                id: 22,
-                title: 'Cá thu',
-                categoryId: 2,
-                categoryTitle: 'Hải sản',
-                price: '12$',
-                image: 'http://103.94.18.249/jstore/wp-content/uploads/2019/04/recipe-300x188.jpg',
-                description: "Hello there, i'm a cool product with a heart of gold."
-            },
-            // {id: 100, title: 'Black Pearl Earrings', categoryId: 1, categoryTitle: 'KIDS', price: '2$', image: 'http://res.cloudinary.com/atf19/image/upload/c_crop,g_center,h_250/v1500465307/pexels-photo-262226_kbjbl3.jpg', description: "Hello there, i'm a cool product with a heart of gold."},
-            // {id: 215, title: 'Grey Blazer', categoryId: 5, categoryTitle: 'MEN', price: '120$', image: 'http://res.cloudinary.com/atf19/image/upload/c_scale,w_300/v1500284127/pexels-photo-497848_yenhuf.jpg', description: "Hello there, i'm a cool product with a heart of gold."},
-            // {id: 12, title: 'Mirror Sunglasses', categoryId: 5, categoryTitle: 'MEN', price: '22$', image: 'http://res.cloudinary.com/atf19/image/upload/c_crop,g_face,h_250/v1500465307/pexels-photo-488541_s0si3h.jpg', description: "Hello there, i'm a cool product with a heart of gold."},
-            // {id: 29, title: 'White Shirt', categoryId: 2, categoryTitle: 'WOMEN', price: '12$', image: 'http://res.cloudinary.com/atf19/image/upload/c_scale,w_300/v1500284127/pexels-photo-497848_yenhuf.jpg', description: "Hello there, i'm a cool product with a heart of gold."},
-            // {id: 16, title: 'Tie', categoryId: 1, categoryTitle: 'KIDS', price: '2$', image: 'http://res.cloudinary.com/atf19/image/upload/c_scale,w_300/v1500284127/pexels-photo-497848_yenhuf.jpg', description: "Hello there, i'm a cool product with a heart of gold."},
-        ];
-        global.WooCommerceAPI.get('products', {})
+        global.WooCommerceAPI.get('orders', {
+            orderby: 'date',
+            customer: this.state.userId
+        })
             .then(data => {
                 // data will contain the body content from the request
                 console.log("get data");
@@ -108,34 +87,25 @@ export default class Category extends Component {
         return (
             <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref}>
                 <Container style={{backgroundColor: '#fdfdfd'}}>
-                    <Navbar left={left} right={right} title={this.props.title}/>
+                    <Navbar left={left} right={right} title="Quản lý đơn hàng"/>
                     <Content padder>
-                        {this.renderProducts()}
+                        {this.renderOrders()}
                     </Content>
                 </Container>
             </SideMenuDrawer>
         );
     }
 
-    renderProducts() {
+
+    renderOrders() {
         let items = [];
-        let stateItems = this.state.items
-        for (var i = 0; i < stateItems.length; i += 2) {
-            if (stateItems[i + 1]) {
-                items.push(
-                    <Grid key={i}>
-                        <Product key={stateItems[i].id} product={stateItems[i]}/>
-                        <Product key={stateItems[i + 1].id} product={stateItems[i + 1]} isRight/>
-                    </Grid>
-                );
-            } else {
-                items.push(
-                    <Grid key={i}>
-                        <Product key={stateItems[i].id} product={stateItems[i]}/>
-                        <Col key={i + 1}/>
-                    </Grid>
-                );
-            }
+        let stateItems = this.state.items;
+        for (var i = 0; i < stateItems.length; i++) {
+            items.push(
+                <Grid key={i}>
+                    <OrderBlock key={stateItems[i].id} order={stateItems[i]}/>
+                </Grid>
+            );
         }
         return items;
     }
