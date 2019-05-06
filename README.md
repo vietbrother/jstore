@@ -49,6 +49,13 @@ react-native run-ios
 ```
 react-native run-android
 ```
+build release
+```
+react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
+cd android
+gradlew clean
+gradlew assembleRelease
+```
 
 
 ## Screenshots
@@ -70,3 +77,4 @@ To contribute your changes to the main repository, create a pull request from yo
 - https://github.com/minhcasi/react-native-woocommerce/blob/master/example/Product.js
 - http://woocommerce.github.io/woocommerce-rest-api-docs/#list-all-products
 - https://stackoverflow.com/questions/48163307/woocommerce-rest-api-product-filters-how-it-works
+

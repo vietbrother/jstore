@@ -79,8 +79,8 @@ export default class Login extends Component {
                     paddingLeft: 50,
                     paddingRight: 50
                 }}>
-                    <View style={{marginBottom: 15, width: '100%'}}>
-                        <Image source={require('../images/logo.png')}/>
+                    <View style={{marginBottom: 15, width: '100%', alignItems: 'center'}}>
+                        <Image style={{height: 128, width: 128}} source={require('../images/logo_jstore.png')}/>
                         <Text style={{
                             fontSize: 24,
                             fontWeight: 'bold',
@@ -131,14 +131,16 @@ export default class Login extends Component {
         var user = this.state.username;
         var pass = this.state.password;
         let statusLogin;
+        let sessionLoginKey;
         try {
             await fetch('http://103.94.18.249/jstore/api/user/generate_auth_cookie/?username=' + user + '&password=' + pass + '&insecure=cool')
                 .then((response) => response.json())
                 .then((responseJson) => {
                     statusLogin = responseJson.status;
+                    sessionLoginKey = responseJson.cookie;
                     try {
                         AsyncStorage.setItem('cookieUserFromApi', responseJson.cookie);
-                        AsyncStorage.setItem('userId', responseJson.user.id);
+                        AsyncStorage.setItem('userId', responseJson.user.id.toString());
                     } catch (error) {
                         // Error saving data
                         console.error(error);
@@ -153,7 +155,7 @@ export default class Login extends Component {
         }
 
         if (statusLogin == 'ok') {
-            Actions.home();
+            Actions.home({sessionLoginKey: sessionLoginKey});
         } else {
             this.setState({hasError: true, errorText: 'Tên đăng nhập hoặc mật khẩu không đúng'});
         }

@@ -7,17 +7,18 @@
     "test": "jest"
   },
   "dependencies": {
+    "crypto-js": "^3.1.9-1",
     "native-base": "2.7.2",
+    "oauth-1.0a": "^2.2.2",
     "react": "16.4.1",
     "react-native": "0.55.4",
     "react-native-drawer": "^2.5.0",
     "react-native-image-gallery": "2.1.5",
     "react-native-maps": "0.21.0",
+    "react-native-render-html": "^4.1.2",
     "react-native-router-flux": "4.0.1",
     "react-native-snap-carousel": "3.7.2",
-    "react-native-woocommerce-api": "^1.0.12",
-    "crypto-js": "^3.1.9-1",
-    "oauth-1.0a": "^2.2.2"
+    "react-native-woocommerce-api": "^1.0.12"
   },
   "devDependencies": {
     "babel-jest": "23.4.0",

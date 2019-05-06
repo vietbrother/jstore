@@ -1,12 +1,12 @@
 /**
-* This is the Home page
-**/
+ * This is the Home page
+ **/
 
 // React native and others libraries imports
-import React, { Component } from 'react';
-import { Image , ActivityIndicator} from 'react-native';
-import { Container, Content, View, Button, Left, Right, Icon, Card, CardItem, cardBody } from 'native-base';
-import { Actions } from 'react-native-router-flux';
+import React, {Component} from 'react';
+import {Image, ActivityIndicator, AsyncStorage} from 'react-native';
+import {Container, Content, View, Button, Left, Right, Icon, Card, CardItem, cardBody} from 'native-base';
+import {Actions} from 'react-native-router-flux';
 
 // Our custom files and classes import
 import Text from '../component/Text';
@@ -18,88 +18,114 @@ import CategoryBlock from '../component/CategoryBlock';
 
 export default class Home extends Component {
 
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.state = {
-      categories: [],
-      isLoading: true,
-      error: null,
-    };
-  }
-
-  componentDidMount() {
-    //Have a try and catch block for catching errors.
-    try {
-      this.setState({ isLoading: true });
-      global.WooCommerceAPI.get('products/categories', {})
-          .then(data => {
-            // data will contain the body content from the request
-            console.log("get category");
-            console.log(data);
-            this.setState({categories: data, loading: false});
-          })
-          .catch(error => {
-            // error will return any errors that occur
-            console.log(error);
-            this.setState({
-              error: error.toString(),
-              isLoading: false
-            });
-          });
-    } catch(err) {
-      console.log("Error fetching data-----------", err);
-    }
-  }
-  render() {
-    var left = (
-      <Left style={{flex:1}}>
-        <Button onPress={() => this._sideMenuDrawer.open()} transparent>
-          <Icon name='ios-menu-outline' />
-        </Button>
-      </Left>
-    );
-    var right = (
-      <Right style={{flex:1}}>
-        <Button onPress={() => Actions.search()} transparent>
-          <Icon name='ios-search-outline' />
-        </Button>
-        <Button onPress={() => Actions.cart()} transparent>
-          <Icon name='ios-cart' />
-        </Button>
-      </Right>
-    );
-    const { categories, loading } = this.state;
-    if(!loading) {
-      return(
-          <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref}>
-            <Container>
-              <Navbar left={left} right={right} title="J-STORE" />
-              <Content>
-                {this.renderCategories(categories)}
-              </Content>
-            </Container>
-          </SideMenuDrawer>
-      );
-    } else {
-      return <ActivityIndicator />
+        this.state = {
+            categories: [],
+            isLoading: true,
+            error: null,
+            sessionKey: null
+        };
     }
 
-  }
+    componentWillMount() {
+        this.getSessionKey();
+    }
 
-  renderCategories(categories) {
-    let cat = [];
-    for(var i=0; i<categories.length; i++) {
-      console.log(categories[i]);
-      if(categories[i].parent != '0'){
-        cat.push(
-            <CategoryBlock key={categories[i].id} id={categories[i].id} image={categories[i].image.src} title={categories[i].name} />
+
+    async getSessionKey() {
+        try {
+            const value = await AsyncStorage.getItem('cookieUserFromApi');
+            console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            console.log(value);
+            this.setState({sessionKey: value});
+            console.log("state : " + this.state.sessionKey);
+        } catch (error) {
+            // Handle errors here
+            console.error(error);
+        }
+    }
+
+    componentDidMount() {
+        //Have a try and catch block for catching errors.
+        try {
+            this.getSessionKey();
+            this.setState({isLoading: true});
+            global.WooCommerceAPI.get('products/categories', {})
+                .then(data => {
+                    // data will contain the body content from the request
+                    console.log("get category");
+                    // console.log(data);
+                    this.setState({categories: data, loading: false});
+                })
+                .catch(error => {
+                    // error will return any errors that occur
+                    console.log(error);
+                    this.setState({
+                        error: error.toString(),
+                        isLoading: false
+                    });
+                });
+        } catch (err) {
+            console.log("Error fetching data-----------", err);
+        }
+    }
+
+    render() {
+        var left = (
+            <Left style={{flex: 1}}>
+                <Button onPress={() => this._sideMenuDrawer.open()} transparent>
+                    <Icon name='ios-menu-outline'/>
+                </Button>
+            </Left>
         );
-      }
+        var right = (
+            <Right style={{flex: 1}}>
+                <Button onPress={() => Actions.search()} transparent>
+                    <Icon name='ios-search-outline'/>
+                </Button>
+                <Button onPress={() => Actions.cart()} transparent>
+                    <Icon name='ios-cart'/>
+                </Button>
+            </Right>
+        );
+        const {categories, loading} = this.state;
+        if (!loading) {
+            return (this.renderMainContent(left, right, categories));
+        } else {
+            return <ActivityIndicator/>
+        }
 
     }
-    return cat;
-  }
+
+    renderMainContent(left, right, categories) {
+        console.log("render content")
+        return (<SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref} sessionLoginKey={this.props.sessionLoginKey}>
+            <Container>
+                <Navbar left={left} right={right} title="J-STORE"/>
+                <Content>
+                    {this.renderCategories(categories)}
+                </Content>
+            </Container>
+        </SideMenuDrawer>);
+    }
+
+    renderCategories(categories) {
+        let cat = [];
+        console.log("render category")
+        for (var i = 0; i < categories.length; i++) {
+            //console.log(categories[i]);
+            if (categories[i].parent != '0') {
+                cat.push(
+                    <CategoryBlock key={categories[i].id} id={categories[i].id} image={categories[i].image.src}
+                                   title={categories[i].name}/>
+                );
+            }
+
+        }
+        return cat;
+    }
 
 }
 

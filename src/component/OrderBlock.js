@@ -16,9 +16,9 @@ export default class OrderBlock extends Component {
     render() {
         return (
             <Col style={this.props.isRight ? style.leftMargin : style.rightMargin}>
-                <Card transparent>
+                <Card>
                     <CardItem style={{paddingTop: 0}}>
-                        <Button style={{flex: 1, paddingLeft: 0, paddingRight: 0, paddingBottom: 0, paddingTop: 0}}
+                        <Button style={{flex: 1, width: '100%', minHeight: 80}}
                                 transparent
                                 onPress={() => this.pressed()}
                         >
@@ -28,10 +28,10 @@ export default class OrderBlock extends Component {
                                     : {this.props.order.number}</Text>
                             </Text>
                             <Text>
-                                <Text style={{}}>Thời gian tạo : {this.props.order.date_created}</Text>
+                                <Text style={{}}>Thời gian tạo : {new Date(this.props.order.date_created).toLocaleDateString()} {new Date(this.props.order.date_created).toLocaleTimeString()}</Text>
                             </Text>
                             <Text>
-                                <Text style={{}}>Trạng thái : {this.props.order.date_created}</Text>
+                                Trạng thái : {this.renderStatus(this.props.order.status)}
                             </Text>
                             </Body>
                         </Button>
@@ -43,6 +43,16 @@ export default class OrderBlock extends Component {
 
     pressed() {
         Actions.orderItem({order: this.props.order});
+    }
+
+    renderStatus(status){
+        if(status == 'processing'){
+            return (<Text style={{color: '#ffa505'}}>Đang xử lý</Text>);
+        } else if(status == 'completed'){
+            return (<Text style={{color: '#44bc37'}}>Hoàn thành</Text>);
+        } else {
+            return (<Text style={{color: '#26619c'}}>status</Text>);
+        }
     }
 }
 

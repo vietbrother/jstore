@@ -49,7 +49,7 @@ export default class Orders extends Component {
     componentWillMount() {
         global.WooCommerceAPI.get('orders', {
             orderby: 'date',
-            customer: this.state.userId
+            // customer: this.state.userId
         })
             .then(data => {
                 // data will contain the body content from the request
@@ -75,20 +75,22 @@ export default class Orders extends Component {
         );
         var right = (
             <Right style={{flex: 1}}>
-                <Button onPress={() => Actions.search()} transparent>
-                    <Icon name='ios-search-outline'/>
-                </Button>
-                <Button onPress={() => Actions.cart()} transparent>
-                    <Icon name='ios-cart'/>
-                </Button>
+                {/*<Button onPress={() => Actions.search()} transparent>*/}
+                    {/*<Icon name='ios-search-outline'/>*/}
+                {/*</Button>*/}
+                {/*<Button onPress={() => Actions.cart()} transparent>*/}
+                    {/*<Icon name='ios-cart'/>*/}
+                {/*</Button>*/}
             </Right>
         );
 
         return (
             <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref}>
-                <Container style={{backgroundColor: '#fdfdfd'}}>
+                <Container style={{backgroundColor: '#f3f9ff'}}>
                     <Navbar left={left} right={right} title="Quản lý đơn hàng"/>
-                    <Content padder>
+                    <Content padder contentContainerStyle={{
+                        backgroundColor: '#f3f9ff'
+                    }}>
                         {this.renderOrders()}
                     </Content>
                 </Container>

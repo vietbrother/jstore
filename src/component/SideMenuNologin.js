@@ -5,7 +5,7 @@
 // React native and others libraries imports
 import React, {Component} from 'react';
 import {ScrollView, LayoutAnimation, UIManager, Linking, Image, AsyncStorage} from 'react-native';
-import {View, List, ListItem, Body, Left, Right, Icon, Item, Input, Button, Grid, Col, Toast} from 'native-base';
+import {View, List, ListItem, Body, Left, Right, Icon, Item, Input, Button, Grid, Col} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 
 // Our custom files and classes import
@@ -23,36 +23,30 @@ export default class SideMenu extends Component {
             subMenuItems: [],
             clickedItem: '',
             sessionKey: null,
-            isReload: true
         };
 
         UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
 
-    componentDidMount() {
-        AsyncStorage.getItem("cookieUserFromApi", (err, res) => {
-            console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            console.log("res : " + res);
-            this.setState({sessionKey: res});
-            console.log("state : " + this.state.sessionKey);
-        });
+    componentWillMount(){
+        this.getSessionKey();
     }
 
 
-    render() {
-        console.log("render main SideMenu");
-        // console.log("this.state.isReload " + this.state.isReload);
-        // this.setState({isReload: true});
-        // if(this.state.isReload){
-        //     this.setState({isReload: false});
-        //     AsyncStorage.getItem("cookieUserFromApi", (err, res) => {
-        //         console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        //         console.log("res : " + res);
-        //         this.setState({sessionKey: res});
-        //         console.log("state : " + this.state.sessionKey);
-        //     });
-        // }
+    async getSessionKey() {
+        try {
+            const value = await AsyncStorage.getItem('cookieUserFromApi');
+            console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            console.log(value);
+            this.setState({sessionKey: value});
+            console.log("state : " + this.state.sessionKey);
+        } catch (error) {
+            // Handle errors here
+            console.error(error);
+        }
+    }
 
+    render() {
         return (
             <ScrollView style={styles.container}>
                 {this.renderMenu()}
@@ -60,42 +54,12 @@ export default class SideMenu extends Component {
         );
     }
 
-    renderContentMenu(){
-        console.log("render renderContentMenu");
-        AsyncStorage.getItem("cookieUserFromApi", (err, res) => {
-            console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            console.log("res : " + res);
-            if(res != null){
-                return this.renderSecondaryList();
-            } else {
-                return this.renderSecondaryListNologin();
-            }
-        });
-    }
     renderMenu() {
-        console.log("render SideMenu");
-        console.log("this.props.sessionLoginKey " + this.props.sessionLoginKey);
-        // this.setState({sessionKey: this.props.sessionLoginKey});
-        // AsyncStorage.getItem("cookieUserFromApi", (err, res) => {
-        //     console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        //     console.log("res : " + res);
-        //     this.setState({sessionKey: res});
-        // });
         if (!this.state.subMenu) {
             return (
                 <View>
-                    {/*<View style={{paddingLeft: 15, paddingRight: 15}}>*/}
-                    {/*<Item error={this.state.searchError}>*/}
-                    {/*<Input*/}
-                    {/*placeholder='Tìm kiếm...'*/}
-                    {/*onChangeText={(text) => this.setState({search: text, searchError: false})}*/}
-                    {/*onSubmitEditing={() => this.search()}*/}
-                    {/*/>*/}
-                    {/*<Icon active name='ios-search-outline' onPress={() => this.search()} />*/}
-                    {/*</Item>*/}
-                    {/*</View>*/}
                     <View style={{marginTop: 15, marginBottom: 15, width: '100%', alignItems: 'center'}}>
-                        <Image style={{height: 100, width: 100}} source={require('../images/logo_jstore.png')}/>
+                        <Image source={require('../images/logo.png')}/>
                         <Text style={{
                             fontSize: 18,
                             fontWeight: 'bold',
@@ -103,7 +67,6 @@ export default class SideMenu extends Component {
                             width: '100%',
                             color: Colors.navbarBackgroundColor
                         }}>J-STORE </Text>
-                        {/*<Text style={{fontSize: 12, textAlign: 'left', width: '100%', color: '#687373'}}>Thực phẩm sạch Nhật Bản </Text>*/}
                     </View>
                     <View style={{paddingRight: 15}}>
                         <List>
@@ -111,26 +74,17 @@ export default class SideMenu extends Component {
                                 icon
                                 key={0}
                                 button={true}
-                                onPress={Actions['home']}
-
+                                onPress={() => Actions.home()}
                             >
                                 <Body>
                                 <Text>Trang chủ</Text>
                                 </Body>
-                                {/*<Right>*/}
-                                {/*<Icon name="ios-arrow-forward"/>*/}
-                                {/*</Right>*/}
                             </ListItem>
-                            {/*{this.renderMenuItems()}*/}
                         </List>
                     </View>
-                    {/*<View style={styles.line}/>*/}
                     <View style={{paddingRight: 15}}>
                         <List>
-                            {/*{this.state.sessionKey == null ? this.renderSecondaryListNologin() : this.renderSecondaryList()}*/}
-                            {this.props.sessionLoginKey != null || this.state.sessionKey != null ? this.renderSecondaryList() : this.renderSecondaryListNologin() }
-                            {/*{this.renderSecondaryList()}*/}
-                            {/*{this.renderContentMenu()}*/}
+                            {this.renderSecondaryListNologin()}
                         </List>
                     </View>
                     <View style={styles.line}/>

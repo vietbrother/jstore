@@ -4,7 +4,7 @@
 
 // React native and others libraries imports
 import React, {Component} from 'react';
-import {Image, Dimensions, TouchableWithoutFeedback, AsyncStorage} from 'react-native';
+import {Image, Dimensions, TouchableWithoutFeedback, AsyncStorage, WebView} from 'react-native';
 import {
     View,
     Container,
@@ -22,6 +22,7 @@ import {
 } from 'native-base';
 import {Actions} from 'react-native-router-flux';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
+import HTML from 'react-native-render-html';
 
 // Our custom files and classes import
 import Colors from '../Colors';
@@ -256,9 +257,11 @@ export default class Product extends Component {
                                 marginLeft: 7,
                                 marginBottom: 10
                             }}/>
-                            <NBText note>
-                                {this.state.product.description}
-                            </NBText>
+                            <HTML html={this.state.product.description} imagesMaxWidth={Dimensions.get('window').width} />
+                            {/*<NBText note>*/}
+                                {/*{this.state.product.description}*/}
+
+                            {/*</NBText>*/}
                         </View>
                     </View>
                     {/*<View style={{marginTop: 15, paddingLeft: 12, paddingRight: 12}}>*/}
