@@ -33,15 +33,31 @@ export default class Cart extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            cartItems: []
+            cartItems: [],
+            total: 0
         };
     }
 
     componentWillMount() {
-        AsyncStorage.getItem("CART", (err, res) => {
-            if (!res) this.setState({cartItems: []});
-            else this.setState({cartItems: JSON.parse(res)});
+        AsyncStorage.getItem('userId',(err, res) => {
+            if (res) {
+                //if user is existed
+                let userId = res;
+                AsyncStorage.getItem("CART", (err, res) => {
+                    console.log("res " + res);
+                    if (!res) this.setState({cartItems: []});
+                    else {
+                        var itemArr = JSON.parse(res);
+                        var temp = itemArr.filter(function(cartItem) {
+                            return cartItem.userId == userId;
+                        });
+                        this.setState({cartItems: temp});
+                    }
+                    this.getTotal();
+                });
+            }
         });
+
     }
 
     render() {
@@ -88,11 +104,26 @@ export default class Cart extends Component {
         );
     }
 
+    getTotal() {
+        let totalTemp = 0;
+        this.state.cartItems.map((item, i) => {
+            totalTemp += item.quantity * item.price;
+        });
+        this.setState({total: totalTemp});
+    }
+
+    changeQuatity(item, quantityUpdate){
+        var tempCartItem = this.state.cartItems;
+        var objIndex = tempCartItem.findIndex((obj => obj.name == item.name));
+        if(objIndex != -1){
+            tempCartItem[objIndex].quantity = quantityUpdate;
+            this.setState({cartItems: tempCartItem});
+            this.getTotal();
+        }
+    }
     renderItems() {
         let items = [];
-        let total = 0;
         this.state.cartItems.map((item, i) => {
-            total += item.quantity * item.price;
             items.push(
                 <ListItem
                     key={i}
@@ -111,12 +142,35 @@ export default class Cart extends Component {
                     <Text style={{fontSize: 16, fontWeight: 'bold', marginBottom: 10}}>{item.price}</Text>
                     {/*<Text style={{fontSize: 14 ,fontStyle: 'italic'}}>Tên: {item.name}</Text>*/}
                     {/*<Text style={{fontSize: 14 ,fontStyle: 'italic'}}>Size: {item.size}</Text>*/}
+
+                    <View style={{flex: 1, flexDirection: 'row'}}>
+                        <Button style={{flex: 1}} icon transparent
+                                style={{backgroundColor: '#fdfdfd'}}
+                                onPress={() => this.changeQuatity(item, (item.quantity > 1 ? item.quantity - 1 : 1))}>
+                            <Icon style={{color: Colors.navbarBackgroundColor}}
+                                  name='ios-remove-circle-outline'/>
+                        </Button>
+                        <View style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                            <Text style={{fontSize: 18}}>{item.quantity}</Text>
+                        </View>
+                        <Button style={{flex: 1}} icon transparent
+                                style={{backgroundColor: '#fdfdfd'}}
+                                onPress={() => this.changeQuatity(item, item.quantity + 1)}>
+                            <Icon style={{color: Colors.navbarBackgroundColor}}
+                                  name='ios-add-circle-outline'/>
+                        </Button>
+                    </View>
                     </Body>
                     <Right>
                         <Button style={{marginLeft: -25}} transparent onPress={() => this.removeItemPressed(item)}>
-                            <Icon size={30} style={{fontSize: 30, color: '#95a5a6'}} name='ios-remove-circle-outline'/>
+                            <Icon size={30} style={{fontSize: 30, color: 'red'}}
+                                  name='ios-remove-circle-outline'/>
                         </Button>
                     </Right>
+
                 </ListItem>
             );
         });
@@ -125,10 +179,15 @@ export default class Cart extends Component {
                 <CardItem>
                     <Grid style={{fontSize: 16,}}>
                         <Col size={2}>
-                            <Text >Thành tiền : </Text>
+                            <Text>Thành tiền : </Text>
                         </Col>
                         <Col size={2}>
-                            <Text style={{fontSize: 20,fontWeight: 'bold', color:'#BE0026', textAlign: 'right'}}>{total}</Text>
+                            <Text style={{
+                                fontSize: 20,
+                                fontWeight: 'bold',
+                                color: '#BE0026',
+                                textAlign: 'right'
+                            }}>{this.state.total}</Text>
                         </Col>
                     </Grid>
 
@@ -140,7 +199,7 @@ export default class Cart extends Component {
 
     removeItemPressed(item) {
         Alert.alert(
-            'Xóa ' + item.title,
+            'Xóa ' + item.name,
             'Bạn có muốn xóa đồ này trong giỏ hàng ?',
             [
                 {text: 'Không', onPress: () => console.log('No Pressed'), style: 'cancel'},
@@ -192,35 +251,35 @@ const styles = {
     }
 };
 
-const items = [
-    {
-        id: 1,
-        quantity: 1,
-        title: 'Black Hat',
-        categoryId: 5,
-        categoryTitle: 'MEN',
-        price: '22$',
-        image: 'http://res.cloudinary.com/atf19/image/upload/c_crop,h_250,w_358,x_150/v1500465309/pexels-photo-206470_nwtgor.jpg',
-        description: "Hello there, i'm a cool product with a heart of gold."
-    },
-    {
-        id: 2,
-        quantity: 3,
-        title: 'V Neck T-Shirt',
-        categoryId: 2,
-        categoryTitle: 'WOMEN',
-        price: '12$',
-        image: 'http://res.cloudinary.com/atf19/image/upload/c_crop,h_250,x_226,y_54/v1500465309/pexels-photo-521197_hg8kak.jpg',
-        description: "Hello there, i'm a cool product with a heart of gold."
-    },
-    {
-        id: 10,
-        quantity: 1,
-        title: 'Black Leather Hat',
-        categoryId: 1,
-        categoryTitle: 'KIDS',
-        price: '2$',
-        image: 'http://res.cloudinary.com/atf19/image/upload/c_crop,g_face,h_250,x_248/v1500465308/fashion-men-s-individuality-black-and-white-157675_wnctss.jpg',
-        description: "Hello there, i'm a cool product with a heart of gold."
-    },
-];
+// const items = [
+//     {
+//         id: 1,
+//         quantity: 1,
+//         title: 'Black Hat',
+//         categoryId: 5,
+//         categoryTitle: 'MEN',
+//         price: '22$',
+//         image: 'http://res.cloudinary.com/atf19/image/upload/c_crop,h_250,w_358,x_150/v1500465309/pexels-photo-206470_nwtgor.jpg',
+//         description: "Hello there, i'm a cool product with a heart of gold."
+//     },
+//     {
+//         id: 2,
+//         quantity: 3,
+//         title: 'V Neck T-Shirt',
+//         categoryId: 2,
+//         categoryTitle: 'WOMEN',
+//         price: '12$',
+//         image: 'http://res.cloudinary.com/atf19/image/upload/c_crop,h_250,x_226,y_54/v1500465309/pexels-photo-521197_hg8kak.jpg',
+//         description: "Hello there, i'm a cool product with a heart of gold."
+//     },
+//     {
+//         id: 10,
+//         quantity: 1,
+//         title: 'Black Leather Hat',
+//         categoryId: 1,
+//         categoryTitle: 'KIDS',
+//         price: '2$',
+//         image: 'http://res.cloudinary.com/atf19/image/upload/c_crop,g_face,h_250,x_248/v1500465308/fashion-men-s-individuality-black-and-white-157675_wnctss.jpg',
+//         description: "Hello there, i'm a cool product with a heart of gold."
+//     },
+// ];

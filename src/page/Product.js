@@ -39,13 +39,20 @@ export default class Product extends Component {
             activeSlide: 0,
             quantity: 1,
             selectedColor: '',
-            selectedSize: ''
+            selectedSize: '',
+            userId: '',
         };
     }
 
     componentWillMount() {
         //get the product with id of this.props.product.id from your server
         this.setState({product: this.props.product});
+        AsyncStorage.getItem('userId',(err, res) => {
+            console.log("Product userId " + res);
+            if(res){
+                this.setState({userId: res});
+            }
+        });
     }
 
     componentDidMount() {
@@ -80,17 +87,7 @@ export default class Product extends Component {
             <Container style={{backgroundColor: '#fdfdfd'}}>
                 <Navbar left={left} right={right} title={this.props.product.name}/>
                 <Content>
-                    {/*<Carousel*/}
-                    {/*ref={(carousel) => {*/}
-                    {/*this._carousel = carousel;*/}
-                    {/*}}*/}
-                    {/*sliderWidth={Dimensions.get('window').width}*/}
-                    {/*itemWidth={Dimensions.get('window').width}*/}
-                    {/*onSnapToItem={(index) => this.setState({activeSlide: index})}*/}
-                    {/*enableSnap={true}*/}
-                    {/*>*/}
-                    {/*{this.renderImages()}*/}
-                    {/*</Carousel>*/}
+
                     {this.renderImages()}
                     <Carousel
                         ref={c => this._slider1Ref = c}
@@ -114,18 +111,7 @@ export default class Product extends Component {
                     >
                         {this.renderImages()}
                     </Carousel>
-                    {/*<Pagination*/}
-                    {/*dotsLength={ENTRIES1.length}*/}
-                    {/*activeDotIndex={slider1ActiveSlide}*/}
-                    {/*containerStyle={styles.paginationContainer}*/}
-                    {/*dotColor={'rgba(255, 255, 255, 0.92)'}*/}
-                    {/*dotStyle={styles.paginationDot}*/}
-                    {/*inactiveDotColor={colors.black}*/}
-                    {/*inactiveDotOpacity={0.4}*/}
-                    {/*inactiveDotScale={0.6}*/}
-                    {/*carouselRef={this._slider1Ref}*/}
-                    {/*tappableDots={!!this._slider1Ref}*/}
-                    {/*/>*/}
+
                     <Pagination
                         dotsLength={this.state.product.images.length}
                         activeDotIndex={this.state.activeSlide}
@@ -161,42 +147,7 @@ export default class Product extends Component {
                                 <Text style={{fontSize: 20, fontWeight: 'bold'}}>{this.state.product.price}</Text>
                             </Col>
                         </Grid>
-                        {/*<Grid style={{marginTop: 15}}>*/}
-                        {/*<Col>*/}
-                        {/*<View style={{flex: 1, justifyContent: 'center'}}>*/}
-                        {/*<Text>Màu:</Text>*/}
-                        {/*</View>*/}
-                        {/*</Col>*/}
-                        {/*<Col size={3}>*/}
-                        {/*<Picker*/}
-                        {/*mode="dropdown"*/}
-                        {/*placeholder="Select a color"*/}
-                        {/*note={true}*/}
-                        {/*selectedValue={this.state.selectedColor}*/}
-                        {/*onValueChange={(color) => this.setState({selectedColor: color})}*/}
-                        {/*>*/}
-                        {/*{this.renderColors()}*/}
-                        {/*</Picker>*/}
-                        {/*</Col>*/}
-                        {/*</Grid>*/}
-                        {/*<Grid>*/}
-                        {/*<Col>*/}
-                        {/*<View style={{flex: 1, justifyContent: 'center'}}>*/}
-                        {/*<Text>Cỡ:</Text>*/}
-                        {/*</View>*/}
-                        {/*</Col>*/}
-                        {/*<Col size={3}>*/}
-                        {/*<Picker*/}
-                        {/*mode="dropdown"*/}
-                        {/*placeholder="Chọn kích cỡ"*/}
-                        {/*note={true}*/}
-                        {/*selectedValue={this.state.selectedSize}*/}
-                        {/*onValueChange={(size) => this.setState({selectedSize: size})}*/}
-                        {/*>*/}
-                        {/*{this.renderSize()}*/}
-                        {/*</Picker>*/}
-                        {/*</Col>*/}
-                        {/*</Grid>*/}
+
                         <Grid>
                             <Col size={2}>
                                 <View style={{flex: 1, justifyContent: 'center'}}>
@@ -259,7 +210,7 @@ export default class Product extends Component {
                                 marginLeft: 7,
                                 marginBottom: 10
                             }}/>
-                            <HTML html={this.state.product.description}
+                            <HTML html={this.state.product.description == null ? '' : this.state.product.description }
                                   imagesMaxWidth={Dimensions.get('window').width}/>
                             {/*<NBText note>*/}
                             {/*{this.state.product.description}*/}
@@ -354,6 +305,7 @@ export default class Product extends Component {
         // product['color'] = this.state.selectedColor;
         // product['size'] = this.state.selectedSize;
         product['quantity'] = this.state.quantity;
+        product['userId'] = this.state.userId;
         AsyncStorage.getItem("CART", (err, res) => {
             if (!res) AsyncStorage.setItem("CART", JSON.stringify([product]));
             else {
@@ -430,39 +382,39 @@ export default class Product extends Component {
 
 }
 
-const dummyProduct = {
-    id: 2,
-    title: 'Cá hồi',
-    description: "Thịt cá hồi vừa ngon, vừa không sợ béo. các loại axit béo omega-3 chứa trong cá hồi mang lại nhiều lợi ích cho sức khỏe như: chống các dấu hiệu lão hóa, giảm mức cholesterol và huyết áp, kéo giảm nguy cơ bị đột quỵ, giúp giảm đau và cứng khớp gây ra bởi viêm khớp",
-    image: 'http://103.94.18.249/jstore/wp-content/uploads/2019/04/recipe2-300x188.jpg',
-    images: [
-        'http://103.94.18.249/jstore/wp-content/uploads/2019/04/recipe2-300x188.jpg',
-        // 'http://res.cloudinary.com/atf19/image/upload/c_crop,h_250,x_226,y_54/v1500465309/pexels-photo-521197_hg8kak.jpg',
-        // 'http://res.cloudinary.com/atf19/image/upload/c_crop,g_face,h_250,x_248/v1500465308/fashion-men-s-individuality-black-and-white-157675_wnctss.jpg',
-        // 'http://res.cloudinary.com/atf19/image/upload/c_crop,h_250/v1500465308/pexels-photo-179909_ddlsmt.jpg'
-    ],
-    price: '120$',
-    colors: ['Red', 'Blue', 'Black'],
-    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-    category: 'Hải sản',
-    similarItems: [
-        {
-            id: 10,
-            title: 'Cá thu',
-            price: '29$',
-            image: 'http://103.94.18.249/jstore/wp-content/uploads/2019/04/recipe2-300x188.jpg'
-        },
-        // {
-        //     id: 11,
-        //     title: 'V NECK T-SHIRT',
-        //     price: '29$',
-        //     image: 'http://res.cloudinary.com/atf19/image/upload/c_crop,h_250/v1500465308/pexels-photo-179909_ddlsmt.jpg'
-        // },
-        // {
-        //     id: 12,
-        //     title: 'V NECK T-SHIRT',
-        //     price: '29$',
-        //     image: 'http://res.cloudinary.com/atf19/image/upload/c_crop,h_250/v1500465308/pexels-photo-179909_ddlsmt.jpg'
-        // }
-    ]
-};
+// const dummyProduct = {
+//     id: 2,
+//     title: 'Cá hồi',
+//     description: "Thịt cá hồi vừa ngon, vừa không sợ béo. các loại axit béo omega-3 chứa trong cá hồi mang lại nhiều lợi ích cho sức khỏe như: chống các dấu hiệu lão hóa, giảm mức cholesterol và huyết áp, kéo giảm nguy cơ bị đột quỵ, giúp giảm đau và cứng khớp gây ra bởi viêm khớp",
+//     image: 'http://103.94.18.249/jstore/wp-content/uploads/2019/04/recipe2-300x188.jpg',
+//     images: [
+//         'http://103.94.18.249/jstore/wp-content/uploads/2019/04/recipe2-300x188.jpg',
+//         // 'http://res.cloudinary.com/atf19/image/upload/c_crop,h_250,x_226,y_54/v1500465309/pexels-photo-521197_hg8kak.jpg',
+//         // 'http://res.cloudinary.com/atf19/image/upload/c_crop,g_face,h_250,x_248/v1500465308/fashion-men-s-individuality-black-and-white-157675_wnctss.jpg',
+//         // 'http://res.cloudinary.com/atf19/image/upload/c_crop,h_250/v1500465308/pexels-photo-179909_ddlsmt.jpg'
+//     ],
+//     price: '120$',
+//     colors: ['Red', 'Blue', 'Black'],
+//     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+//     category: 'Hải sản',
+//     similarItems: [
+//         {
+//             id: 10,
+//             title: 'Cá thu',
+//             price: '29$',
+//             image: 'http://103.94.18.249/jstore/wp-content/uploads/2019/04/recipe2-300x188.jpg'
+//         },
+//         // {
+//         //     id: 11,
+//         //     title: 'V NECK T-SHIRT',
+//         //     price: '29$',
+//         //     image: 'http://res.cloudinary.com/atf19/image/upload/c_crop,h_250/v1500465308/pexels-photo-179909_ddlsmt.jpg'
+//         // },
+//         // {
+//         //     id: 12,
+//         //     title: 'V NECK T-SHIRT',
+//         //     price: '29$',
+//         //     image: 'http://res.cloudinary.com/atf19/image/upload/c_crop,h_250/v1500465308/pexels-photo-179909_ddlsmt.jpg'
+//         // }
+//     ]
+// };

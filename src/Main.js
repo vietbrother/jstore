@@ -12,6 +12,7 @@ import { Scene, Router, Actions } from 'react-native-router-flux';
 
 // Our custom files and classes import
 import Home from './page/Home';
+import Homepage from './page/Homepage';
 import Search from './page/Search';
 import Cart from './page/Cart';
 import WishList from './page/WishList';
@@ -69,6 +70,7 @@ export default class Main extends Component {
         <Router>
           <Scene key="root">
             <Scene initial key="home" component={Home} hideNavBar />
+            {/*<Scene key="homepage" component={Homepage} hideNavBar />*/}
             <Scene key="search" component={Search} modal hideNavBar />
             <Scene key="cart" component={Cart} modal hideNavBar />
             <Scene key="wishlist" component={WishList} modal hideNavBar />

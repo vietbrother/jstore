@@ -22,7 +22,7 @@ export default class ImageGallery extends Component {
   componentWillMount() {
     let imgs = [];
     this.props.images.map((img) => {
-      imgs.push({source: {uri: img}})
+      imgs.push({source: {uri: img.src}})
     });
     this.setState({images: imgs});
   }
