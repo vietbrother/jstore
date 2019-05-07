@@ -36,7 +36,7 @@ export default class Orders extends Component {
     async getUserId() {
         try {
             const value = await AsyncStorage.getItem('userId');
-            console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            console.log("Orders ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             console.log(value);
             this.setState({userId: value});
             console.log("userId : " + this.state.userId);
@@ -50,6 +50,7 @@ export default class Orders extends Component {
         global.WooCommerceAPI.get('orders', {
             orderby: 'date',
             // customer: this.state.userId
+            customer: parseInt(this.state.userId)
         })
             .then(data => {
                 // data will contain the body content from the request

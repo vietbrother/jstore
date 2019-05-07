@@ -81,15 +81,15 @@ export default class Product extends Component {
                 <Navbar left={left} right={right} title={this.props.product.name}/>
                 <Content>
                     {/*<Carousel*/}
-                        {/*ref={(carousel) => {*/}
-                            {/*this._carousel = carousel;*/}
-                        {/*}}*/}
-                        {/*sliderWidth={Dimensions.get('window').width}*/}
-                        {/*itemWidth={Dimensions.get('window').width}*/}
-                        {/*onSnapToItem={(index) => this.setState({activeSlide: index})}*/}
-                        {/*enableSnap={true}*/}
+                    {/*ref={(carousel) => {*/}
+                    {/*this._carousel = carousel;*/}
+                    {/*}}*/}
+                    {/*sliderWidth={Dimensions.get('window').width}*/}
+                    {/*itemWidth={Dimensions.get('window').width}*/}
+                    {/*onSnapToItem={(index) => this.setState({activeSlide: index})}*/}
+                    {/*enableSnap={true}*/}
                     {/*>*/}
-                        {/*{this.renderImages()}*/}
+                    {/*{this.renderImages()}*/}
                     {/*</Carousel>*/}
                     {this.renderImages()}
                     <Carousel
@@ -110,21 +110,21 @@ export default class Product extends Component {
                         autoplay={true}
                         autoplayDelay={500}
                         autoplayInterval={3000}
-                        onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
+                        onSnapToItem={(index) => this.setState({slider1ActiveSlide: index})}
                     >
                         {this.renderImages()}
                     </Carousel>
                     {/*<Pagination*/}
-                        {/*dotsLength={ENTRIES1.length}*/}
-                        {/*activeDotIndex={slider1ActiveSlide}*/}
-                        {/*containerStyle={styles.paginationContainer}*/}
-                        {/*dotColor={'rgba(255, 255, 255, 0.92)'}*/}
-                        {/*dotStyle={styles.paginationDot}*/}
-                        {/*inactiveDotColor={colors.black}*/}
-                        {/*inactiveDotOpacity={0.4}*/}
-                        {/*inactiveDotScale={0.6}*/}
-                        {/*carouselRef={this._slider1Ref}*/}
-                        {/*tappableDots={!!this._slider1Ref}*/}
+                    {/*dotsLength={ENTRIES1.length}*/}
+                    {/*activeDotIndex={slider1ActiveSlide}*/}
+                    {/*containerStyle={styles.paginationContainer}*/}
+                    {/*dotColor={'rgba(255, 255, 255, 0.92)'}*/}
+                    {/*dotStyle={styles.paginationDot}*/}
+                    {/*inactiveDotColor={colors.black}*/}
+                    {/*inactiveDotOpacity={0.4}*/}
+                    {/*inactiveDotScale={0.6}*/}
+                    {/*carouselRef={this._slider1Ref}*/}
+                    {/*tappableDots={!!this._slider1Ref}*/}
                     {/*/>*/}
                     <Pagination
                         dotsLength={this.state.product.images.length}
@@ -162,40 +162,40 @@ export default class Product extends Component {
                             </Col>
                         </Grid>
                         {/*<Grid style={{marginTop: 15}}>*/}
-                            {/*<Col>*/}
-                                {/*<View style={{flex: 1, justifyContent: 'center'}}>*/}
-                                    {/*<Text>Màu:</Text>*/}
-                                {/*</View>*/}
-                            {/*</Col>*/}
-                            {/*<Col size={3}>*/}
-                                {/*<Picker*/}
-                                    {/*mode="dropdown"*/}
-                                    {/*placeholder="Select a color"*/}
-                                    {/*note={true}*/}
-                                    {/*selectedValue={this.state.selectedColor}*/}
-                                    {/*onValueChange={(color) => this.setState({selectedColor: color})}*/}
-                                {/*>*/}
-                                    {/*{this.renderColors()}*/}
-                                {/*</Picker>*/}
-                            {/*</Col>*/}
+                        {/*<Col>*/}
+                        {/*<View style={{flex: 1, justifyContent: 'center'}}>*/}
+                        {/*<Text>Màu:</Text>*/}
+                        {/*</View>*/}
+                        {/*</Col>*/}
+                        {/*<Col size={3}>*/}
+                        {/*<Picker*/}
+                        {/*mode="dropdown"*/}
+                        {/*placeholder="Select a color"*/}
+                        {/*note={true}*/}
+                        {/*selectedValue={this.state.selectedColor}*/}
+                        {/*onValueChange={(color) => this.setState({selectedColor: color})}*/}
+                        {/*>*/}
+                        {/*{this.renderColors()}*/}
+                        {/*</Picker>*/}
+                        {/*</Col>*/}
                         {/*</Grid>*/}
                         {/*<Grid>*/}
-                            {/*<Col>*/}
-                                {/*<View style={{flex: 1, justifyContent: 'center'}}>*/}
-                                    {/*<Text>Cỡ:</Text>*/}
-                                {/*</View>*/}
-                            {/*</Col>*/}
-                            {/*<Col size={3}>*/}
-                                {/*<Picker*/}
-                                    {/*mode="dropdown"*/}
-                                    {/*placeholder="Chọn kích cỡ"*/}
-                                    {/*note={true}*/}
-                                    {/*selectedValue={this.state.selectedSize}*/}
-                                    {/*onValueChange={(size) => this.setState({selectedSize: size})}*/}
-                                {/*>*/}
-                                    {/*{this.renderSize()}*/}
-                                {/*</Picker>*/}
-                            {/*</Col>*/}
+                        {/*<Col>*/}
+                        {/*<View style={{flex: 1, justifyContent: 'center'}}>*/}
+                        {/*<Text>Cỡ:</Text>*/}
+                        {/*</View>*/}
+                        {/*</Col>*/}
+                        {/*<Col size={3}>*/}
+                        {/*<Picker*/}
+                        {/*mode="dropdown"*/}
+                        {/*placeholder="Chọn kích cỡ"*/}
+                        {/*note={true}*/}
+                        {/*selectedValue={this.state.selectedSize}*/}
+                        {/*onValueChange={(size) => this.setState({selectedSize: size})}*/}
+                        {/*>*/}
+                        {/*{this.renderSize()}*/}
+                        {/*</Picker>*/}
+                        {/*</Col>*/}
                         {/*</Grid>*/}
                         <Grid>
                             <Col size={2}>
@@ -208,7 +208,8 @@ export default class Product extends Component {
                                     <Button style={{flex: 1}} icon transparent
                                             style={{backgroundColor: '#fdfdfd'}}
                                             onPress={() => this.setState({quantity: this.state.quantity > 1 ? this.state.quantity - 1 : 1})}>
-                                        <Icon style={{color: Colors.navbarBackgroundColor}} name='ios-remove-circle-outline'/>
+                                        <Icon style={{color: Colors.navbarBackgroundColor}}
+                                              name='ios-remove-circle-outline'/>
                                     </Button>
                                     <View style={{
                                         flex: 4,
@@ -222,7 +223,8 @@ export default class Product extends Component {
                                     <Button style={{flex: 1}} icon transparent
                                             style={{backgroundColor: '#fdfdfd'}}
                                             onPress={() => this.setState({quantity: this.state.quantity + 1})}>
-                                        <Icon style={{color: Colors.navbarBackgroundColor}} name='ios-add-circle-outline'/>
+                                        <Icon style={{color: Colors.navbarBackgroundColor}}
+                                              name='ios-add-circle-outline'/>
                                     </Button>
                                 </View>
                             </Col>
@@ -257,23 +259,24 @@ export default class Product extends Component {
                                 marginLeft: 7,
                                 marginBottom: 10
                             }}/>
-                            <HTML html={this.state.product.description} imagesMaxWidth={Dimensions.get('window').width} />
+                            <HTML html={this.state.product.description}
+                                  imagesMaxWidth={Dimensions.get('window').width}/>
                             {/*<NBText note>*/}
-                                {/*{this.state.product.description}*/}
+                            {/*{this.state.product.description}*/}
 
                             {/*</NBText>*/}
                         </View>
                     </View>
                     {/*<View style={{marginTop: 15, paddingLeft: 12, paddingRight: 12}}>*/}
-                        {/*<Text style={{marginBottom: 5}}>Sản phẩm khác </Text>*/}
-                        {/*<View style={{*/}
-                            {/*width: 50,*/}
-                            {/*height: 1,*/}
-                            {/*backgroundColor: 'rgba(44, 62, 80, 0.5)',*/}
-                            {/*marginLeft: 7,*/}
-                            {/*marginBottom: 10*/}
-                        {/*}}/>*/}
-                        {/*{this.renderSimilairs()}*/}
+                    {/*<Text style={{marginBottom: 5}}>Sản phẩm khác </Text>*/}
+                    {/*<View style={{*/}
+                    {/*width: 50,*/}
+                    {/*height: 1,*/}
+                    {/*backgroundColor: 'rgba(44, 62, 80, 0.5)',*/}
+                    {/*marginLeft: 7,*/}
+                    {/*marginBottom: 10*/}
+                    {/*}}/>*/}
+                    {/*{this.renderSimilairs()}*/}
                     {/*</View>*/}
                 </Content>
             </Container>
@@ -355,7 +358,23 @@ export default class Product extends Component {
             if (!res) AsyncStorage.setItem("CART", JSON.stringify([product]));
             else {
                 var items = JSON.parse(res);
-                items.push(product);
+
+                //Find index of specific object using findIndex method.
+                //check product name is existed in cart -> increase quatity
+                var objIndex = items.findIndex((obj => obj.name == product.name));
+                if(objIndex != -1){
+                    //Log object to Console.
+                    console.log("Before update: ", items[objIndex])
+
+                    //Update object's name property.
+                    items[objIndex].quantity = items[objIndex].quantity + product.quantity;
+
+                    //Log object to console again.
+                    console.log("After update: ", items[objIndex]);
+                } else {
+                    items.push(product);
+                }
+
                 AsyncStorage.setItem("CART", JSON.stringify(items));
             }
             Toast.show({
