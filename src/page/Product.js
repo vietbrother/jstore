@@ -313,7 +313,7 @@ export default class Product extends Component {
 
                 //Find index of specific object using findIndex method.
                 //check product name is existed in cart -> increase quatity
-                var objIndex = items.findIndex((obj => obj.name == product.name));
+                var objIndex = items.findIndex((obj => obj.name == product.name && obj.userId == this.state.userId ));
                 if(objIndex != -1){
                     //Log object to Console.
                     console.log("Before update: ", items[objIndex])
@@ -341,6 +341,7 @@ export default class Product extends Component {
 
     addToWishlist() {
         var product = this.state.product;
+        product['userId'] = this.state.userId;
         var success = true;
         AsyncStorage.getItem("WISHLIST", (err, res) => {
             if (!res) AsyncStorage.setItem("WISHLIST", JSON.stringify([product]));
