@@ -34,21 +34,23 @@ export default class Cart extends Component {
         super(props);
         this.state = {
             cartItems: [],
-            total: 0
+            total: 0,
+            userId: ''
         };
     }
 
     componentWillMount() {
-        AsyncStorage.getItem('userId',(err, res) => {
+        AsyncStorage.getItem('userId', (err, res) => {
             if (res) {
                 //if user is existed
                 let userId = res;
+                this.setState({userId: userId});
                 AsyncStorage.getItem("CART", (err, res) => {
                     console.log("res " + res);
                     if (!res) this.setState({cartItems: []});
                     else {
                         var itemArr = JSON.parse(res);
-                        var temp = itemArr.filter(function(cartItem) {
+                        var temp = itemArr.filter(function (cartItem) {
                             return cartItem.userId == userId;
                         });
                         this.setState({cartItems: temp});
@@ -112,15 +114,36 @@ export default class Cart extends Component {
         this.setState({total: totalTemp});
     }
 
-    changeQuatity(item, quantityUpdate){
+    changeQuatity(item, quantityUpdate) {
         var tempCartItem = this.state.cartItems;
         var objIndex = tempCartItem.findIndex((obj => obj.name == item.name));
-        if(objIndex != -1){
+        if (objIndex != -1) {
             tempCartItem[objIndex].quantity = quantityUpdate;
             this.setState({cartItems: tempCartItem});
             this.getTotal();
         }
+        this.upfateStorageData(tempCartItem)
     }
+
+    upfateStorageData(tempCartItem) {
+        AsyncStorage.getItem("CART", (err, res) => {
+            if (res){
+                var itemArr = JSON.parse(res);
+                for (var index = 0; index < tempCartItem.length; ++index) {
+                    var item = tempCartItem[index];
+                    var objIndex = itemArr.findIndex((obj => obj.name == item.name && obj.userId == this.state.userId));
+                    if (objIndex != -1) {
+                        itemArr[objIndex].quantity  = item.quantity;
+                    } else {
+                        itemArr.push(item);
+                    }
+                }
+                AsyncStorage.setItem("CART", JSON.stringify(itemArr));
+
+            }
+        });
+    }
+
     renderItems() {
         let items = [];
         this.state.cartItems.map((item, i) => {

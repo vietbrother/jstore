@@ -40,7 +40,7 @@ export default class Navbar extends Component {
 
 const styles = {
     body: {
-        flex: 1,
+        flex: 2,
         justifyContent: 'center',
         alignItems: 'center'
     },
