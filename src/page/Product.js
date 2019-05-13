@@ -4,7 +4,7 @@
 
 // React native and others libraries imports
 import React, {Component} from 'react';
-import {Image, Dimensions, TouchableWithoutFeedback, AsyncStorage, WebView} from 'react-native';
+import {Image, Dimensions, TouchableWithoutFeedback, AsyncStorage, WebView, Alert} from 'react-native';
 import {
     View,
     Container,
@@ -301,6 +301,18 @@ export default class Product extends Component {
     }
 
     addToCart() {
+        if(this.state.userId == null || this.state.userId == ''){
+            //alert('Bạn cần đăng nhập trước khi thêm đồ vào giỏ hàng!');
+            Alert.alert(
+                '',
+                'Bạn cần đăng nhập trước khi thêm đồ vào giỏ hàng!', // <- this part is optional, you can pass an empty string
+                [
+                    {text: 'Đóng', onPress: () => console.log('OK Pressed')},
+                ],
+                {cancelable: false},
+            );
+            return;
+        }
         var product = this.state.product;
         // product['color'] = this.state.selectedColor;
         // product['size'] = this.state.selectedSize;
@@ -340,6 +352,17 @@ export default class Product extends Component {
     }
 
     addToWishlist() {
+        if(this.state.userId == null || this.state.userId == ''){
+            Alert.alert(
+                '',
+                'Bạn cần đăng nhập trước khi thêm danh sách yêu thích!', // <- this part is optional, you can pass an empty string
+                [
+                    {text: 'Đóng', onPress: () => console.log('OK Pressed')},
+                ],
+                {cancelable: false},
+            );
+            return;
+        }
         var product = this.state.product;
         product['userId'] = this.state.userId;
         var success = true;

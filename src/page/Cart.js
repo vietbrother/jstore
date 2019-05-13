@@ -258,7 +258,7 @@ export default class Cart extends Component {
     }
 
     checkout() {
-        Actions.checkout({cartItems: this.state.cartItems});
+        Actions.checkout({cartItems: this.state.cartItems, userId: this.state.userId});
     }
 
     itemClicked(item) {

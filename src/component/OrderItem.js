@@ -135,14 +135,46 @@ export default class OrderItem extends Component {
 
                     <Card>
                         <CardItem>
-                            <Text style={{}}>Thuế : {this.state.order.total_tax}</Text>
+                            <Col size={2}>
+                                <Text>Thuế : </Text>
+                            </Col>
+                            <Col size={2}>
+                                <Text style={{
+                                    fontSize: 20,
+                                    fontWeight: 'bold',
+                                    textAlign: 'right'
+                                }}>{this.state.order.total_tax} VND</Text>
+                            </Col>
                         </CardItem>
                         <CardItem>
-                            <Text style={{}}>Phí vận chuyển : {this.state.order.shipping_total}</Text>
+                            <Col size={2}>
+                                <Text>Phí vận chuyển : </Text>
+                            </Col>
+                            <Col size={2}>
+                                <Text style={{
+                                    fontSize: 20,
+                                    fontWeight: 'bold',
+                                    textAlign: 'right'
+                                }}>{this.state.order.shipping_total} VND</Text>
+                            </Col>
                         </CardItem>
                         <CardItem>
-                            <Text style={{fontSize: 18, fontWeight: 'bold'}}>Tổng tiền
-                                : {this.state.order.total}</Text>
+                            {/*<Text style={{fontSize: 18, fontWeight: 'bold'}}>Tổng tiền*/}
+                                {/*: <Text style={{fontSize: 18, fontWeight: 'bold', color: '#BE0026'}}>{this.state.order.total}</Text>*/}
+                            {/*</Text>*/}
+                            <Grid style={{fontSize: 16,}}>
+                                <Col size={2}>
+                                    <Text>Thành tiền : </Text>
+                                </Col>
+                                <Col size={2}>
+                                    <Text style={{
+                                        fontSize: 20,
+                                        fontWeight: 'bold',
+                                        color: '#BE0026',
+                                        textAlign: 'right'
+                                    }}>{this.state.order.total} VND</Text>
+                                </Col>
+                            </Grid>
                         </CardItem>
 
                     </Card>

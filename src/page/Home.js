@@ -103,7 +103,7 @@ export default class Home extends Component {
         console.log("render content")
         return (<SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref} sessionLoginKey={this.props.sessionLoginKey}>
             <Container>
-                <Navbar left={left} right={right} title="J-STORE"/>
+                <Navbar left={left} right={right} title="ONNI"/>
                 <Content>
                     {this.renderCategories(categories)}
                 </Content>

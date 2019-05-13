@@ -87,7 +87,7 @@ export default class Login extends Component {
                             textAlign: 'left',
                             width: '100%',
                             color: Colors.navbarBackgroundColor
-                        }}>J-STORE </Text>
+                        }}>ONNI </Text>
                         <Text style={{fontSize: 18, textAlign: 'left', width: '100%', color: '#687373'}}>Thực phẩm sạch Nhật Bản </Text>
                     </View>
                     <Item>

@@ -102,7 +102,7 @@ export default class SideMenu extends Component {
                             textAlign: 'center',
                             width: '100%',
                             color: Colors.navbarBackgroundColor
-                        }}>J-STORE </Text>
+                        }}>ONNI </Text>
                         {/*<Text style={{fontSize: 12, textAlign: 'left', width: '100%', color: '#687373'}}>Thực phẩm sạch Nhật Bản </Text>*/}
                     </View>
                     <View style={{paddingRight: 15}}>

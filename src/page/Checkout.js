@@ -32,6 +32,8 @@ import Colors from '../Colors';
 import Text from '../component/Text';
 import Navbar from '../component/Navbar';
 
+import WooCommerceAPI_ from 'react-native-woocommerce-api';
+
 export default class Checkout extends Component {
     constructor(props) {
         super(props);
@@ -51,8 +53,21 @@ export default class Checkout extends Component {
             note: '',
             sessionKey: null,
             errorText: '',
-            finishOrder: false
+            finishOrder: false,
+            userId: this.props.userId
         };
+
+        global.WooCommerceAPI_ = new WooCommerceAPI_({
+            url: 'http://103.94.18.249/jstore', // Your store URL
+            ssl: false,
+            consumerKey: 'ck_155068b58dd6614b3ace920437df62399bb94503', // Your consumer secret
+            consumerSecret: 'cs_9fb0b186ea0024bd6d9d497715e88e43b1bf2b6e', // Your consumer secret
+            //consumerKey: 'ck_29b281d2af61df58dadbeead327b06dd9a53f1be', // Your consumer secret
+            //consumerSecret: 'cs_a6d53b6572240d483749ee0123d48c76332c0e0d', // Your consumer secret
+            wpAPI: true, // Enable the WP REST API integration
+            version: 'wc/v3', // WooCommerce WP REST API version
+            queryStringAuth: true
+        });
     }
 
     componentDidMount() {
@@ -74,8 +89,8 @@ export default class Checkout extends Component {
 
     componentWillMount() {
         this.setState({cartItems: this.props.cartItems});
+        var total = 0;
         this.props.cartItems.map((item) => {
-            var total = 0;
             total += parseFloat(item.price) * parseInt(item.quantity);
             this.setState({total: total});
         });
@@ -187,7 +202,7 @@ export default class Checkout extends Component {
                     <View style={styles.invoice}>
 
                         <Item style={styles.item}>
-                            <Text>Thanh toán qua thẻ</Text>
+                            <Text>Chuyển khoản ngân hàng</Text>
                             <FAIcon name="cc-mastercard" size={20} color="#c0392b" style={{marginLeft: 7}}/>
                             <FAIcon name="cc-visa" size={20} color="#2980b9" style={{marginLeft: 2}}/>
                             <Right>
@@ -197,7 +212,7 @@ export default class Checkout extends Component {
                         </Item>
                         {this.state.card == true ? this.renderCardInfo() : null}
                         <Item style={styles.item}>
-                            <Text>Thanh toán sau khi nhận hàng</Text>
+                            <Text>Trả tiền mặt khi nhận hàng </Text>
                             <FAIcon name="money" size={20} color="#34495e" style={{marginLeft: 7}}/>
                             <Right>
                                 <Radio selected={this.state.paypal}
@@ -329,6 +344,7 @@ export default class Checkout extends Component {
         }
         if (msgErr != '') {
             this.setState({hasError: true, errorText: msgErr});
+            alert(errorText);
             return;
         }
         try {
@@ -343,6 +359,7 @@ export default class Checkout extends Component {
             billingObj['postcode'] = '100000';
             billingObj['country'] = 'VN';
             billingObj['email'] = '';
+            console.log(billingObj);
 
             var shippingObj = {};
             shippingObj['first_name'] = this.state.name;
@@ -353,6 +370,7 @@ export default class Checkout extends Component {
             shippingObj['state'] = '';
             shippingObj['postcode'] = '100000';
             shippingObj['country'] = 'VN';
+            console.log(shippingObj);
 
             var line_items = [];
             this.state.cartItems.map((item, i) => {
@@ -361,20 +379,24 @@ export default class Checkout extends Component {
                 lineItemObject['quantity'] = item.quantity;
                 line_items.push(lineItemObject);
             });
+            console.log(line_items);
 
 
-            global.WooCommerceAPI.post('products', {
-                category: this.props.id,
-                payment_method_title: this.state.card == true ? 'Thanh toán bằng thẻ' : 'Thanh toán trực tiếp',
+            global.WooCommerceAPI_.post('orders', {
+                // category: this.props.id,
+                payment_method: this.state.card == true ? 'bacs' : 'cod',
+                payment_method_title: this.state.card == true ? 'Chuyển khoản ngân hàng' : 'Trả tiền mặt khi nhận hàng',
                 set_paid: true,
+                customer_id: this.state.userId,
                 billing: billingObj,
                 shipping: shippingObj,
-                line_items: line_items
+                line_items: line_items,
             })
                 .then(data => {
                     console.log("API create order-----------------");
                     console.log(data);
                     this.setState({finishOrder: true});
+                    AsyncStorage.setItem("CART", JSON.stringify([]));
                 }).catch(error => {
                 // error will return any errors that occur
                 console.log(error);
@@ -395,7 +417,7 @@ export default class Checkout extends Component {
                     paddingLeft: 20,
                     paddingRight: 20
                 }}>
-                    <Text style={{fontSize: 16}}>Cám ơn quý khách đã thanh toán. Nhân viên JStore sẽ liên hệ lại với quý
+                    <Text style={{fontSize: 18}}>Cám ơn quý khách đã thanh toán. Nhân viên shop sẽ liên hệ lại với quý
                         khách để xác nhận đơn
                         hàng.</Text>
                     <Button onPress={() => this._finishOrder()}
