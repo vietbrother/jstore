@@ -18,7 +18,8 @@
     "react-native-render-html": "^4.1.2",
     "react-native-router-flux": "4.0.1",
     "react-native-snap-carousel": "3.7.2",
-    "react-native-woocommerce-api": "^1.0.12"
+    "react-native-woocommerce-api": "^1.0.12",
+    "react-native-loading-spinner-overlay": "1.0.1"
   },
   "devDependencies": {
     "babel-jest": "23.4.0",

@@ -4,7 +4,7 @@
 
 // React native and others libraries imports
 import React, {Component} from 'react';
-import {TouchableHighlight, AsyncStorage} from 'react-native';
+import {TouchableHighlight, AsyncStorage, Alert} from 'react-native';
 import {
     Container,
     Content,
@@ -33,6 +33,7 @@ import Text from '../component/Text';
 import Navbar from '../component/Navbar';
 
 import WooCommerceAPI_ from 'react-native-woocommerce-api';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class Checkout extends Component {
     constructor(props) {
@@ -54,7 +55,8 @@ export default class Checkout extends Component {
             sessionKey: null,
             errorText: '',
             finishOrder: false,
-            userId: this.props.userId
+            userId: this.props.userId,
+            loading: false
         };
 
         global.WooCommerceAPI_ = new WooCommerceAPI_({
@@ -113,6 +115,14 @@ export default class Checkout extends Component {
         );
         return (
             <Container style={{backgroundColor: '#fdfdfd'}}>
+                <Spinner
+                    //visibility of Overlay Loading Spinner
+                    visible={this.state.loading}
+                    //Text with the Spinner
+                    textContent={'Đang xử lý...'}
+                    //Text style of the Spinner Text
+                    textStyle={styles.spinnerTextStyle}
+                />
                 <Navbar left={left} right={right} title="Thanh toán"/>
                 {this.state.finishOrder == false ? this.renderMainContent() : this.renderFinishContent()}
             </Container>
@@ -381,30 +391,43 @@ export default class Checkout extends Component {
             });
             console.log(line_items);
 
+            Alert.alert(
+                'Thanh toán',
+                'Bạn có chắc chắn muốn thanh toán đơn hàng không ?',
+                [
+                    {text: 'Không', onPress: () => console.log('No Pressed'), style: 'cancel'},
+                    {text: 'Có', onPress: () => this.createOrder(billingObj, shippingObj, line_items)},
+                ]
+            )
 
-            global.WooCommerceAPI_.post('orders', {
-                // category: this.props.id,
-                payment_method: this.state.card == true ? 'bacs' : 'cod',
-                payment_method_title: this.state.card == true ? 'Chuyển khoản ngân hàng' : 'Trả tiền mặt khi nhận hàng',
-                set_paid: true,
-                customer_id: this.state.userId,
-                billing: billingObj,
-                shipping: shippingObj,
-                line_items: line_items,
-            })
-                .then(data => {
-                    console.log("API create order-----------------");
-                    console.log(data);
-                    this.setState({finishOrder: true});
-                    AsyncStorage.setItem("CART", JSON.stringify([]));
-                }).catch(error => {
-                // error will return any errors that occur
-                console.log(error);
-            });
         } catch (e) {
             console.log("Error when create order");
             console.log(e);
         }
+    }
+
+    createOrder(billingObj, shippingObj, line_items) {
+        this.setState({loading: true});
+        global.WooCommerceAPI_.post('orders', {
+            // category: this.props.id,
+            payment_method: this.state.card == true ? 'bacs' : 'cod',
+            payment_method_title: this.state.card == true ? 'Chuyển khoản ngân hàng' : 'Trả tiền mặt khi nhận hàng',
+            set_paid: true,
+            customer_id: this.state.userId,
+            billing: billingObj,
+            shipping: shippingObj,
+            line_items: line_items,
+        })
+            .then(data => {
+                console.log("API create order-----------------");
+                console.log(data);
+                AsyncStorage.setItem("CART", JSON.stringify([]));
+                this.setState({finishOrder: true});
+                this.setState({loading: false});
+            }).catch(error => {
+            // error will return any errors that occur
+            console.log(error);
+        });
     }
 
     renderFinishContent() {
@@ -486,5 +509,9 @@ const styles = {
         justifyContent: 'center',
         borderRadius: 10,
         fontSize: 14,
+    },
+    spinnerTextStyle: {
+        color: '#FFF',
+        fontWeight: 'bold'
     },
 };
