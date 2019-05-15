@@ -269,10 +269,15 @@ export default class Checkout extends Component {
                 // We have data!!
                 console.log(this.state.sessionKey);
                 items.push(<View style={{marginTop: 20, marginBottom: 10, paddingBottom: 7}}>
-                    <Button onPress={() => this.checkout()} style={{backgroundColor: Colors.navbarBackgroundColor}}
+                    <Button onPress={() => this.checkout()} style={{backgroundColor: '#c40521'}}
                             block iconLeft>
                         <Icon name='ios-card'/>
                         <Text style={{color: '#fdfdfd'}}> Thanh toán</Text>
+                    </Button>
+
+                    <Button onPress={() => this.cancelCheckout()} style={{backgroundColor: '#c40521'}} transparent>
+                        <Icon name='ios-close-circle-outline'/>
+                        <Text style={{color: '#fdfdfd'}}> Hủy </Text>
                     </Button>
                 </View>);
                 return items;
@@ -404,6 +409,17 @@ export default class Checkout extends Component {
             console.log("Error when create order");
             console.log(e);
         }
+    }
+
+    cancelCheckout(){
+        Alert.alert(
+            'Thanh toán',
+            'Bạn có chắc chắn muốn hủy thanh toán đơn hàng không ?',
+            [
+                {text: 'Không', onPress: () => console.log('No Pressed'), style: 'cancel'},
+                {text: 'Có', onPress: () => Actions.pop()},
+            ]
+        )
     }
 
     createOrder(billingObj, shippingObj, line_items) {

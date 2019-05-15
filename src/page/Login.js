@@ -167,7 +167,8 @@ export default class Login extends Component {
 
 const styles = StyleSheet.create({
     buttonLogin: {
-        backgroundColor: Colors.navbarBackgroundColor,
+        backgroundColor: '#c40521',
+        color: 'white',
         marginTop: 20,
         width: '100%',
         justifyContent: 'center',

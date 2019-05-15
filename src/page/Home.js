@@ -41,16 +41,17 @@ export default class Home extends Component {
             console.log(value);
             this.setState({sessionKey: value});
             console.log("state : " + this.state.sessionKey);
+            this._fetchCategorieData();
         } catch (error) {
             // Handle errors here
             console.error(error);
         }
     }
 
-    componentDidMount() {
+    _fetchCategorieData() {
         //Have a try and catch block for catching errors.
         try {
-            this.getSessionKey();
+            //this.getSessionKey();
             this.setState({isLoading: true});
             global.WooCommerceAPI.get('products/categories', {})
                 .then(data => {
@@ -91,8 +92,16 @@ export default class Home extends Component {
             </Right>
         );
         const {categories, loading} = this.state;
-        if (!loading) {
-            return (this.renderMainContent(left, right, categories));
+        if (this.state.loading == false) {
+            return (
+                <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref} sessionLoginKey={this.props.sessionLoginKey}>
+                    <Container>
+                        <Navbar left={left} right={right} title="ONNI"/>
+                        <Content>
+                            {this.renderCategories(this.state.categories)}
+                        </Content>
+                    </Container>
+                </SideMenuDrawer>);
         } else {
             return <ActivityIndicator/>
         }

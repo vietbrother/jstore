@@ -86,7 +86,7 @@ export default class Cart extends Component {
                         <Grid style={{marginTop: 20, marginBottom: 10}}>
                             <Col style={{paddingLeft: 10, paddingRight: 5}}>
                                 <Button onPress={() => this.checkout()}
-                                        style={{backgroundColor: Colors.navbarBackgroundColor}} block iconLeft>
+                                        style={{backgroundColor: '#c40521'}} block iconLeft>
                                     <Icon name='ios-card'/>
                                     <Text style={{color: '#fdfdfd'}}> Thanh toán </Text>
                                 </Button>

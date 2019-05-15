@@ -48,9 +48,9 @@ export default class Search extends Component {
                 <Header
                     searchBar
                     rounded
-                    style={{backgroundColor: Colors.navbarBackgroundColor}}
-                    backgroundColor={Colors.navbarBackgroundColor}
-                    androidStatusBarColor={Colors.statusBarColor}
+                    style={{backgroundColor: '#c40521'}}
+                    backgroundColor={'#c40521'}
+                    androidStatusBarColor={'#c40521'}
                     noShadow={true}
                 >
                     <Item>

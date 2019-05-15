@@ -183,7 +183,7 @@ export default class Product extends Component {
                         <Grid style={{marginTop: 15}}>
                             <Col size={3}>
                                 <Button block onPress={this.addToCart.bind(this)}
-                                        style={{backgroundColor: Colors.navbarBackgroundColor}}>
+                                        style={{backgroundColor: '#c40521'}}>
                                     <Text style={{color: "#fdfdfd", marginLeft: 5}}> Thêm vào giỏ </Text>
                                 </Button>
                             </Col>
