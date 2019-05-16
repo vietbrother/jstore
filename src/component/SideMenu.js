@@ -5,13 +5,30 @@
 // React native and others libraries imports
 import React, {Component} from 'react';
 import {ScrollView, LayoutAnimation, UIManager, Linking, Image, AsyncStorage} from 'react-native';
-import {View, List, ListItem, Body, Left, Right, Icon, Item, Input, Button, Grid, Col, Toast} from 'native-base';
+import {
+    View,
+    List,
+    ListItem,
+    Body,
+    Left,
+    Right,
+    Icon,
+    Item,
+    Input,
+    Button,
+    Grid,
+    Col,
+    Toast,
+    Container
+} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 
 // Our custom files and classes import
 import SideMenuSecondLevel from './SideMenuSecondLevel';
 import Text from './Text';
 import Colors from "../Colors";
+
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class SideMenu extends Component {
     constructor(props) {
@@ -23,19 +40,62 @@ export default class SideMenu extends Component {
             subMenuItems: [],
             clickedItem: '',
             sessionKey: null,
-            isReload: true
+            isReload: true,
+            isLoading: false,
+            menuItems: menuItems
         };
 
         UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
 
-    componentDidMount() {
+    // componentDidMount() {
+    //     AsyncStorage.getItem("cookieUserFromApi", (err, res) => {
+    //         console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+    //         console.log("res : " + res);
+    //         this.setState({sessionKey: res});
+    //         console.log("state : " + this.state.sessionKey);
+    //     });
+    // }
+
+    componentWillMount() {
         AsyncStorage.getItem("cookieUserFromApi", (err, res) => {
-            console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            console.log("get cookieUserFromApi in menu ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             console.log("res : " + res);
             this.setState({sessionKey: res});
             console.log("state : " + this.state.sessionKey);
+            this._fetchCategorieData();
         });
+    }
+
+    _fetchCategorieData() {
+        //Have a try and catch block for catching errors.
+        try {
+            //this.getSessionKey();
+            this.setState({isLoading: true});
+            global.WooCommerceAPI.get('products/categories', {})
+                .then(data => {
+                    // data will contain the body content from the request
+                    console.log("get category");
+                    // console.log(data);
+                    var items = [];
+                    data.map((item, i) => {
+                        if (item.parent != '0') {
+                            items.push(item);
+                        }
+                    });
+                    this.setState({menuItems: items, loading: false});
+                })
+                .catch(error => {
+                    // error will return any errors that occur
+                    console.log(error);
+                    this.setState({
+                        error: error.toString(),
+                        isLoading: false
+                    });
+                });
+        } catch (err) {
+            console.log("Error fetching data-----------", err);
+        }
     }
 
 
@@ -55,23 +115,32 @@ export default class SideMenu extends Component {
 
         return (
             <ScrollView style={styles.container}>
+                <Spinner
+                    //visibility of Overlay Loading Spinner
+                    visible={this.state.isLoading}
+                    //Text with the Spinner
+                    textContent={'Đang lấy dữ liệu...'}
+                    //Text style of the Spinner Text
+                    textStyle={styles.spinnerTextStyle}
+                />
                 {this.renderMenu()}
             </ScrollView>
         );
     }
 
-    renderContentMenu(){
+    renderContentMenu() {
         console.log("render renderContentMenu");
         AsyncStorage.getItem("cookieUserFromApi", (err, res) => {
             console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             console.log("res : " + res);
-            if(res != null){
+            if (res != null) {
                 return this.renderSecondaryList();
             } else {
                 return this.renderSecondaryListNologin();
             }
         });
     }
+
     renderMenu() {
         console.log("render SideMenu");
         console.log("this.props.sessionLoginKey " + this.props.sessionLoginKey);
@@ -121,14 +190,14 @@ export default class SideMenu extends Component {
                                 {/*<Icon name="ios-arrow-forward"/>*/}
                                 {/*</Right>*/}
                             </ListItem>
-                            {/*{this.renderMenuItems()}*/}
+                            {this.renderMenuItems()}
                         </List>
                     </View>
                     {/*<View style={styles.line}/>*/}
                     <View style={{paddingRight: 15}}>
                         <List>
                             {/*{this.state.sessionKey == null ? this.renderSecondaryListNologin() : this.renderSecondaryList()}*/}
-                            {this.props.sessionLoginKey != null || this.state.sessionKey != null ? this.renderSecondaryList() : this.renderSecondaryListNologin() }
+                            {this.props.sessionLoginKey != null || this.state.sessionKey != null ? this.renderSecondaryList() : this.renderSecondaryListNologin()}
                             {/*{this.renderSecondaryList()}*/}
                             {/*{this.renderContentMenu()}*/}
                         </List>
@@ -160,31 +229,51 @@ export default class SideMenu extends Component {
     }
 
     renderMenuItems() {
-        let items = [];
-        menuItems.map((item, i) => {
-            items.push(
-                <ListItem
-                    last={menuItems.length === i + 1}
-                    icon
-                    key={item.id}
-                    button={true}
-                    onPress={() => this.itemClicked(item)}
-                >
-                    <Body>
-                    <Text>{item.title}</Text>
-                    </Body>
-                    <Right>
-                        <Icon name="ios-arrow-forward"/>
-                    </Right>
-                </ListItem>
-            );
-        });
-        return items;
+        if (this.state.menuItems != null && this.state.menuItems > 0) {
+            let items = [];
+
+            var treeList = [];
+            var lookup = {};
+            this.state.menuItems.forEach(function(obj) {
+                lookup[obj['id']] = obj;
+                obj['subMenu'] = [];
+            });
+            this.state.menuItems.forEach(function(obj) {
+                if (obj['parent'] != null) {
+                    lookup[obj['parent']]['subMenu'].push(obj);
+                } else {
+                    treeList.push(obj);
+                }
+            });
+
+            treeList.map((item, i) => {
+                items.push(
+                    <ListItem
+                        last={menuItems.length === i + 1}
+                        icon
+                        key={item.id}
+                        button={true}
+                        onPress={() => this.itemClicked(item)}
+                    >
+                        <Body>
+                        <Text>{item.name}</Text>
+                        </Body>
+                        <Right>
+                            <Icon name="ios-arrow-forward"/>
+                        </Right>
+                    </ListItem>
+                );
+            });
+
+            return items;
+        }
+        return;
+
     }
 
     itemClicked(item) {
         if (!item.subMenu || item.subMenu.length <= 0) {
-            Actions.category({id: item.id, title: item.title});
+            Actions.category({id: item.id, title: item.name});
             return;
         }
         var animationConfig = {
@@ -279,7 +368,11 @@ const styles = {
         backgroundColor: 'rgba(189, 195, 199, 0.6)',
         marginTop: 10,
         marginBottom: 10
-    }
+    },
+    spinnerTextStyle: {
+        color: '#FFF',
+        fontWeight: 'bold'
+    },
 };
 
 var menuItems = [
