@@ -268,17 +268,26 @@ export default class Checkout extends Component {
             if (this.state.sessionKey !== null) {
                 // We have data!!
                 console.log(this.state.sessionKey);
-                items.push(<View style={{marginTop: 20, marginBottom: 10, paddingBottom: 7}}>
-                    <Button onPress={() => this.checkout()} style={{backgroundColor: '#c40521'}}
-                            block iconLeft>
-                        <Icon name='ios-card'/>
-                        <Text style={{color: '#fdfdfd'}}> Thanh toán</Text>
-                    </Button>
+                items.push(<View style={{width : '100%', marginTop: 20, marginBottom: 10, paddingBottom: 7}}>
 
-                    <Button onPress={() => this.cancelCheckout()} style={{backgroundColor: '#c40521'}} transparent>
-                        <Icon name='ios-close-circle-outline'/>
-                        <Text style={{color: '#fdfdfd'}}> Hủy </Text>
-                    </Button>
+                    <Grid style={{marginTop: 20, marginBottom: 10}}>
+                        <Col style={{paddingLeft: 10, paddingRight: 5}}>
+                            <Button onPress={() => this.checkout()}
+                                    style={{backgroundColor: '#c40521'}} block iconLeft>
+                                <Icon name='ios-card'/>
+                                <Text style={{color: '#fdfdfd'}}> Thanh toán </Text>
+                            </Button>
+                        </Col>
+                        <Col style={{paddingLeft: 5, paddingRight: 10}}>
+                            <Button onPress={() => this.cancelCheckout()}
+                                    style={{borderWidth: 1, borderColor: Colors.navbarBackgroundColor}} block
+                                    iconRight transparent>
+                                <Text style={{color: Colors.navbarBackgroundColor}}> Hủy thanh toán </Text>
+                                <Icon style={{color: Colors.navbarBackgroundColor}} name='ios-close-circle-outline'/>
+                            </Button>
+                        </Col>
+                    </Grid>
+
                 </View>);
                 return items;
             } else {
@@ -359,7 +368,14 @@ export default class Checkout extends Component {
         }
         if (msgErr != '') {
             this.setState({hasError: true, errorText: msgErr});
-            alert(errorText);
+            // alert(msgErr);
+            Alert.alert(
+                'Thông tin chưa chính xác',
+                msgErr,
+                [
+                    {text: 'Đóng', onPress: () => console.log('No Pressed'), style: 'cancel'},
+                ]
+            )
             return;
         }
         try {
@@ -411,7 +427,7 @@ export default class Checkout extends Component {
         }
     }
 
-    cancelCheckout(){
+    cancelCheckout() {
         Alert.alert(
             'Thanh toán',
             'Bạn có chắc chắn muốn hủy thanh toán đơn hàng không ?',

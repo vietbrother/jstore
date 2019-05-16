@@ -94,7 +94,7 @@ export default class Home extends Component {
         const {categories, loading} = this.state;
         if (this.state.loading == false) {
             return (
-                <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref} sessionLoginKey={this.props.sessionLoginKey}>
+                <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref}  key={new Date().valueOf()}  sessionLoginKey={this.props.sessionLoginKey}>
                     <Container>
                         <Navbar left={left} right={right} title="ONNI"/>
                         <Content>
@@ -106,18 +106,6 @@ export default class Home extends Component {
             return <ActivityIndicator/>
         }
 
-    }
-
-    renderMainContent(left, right, categories) {
-        console.log("render content")
-        return (<SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref} sessionLoginKey={this.props.sessionLoginKey}>
-            <Container>
-                <Navbar left={left} right={right} title="ONNI"/>
-                <Content>
-                    {this.renderCategories(categories)}
-                </Content>
-            </Container>
-        </SideMenuDrawer>);
     }
 
     renderCategories(categories) {

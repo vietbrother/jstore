@@ -23,6 +23,7 @@ export default class Category extends Component {
         this.state = {
             items: [],
             isLoading: true,
+            isReload: false
         };
     }
 
@@ -72,7 +73,7 @@ export default class Category extends Component {
             // {id: 29, title: 'White Shirt', categoryId: 2, categoryTitle: 'WOMEN', price: '12$', image: 'http://res.cloudinary.com/atf19/image/upload/c_scale,w_300/v1500284127/pexels-photo-497848_yenhuf.jpg', description: "Hello there, i'm a cool product with a heart of gold."},
             // {id: 16, title: 'Tie', categoryId: 1, categoryTitle: 'KIDS', price: '2$', image: 'http://res.cloudinary.com/atf19/image/upload/c_scale,w_300/v1500284127/pexels-photo-497848_yenhuf.jpg', description: "Hello there, i'm a cool product with a heart of gold."},
         ];
-        console.log("this.props.id : " + this.props.id);
+        console.log("==================================== this.props.id : " + this.props.id);
         global.WooCommerceAPI.get('products', {
             //per_page: 20,
             //page: 1,
@@ -115,9 +116,37 @@ export default class Category extends Component {
         //this.setState({items: products});
     }
 
-    fetchDataToList(data){
-        this.setState({items: data, loading: false});
+    fetchDataToList() {
+        global.WooCommerceAPI.get('products', {
+            //per_page: 20,
+            //page: 1,
+            category: this.props.id
+        })
+            .then(data => {
+                console.log("API-----------------");
+                console.log(data);
+                this.setState({items: data, loading: false});
+            }).catch(error => {
+            // error will return any errors that occur
+            console.log(error);
+        });
     }
+
+    componentWillUpdate() {
+        setTimeout(() => {
+            this.fetchDataToList()
+        }, 3000);
+        // if (this.props.data != null) {
+        //     this.setState({items: this.props.data, loading: false});
+        // }
+    }
+
+    // componentWillReceiveProps() {
+    //     if (this.props.data != null) {
+    //         this.setState({items: this.props.data, loading: false});
+    //     }
+    // }
+
     render() {
         var left = (
             <Left style={{flex: 1}}>
@@ -138,7 +167,7 @@ export default class Category extends Component {
         );
 
         return (
-            <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref}>
+            <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref} key={this.props.id}>
                 <Container style={{backgroundColor: '#fdfdfd'}}>
                     <Navbar left={left} right={right} title={this.props.title}/>
                     <Content padder>
@@ -149,26 +178,34 @@ export default class Category extends Component {
         );
     }
 
+    // componentWillReceiveProps(){
+    //     this.setState({items: [], loading: true});
+    //     console.log("this.props.id " + this.props.id)
+    //     this.fetchDataToList();
+    // }
     renderProducts() {
         let items = [];
-        let stateItems = this.state.items;
-        for (var i = 0; i < stateItems.length; i += 2) {
-            if (stateItems[i + 1]) {
-                items.push(
-                    <Grid key={i}>
-                        <Product key={stateItems[i].id} product={stateItems[i]}/>
-                        <Product key={stateItems[i + 1].id} product={stateItems[i + 1]} isRight/>
-                    </Grid>
-                );
-            } else {
-                items.push(
-                    <Grid key={i}>
-                        <Product key={stateItems[i].id} product={stateItems[i]}/>
-                        <Col key={i + 1}/>
-                    </Grid>
-                );
+        if (this.state.items != null && this.state.items.length > 0) {
+            let stateItems = this.state.items;
+            for (var i = 0; i < stateItems.length; i += 2) {
+                if (stateItems[i + 1]) {
+                    items.push(
+                        <Grid key={i}>
+                            <Product key={stateItems[i].id} product={stateItems[i]}/>
+                            <Product key={stateItems[i + 1].id} product={stateItems[i + 1]} isRight/>
+                        </Grid>
+                    );
+                } else {
+                    items.push(
+                        <Grid key={i}>
+                            <Product key={stateItems[i].id} product={stateItems[i]}/>
+                            <Col key={i + 1}/>
+                        </Grid>
+                    );
+                }
             }
         }
+
         return items;
     }
 }

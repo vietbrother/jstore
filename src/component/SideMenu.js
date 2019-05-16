@@ -42,7 +42,7 @@ export default class SideMenu extends Component {
             sessionKey: null,
             isReload: true,
             isLoading: false,
-            menuItems: menuItems
+            menuItems: []
         };
 
         UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -83,7 +83,8 @@ export default class SideMenu extends Component {
                             items.push(item);
                         }
                     });
-                    this.setState({menuItems: items, loading: false});
+                    // console.log(items);
+                    this.setState({menuItems: items, isLoading: false});
                 })
                 .catch(error => {
                     // error will return any errors that occur
@@ -98,21 +99,21 @@ export default class SideMenu extends Component {
         }
     }
 
-
+    fetchProductByCategoryId(categoryId, categoryName){
+        global.WooCommerceAPI.get('products', {
+            //per_page: 20,
+            //page: 1,
+            category: categoryId
+        })
+            .then(data => {
+                this.setState({items: data, loading: false});
+                Actions.category({id: categoryId, title: categoryName, data: data});
+            }).catch(error => {
+            // error will return any errors that occur
+            console.log(error);
+        });
+    }
     render() {
-        console.log("render main SideMenu");
-        // console.log("this.state.isReload " + this.state.isReload);
-        // this.setState({isReload: true});
-        // if(this.state.isReload){
-        //     this.setState({isReload: false});
-        //     AsyncStorage.getItem("cookieUserFromApi", (err, res) => {
-        //         console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        //         console.log("res : " + res);
-        //         this.setState({sessionKey: res});
-        //         console.log("state : " + this.state.sessionKey);
-        //     });
-        // }
-
         return (
             <ScrollView style={styles.container}>
                 <Spinner
@@ -144,12 +145,6 @@ export default class SideMenu extends Component {
     renderMenu() {
         console.log("render SideMenu");
         console.log("this.props.sessionLoginKey " + this.props.sessionLoginKey);
-        // this.setState({sessionKey: this.props.sessionLoginKey});
-        // AsyncStorage.getItem("cookieUserFromApi", (err, res) => {
-        //     console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        //     console.log("res : " + res);
-        //     this.setState({sessionKey: res});
-        // });
         if (!this.state.subMenu) {
             return (
                 <View>
@@ -180,7 +175,7 @@ export default class SideMenu extends Component {
                                 icon
                                 key={0}
                                 button={true}
-                                onPress={Actions['home']}
+                                onPress={()=> this._gotoHomepage(0)}
 
                             >
                                 <Body>
@@ -228,52 +223,80 @@ export default class SideMenu extends Component {
         }
     }
 
-    renderMenuItems() {
-        if (this.state.menuItems != null && this.state.menuItems > 0) {
-            let items = [];
+    _gotoHomepage(id) {
+        Actions.home({id: id});
+    }
 
-            var treeList = [];
-            var lookup = {};
-            this.state.menuItems.forEach(function(obj) {
-                lookup[obj['id']] = obj;
-                obj['subMenu'] = [];
-            });
-            this.state.menuItems.forEach(function(obj) {
-                if (obj['parent'] != null) {
-                    lookup[obj['parent']]['subMenu'].push(obj);
-                } else {
-                    treeList.push(obj);
+    unflatten(arr) {
+        var tree = [],
+            mappedArr = {},
+            arrElem,
+            mappedElem;
+
+        // First map the nodes of the array to an object -> create a hash table.
+        for (var i = 0, len = arr.length; i < len; i++) {
+            arrElem = arr[i];
+            mappedArr[arrElem.id] = arrElem;
+            mappedArr[arrElem.id]['subMenu'] = [];
+        }
+
+
+        for (var id in mappedArr) {
+            if (mappedArr.hasOwnProperty(id)) {
+                mappedElem = mappedArr[id];
+                // If the element is not at the root level, add it to its parent array of children.
+                if (mappedElem.parentid) {
+                    mappedArr[mappedElem['parent']]['subMenu'].push(mappedElem);
                 }
-            });
+                // If the element is at the root level, add it to first level elements array.
+                else {
+                    tree.push(mappedElem);
+                }
+            }
+        }
+        return tree;
+    }
 
-            treeList.map((item, i) => {
-                items.push(
-                    <ListItem
-                        last={menuItems.length === i + 1}
-                        icon
-                        key={item.id}
-                        button={true}
-                        onPress={() => this.itemClicked(item)}
-                    >
-                        <Body>
-                        <Text>{item.name}</Text>
-                        </Body>
-                        <Right>
-                            <Icon name="ios-arrow-forward"/>
-                        </Right>
-                    </ListItem>
-                );
-            });
+    renderMenuItems() {
+        if (this.state.menuItems != null && this.state.menuItems.length > 0) {
+            // console.log("___________________________________________this.state.menuItems");
+            let items = [];
+            try {
+                var treeList = this.unflatten(this.state.menuItems);
 
+                // console.log(treeList);
+
+                treeList.map((item, i) => {
+                    var key = new Date().valueOf();
+                    items.push(
+                        <ListItem
+                            last={menuItems.length === i + 1}
+                            icon
+                            key={key + "-" + item.id}
+                            button={true}
+                            onPress={() => this.itemClicked(item)}
+                        >
+                            <Body>
+                            <Text>{item.name}</Text>
+                            </Body>
+                            <Right>
+                                <Icon name="ios-arrow-forward"/>
+                            </Right>
+                        </ListItem>
+                    );
+                });
+            } catch (e) {
+                console.log(e);
+            }
             return items;
         }
-        return;
 
     }
 
     itemClicked(item) {
         if (!item.subMenu || item.subMenu.length <= 0) {
-            Actions.category({id: item.id, title: item.name});
+            Actions.category({id: item.id, title: item.name, reload: '1'});
+            // this.fetchProductByCategoryId(item.id, item.name);
             return;
         }
         var animationConfig = {

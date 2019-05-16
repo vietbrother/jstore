@@ -78,3 +78,5 @@ To contribute your changes to the main repository, create a pull request from yo
 - http://woocommerce.github.io/woocommerce-rest-api-docs/#list-all-products
 - https://stackoverflow.com/questions/48163307/woocommerce-rest-api-product-filters-how-it-works
 
+> note
+- gen unique key={new Date().valueOf()} to re-render menu

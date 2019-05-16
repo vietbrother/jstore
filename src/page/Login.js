@@ -12,7 +12,8 @@ import Colors from '../Colors';
 import Text from '../component/Text';
 import Navbar from '../component/Navbar';
 
-import {StyleSheet, Image, AsyncStorage,} from 'react-native';
+import {StyleSheet, Image, AsyncStorage, ScrollView,} from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class Login extends Component {
     constructor(props) {
@@ -21,11 +22,12 @@ export default class Login extends Component {
             username: '',
             password: '',
             hasError: false,
-            errorText: ''
+            errorText: '',
+            isLoading: false
         };
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this.removeSessionKey();
     }
 
@@ -43,6 +45,7 @@ export default class Login extends Component {
             console.error(error);
         }
     }
+
     async setSessionKey() {
         try {
             await AsyncStorage.setItem('cookieUserFromApi', responseJson.cookie);
@@ -51,6 +54,7 @@ export default class Login extends Component {
             console.error(error);
         }
     }
+
     render() {
         var left = (
             <Left style={{flex: 1}}>
@@ -72,6 +76,14 @@ export default class Login extends Component {
         return (
             <Container style={{backgroundColor: '#fdfdfd'}}>
                 {/*<Navbar left={left} right={right} title="Đăng nhập" />*/}
+                <Spinner
+                    //visibility of Overlay Loading Spinner
+                    visible={this.state.isLoading}
+                    //Text with the Spinner
+                    textContent={'Đang đăng nhập ...'}
+                    //Text style of the Spinner Text
+                    textStyle={styles.spinnerTextStyle}
+                />
                 <View style={{
                     flex: 1,
                     justifyContent: 'center',
@@ -88,7 +100,8 @@ export default class Login extends Component {
                             width: '100%',
                             color: Colors.navbarBackgroundColor
                         }}>ONNI </Text>
-                        <Text style={{fontSize: 18, textAlign: 'left', width: '100%', color: '#687373'}}>Thực phẩm sạch Nhật Bản </Text>
+                        <Text style={{fontSize: 18, textAlign: 'left', width: '100%', color: '#687373'}}>Thực phẩm sạch
+                            Nhật Bản </Text>
                     </View>
                     <Item>
                         <Icon active name='ios-person' style={{color: "#687373"}}/>
@@ -132,15 +145,24 @@ export default class Login extends Component {
         var pass = this.state.password;
         let statusLogin;
         let sessionLoginKey;
+        if (user == null || user == '' || pass == '' || pass == '') {
+            this.setState({hasError: true, errorText: 'Cần nhập tên đăng nhập và mật khẩu'});
+            return;
+        }
         try {
+            this.setState({isLoading: true});
             await fetch('http://103.94.18.249/jstore/api/user/generate_auth_cookie/?username=' + user + '&password=' + pass + '&insecure=cool')
                 .then((response) => response.json())
                 .then((responseJson) => {
-                    statusLogin = responseJson.status;
-                    sessionLoginKey = responseJson.cookie;
+                    console.log(responseJson);
                     try {
-                        AsyncStorage.setItem('cookieUserFromApi', responseJson.cookie);
-                        AsyncStorage.setItem('userId', responseJson.user.id.toString());
+                        this.setState({isLoading: false});
+                        statusLogin = responseJson.status;
+                        if (statusLogin == 'ok') {
+                            sessionLoginKey = responseJson.cookie;
+                            AsyncStorage.setItem('cookieUserFromApi', responseJson.cookie);
+                            AsyncStorage.setItem('userId', responseJson.user.id.toString());
+                        }
                     } catch (error) {
                         // Error saving data
                         console.error(error);
@@ -174,9 +196,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 10,
         fontSize: 14,
-    } ,
+    },
     buttonSignup: {
-        backgroundColor:"transparent",
+        backgroundColor: "transparent",
         color: "#bcbec1",
         marginTop: 20,
         width: '100%',
