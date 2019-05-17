@@ -41,6 +41,7 @@ export default class Product extends Component {
             selectedColor: '',
             selectedSize: '',
             userId: '',
+            isWhislist: Colors.navbarBackgroundColor
         };
     }
 
@@ -51,6 +52,15 @@ export default class Product extends Component {
             console.log("Product userId " + res);
             if(res){
                 this.setState({userId: res});
+            }
+        });
+
+        AsyncStorage.getItem("WISHLIST", (err, res) => {
+            if (res){
+                var items = JSON.parse(res);
+                if (this.search(items, product)) {
+                    this.setState({isWhislist: 'green'});
+                }
             }
         });
     }
@@ -190,7 +200,7 @@ export default class Product extends Component {
                             <Col>
                                 <Button block onPress={this.addToWishlist.bind(this)} icon transparent
                                         style={{backgroundColor: '#fdfdfd'}}>
-                                    <Icon style={{color: Colors.navbarBackgroundColor}} name='ios-heart'/>
+                                    <Icon style={{color: this.state.isWhislist}} name='ios-heart'/>
                                 </Button>
                             </Col>
                         </Grid>
