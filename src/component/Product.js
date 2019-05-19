@@ -4,44 +4,79 @@
 
 // React native and others libraries imports
 import React, {Component} from 'react';
-import {Image} from 'react-native';
+import {Image, TouchableOpacity} from 'react-native';
 import {View, Col, Card, CardItem, Body, Button} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 
 // Our custom files and classes import
 import Colors from '../Colors';
+import Config from '../Config';
 import Text from './Text';
 
 export default class product extends Component {
     render() {
         return (
             <Col style={this.props.isRight ? style.leftMargin : style.rightMargin}>
-                <Card transparent>
-                    <CardItem cardBody>
-                        <Button transparent style={style.button} onPress={() => this.pressed()}>
-                            <Image source={{uri: this.props.product.images[0].src}} style={style.image}/>
-                            <View style={style.border}/>
-                        </Button>
-                    </CardItem>
-                    <CardItem style={{paddingTop: 0}}>
-                        <Button style={{flex: 1, paddingLeft: 0, paddingRight: 0, paddingBottom: 0, paddingTop: 0}}
-                                transparent
-                                onPress={() => this.pressed()}
-                        >
-                            <Body>
+                <TouchableOpacity style={style.content} onPress={() => this.pressed()}>
+                    <Col>
+                        <Image source={{uri: this.props.product.images[0].src}} style={style.image}/>
+                        <View style={style.border}/>
+                        <View style={{flex: 1, width: '100%', alignItems: 'center'}}>
                             <Text
                                 style={{fontSize: 16}}
-                                numberOfLines={1}
+                                numberOfLines={2}
                             >{this.props.product.name}</Text>
                             <View style={{flex: 1, width: '100%', alignItems: 'center'}}>
-                                <View style={style.line}/>
-                                <Text style={style.price}>{this.props.product.price}</Text>
-                                <View style={style.line}/>
+                                {/*<View style={style.line}/>*/}
+                                <Text style={style.price}>{this.props.product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} {Config.vnd}</Text>
+                                {/*<View style={style.line}/>*/}
                             </View>
-                            </Body>
-                        </Button>
-                    </CardItem>
-                </Card>
+                        </View>
+                    </Col>
+                </TouchableOpacity>
+                {/*<Card transparent>*/}
+                    {/*<CardItem cardBody>*/}
+                        {/*<Button transparent style={style.button} onPress={() => this.pressed()}>*/}
+                            {/*<Image source={{uri: this.props.product.images[0].src}} style={style.image}/>*/}
+                            {/*<View style={style.border}/>*/}
+                        {/*</Button>*/}
+                    {/*</CardItem>*/}
+                    {/*<CardItem style={{paddingTop: 0}}>*/}
+                        {/*<Col>*/}
+                            {/*<Button style={{flex: 1, paddingLeft: 0, paddingRight: 0, paddingBottom: 0, paddingTop: -10}}*/}
+                                    {/*transparent*/}
+                                    {/*onPress={() => this.pressed()}*/}
+                            {/*>*/}
+                                {/*<Body>*/}
+                                {/*<Text*/}
+                                    {/*style={{fontSize: 16}}*/}
+                                    {/*numberOfLines={2}*/}
+                                {/*>{this.props.product.name}</Text>*/}
+                                {/*/!*<View style={{flex: 1, width: '100%', alignItems: 'center'}}>*!/*/}
+                                {/*/!*<View style={style.line}/>*!/*/}
+                                {/*/!*<Text style={style.price}>{this.props.product.price}</Text>*!/*/}
+                                {/*/!*<View style={style.line}/>*!/*/}
+                                {/*/!*</View>*!/*/}
+                                {/*</Body>*/}
+                            {/*</Button>*/}
+                            {/*<Button style={{flex: 1, paddingLeft: 0, paddingRight: 0, paddingBottom: 0, marginTop: -8}}*/}
+                                    {/*transparent*/}
+                                    {/*onPress={() => this.pressed()}*/}
+                            {/*>*/}
+                                {/*<Body>*/}
+                                {/*<View style={{flex: 1, width: '100%', alignItems: 'center'}}>*/}
+                                    {/*/!*<View style={style.line}/>*!/*/}
+                                    {/*<Text style={style.price}>{this.props.product.price} {Config.vnd}</Text>*/}
+                                    {/*/!*<View style={style.line}/>*!/*/}
+                                {/*</View>*/}
+                                {/*</Body>*/}
+                            {/*</Button>*/}
+
+                        {/*</Col>*/}
+                    {/*</CardItem>*/}
+
+                {/*</Card>*/}
+
             </Col>
         );
     }
@@ -78,7 +113,8 @@ const style = {
         paddingLeft: 5,
         paddingRight: 5,
         zIndex: 1000,
-        backgroundColor: '#fdfdfd'
+        backgroundColor: '#fdfdfd',
+        color: '#c40521'
     },
     line: {
         width: '100%',
@@ -86,5 +122,12 @@ const style = {
         backgroundColor: '#7f8c8d',
         position: 'absolute',
         top: '52%'
-    }
+    },
+    content: {
+        flexDirection: "row",
+        marginTop: 10,
+        marginRight: 10,
+        marginBottom: 10,
+        marginLeft: 10
+    },
 }

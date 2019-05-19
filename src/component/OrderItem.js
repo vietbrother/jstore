@@ -27,6 +27,7 @@ import Carousel, {Pagination} from 'react-native-snap-carousel';
 
 // Our custom files and classes import
 import Colors from '../Colors';
+import Config from '../Config';
 import Text from '../component/Text';
 import Navbar from '../component/Navbar';
 import {default as OrderComponent} from '../component/OrderItem';
@@ -121,11 +122,14 @@ export default class OrderItem extends Component {
                                   renderRow={(item) =>
                                       <ListItem>
                                           <Grid>
-                                              <Col size={2}>
+                                              <Col size={3}>
                                                   <Text style={{fontWeight: 'bold'}}>{item.name}</Text>
                                               </Col>
-                                              <Col size={2}>
-                                                  <Text>{item.price} x {item.quantity}</Text>
+                                              <Col size={1}>
+                                                  <Text
+                                                      style={{textAlign: 'center'}}>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                                                      x <Text style={{color: '#BE0026',}}>{item.quantity}</Text>
+                                                  </Text>
                                               </Col>
                                           </Grid>
                                       </ListItem>}>
@@ -143,7 +147,7 @@ export default class OrderItem extends Component {
                                     fontSize: 20,
                                     fontWeight: 'bold',
                                     textAlign: 'right'
-                                }}>{this.state.order.total_tax} VND</Text>
+                                }}>{this.state.order.total_tax} {Config.vnd}</Text>
                             </Col>
                         </CardItem>
                         <CardItem>
@@ -155,12 +159,12 @@ export default class OrderItem extends Component {
                                     fontSize: 20,
                                     fontWeight: 'bold',
                                     textAlign: 'right'
-                                }}>{this.state.order.shipping_total} VND</Text>
+                                }}>{this.state.order.shipping_total} {Config.vnd}</Text>
                             </Col>
                         </CardItem>
                         <CardItem>
                             {/*<Text style={{fontSize: 18, fontWeight: 'bold'}}>Tổng tiền*/}
-                                {/*: <Text style={{fontSize: 18, fontWeight: 'bold', color: '#BE0026'}}>{this.state.order.total}</Text>*/}
+                            {/*: <Text style={{fontSize: 18, fontWeight: 'bold', color: '#BE0026'}}>{this.state.order.total}</Text>*/}
                             {/*</Text>*/}
                             <Grid style={{fontSize: 16,}}>
                                 <Col size={2}>
@@ -172,7 +176,7 @@ export default class OrderItem extends Component {
                                         fontWeight: 'bold',
                                         color: '#BE0026',
                                         textAlign: 'right'
-                                    }}>{this.state.order.total} VND</Text>
+                                    }}>{this.state.order.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} {Config.vnd}</Text>
                                 </Col>
                             </Grid>
                         </CardItem>
@@ -185,10 +189,10 @@ export default class OrderItem extends Component {
         );
     }
 
-    renderStatus(status){
-        if(status == 'processing'){
+    renderStatus(status) {
+        if (status == 'processing') {
             return (<Text style={{color: '#ffa505'}}>Đang xử lý</Text>);
-        } else if(status == 'completed'){
+        } else if (status == 'completed') {
             return (<Text style={{color: '#44bc37'}}>Hoàn thành</Text>);
         } else {
             return (<Text style={{color: '#26619c'}}>status</Text>);

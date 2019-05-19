@@ -61,6 +61,7 @@ export default class SideMenu extends Component {
         AsyncStorage.getItem("cookieUserFromApi", (err, res) => {
             console.log("get cookieUserFromApi in menu ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             console.log("res : " + res);
+            console.log("this.props.sessionLoginKey : " + this.props.sessionLoginKey);
             this.setState({sessionKey: res});
             console.log("state : " + this.state.sessionKey);
             this._fetchCategorieData();
@@ -71,48 +72,47 @@ export default class SideMenu extends Component {
         //Have a try and catch block for catching errors.
         try {
             //this.getSessionKey();
-            this.setState({isLoading: true});
-            global.WooCommerceAPI.get('products/categories', {})
-                .then(data => {
-                    // data will contain the body content from the request
-                    console.log("get category");
-                    // console.log(data);
-                    var items = [];
-                    data.map((item, i) => {
-                        if (item.parent != '0') {
-                            items.push(item);
-                        }
+            if (this.props.fetchData != null && this.props.fetchData == '1') {
+                console.log("++++++++++++++ reload data ++++++++++++++++++++++++")
+                this.setState({isLoading: true});
+                global.WooCommerceAPI.get('products/categories', {})
+                    .then(data => {
+                        // data will contain the body content from the request
+                        console.log("get category");
+                        // console.log(data);
+                        var items = [];
+                        data.map((item, i) => {
+                            if (item.parent != '0') {
+                                items.push(item);
+                            }
+                        });
+                        // console.log(items);
+                        this.setState({menuItems: items, isLoading: false});
+                        AsyncStorage.setItem("MENU_CATEGORIES", JSON.stringify(items));
+                    })
+                    .catch(error => {
+                        // error will return any errors that occur
+                        console.log(error);
+                        this.setState({
+                            error: error.toString(),
+                            isLoading: false
+                        });
                     });
-                    // console.log(items);
-                    this.setState({menuItems: items, isLoading: false});
-                })
-                .catch(error => {
-                    // error will return any errors that occur
-                    console.log(error);
-                    this.setState({
-                        error: error.toString(),
-                        isLoading: false
-                    });
+            } else {
+                console.log("++++++++++++++ get data from store++++++++++++++++++++++++")
+                AsyncStorage.getItem("MENU_CATEGORIES", (err, res) => {
+                    if (res) {
+                        var items = JSON.parse(res);
+                        this.setState({menuItems: items, isLoading: false});
+                    }
                 });
+            }
+
         } catch (err) {
             console.log("Error fetching data-----------", err);
         }
     }
 
-    fetchProductByCategoryId(categoryId, categoryName){
-        global.WooCommerceAPI.get('products', {
-            //per_page: 20,
-            //page: 1,
-            category: categoryId
-        })
-            .then(data => {
-                this.setState({items: data, loading: false});
-                Actions.category({id: categoryId, title: categoryName, data: data});
-            }).catch(error => {
-            // error will return any errors that occur
-            console.log(error);
-        });
-    }
     render() {
         return (
             <ScrollView style={styles.container}>
@@ -129,22 +129,23 @@ export default class SideMenu extends Component {
         );
     }
 
-    renderContentMenu() {
-        console.log("render renderContentMenu");
-        AsyncStorage.getItem("cookieUserFromApi", (err, res) => {
-            console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            console.log("res : " + res);
-            if (res != null) {
-                return this.renderSecondaryList();
-            } else {
-                return this.renderSecondaryListNologin();
-            }
-        });
-    }
+    // renderContentMenu() {
+    //     console.log("render renderContentMenu");
+    //     AsyncStorage.getItem("cookieUserFromApi", (err, res) => {
+    //         console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+    //         console.log("res : " + res);
+    //         if (res != null) {
+    //             return this.renderSecondaryList();
+    //         } else {
+    //             return this.renderSecondaryListNologin();
+    //         }
+    //     });
+    // }
 
     renderMenu() {
         console.log("render SideMenu");
         console.log("this.props.sessionLoginKey " + this.props.sessionLoginKey);
+        console.log("this.props.fetchData " + this.props.fetchData);
         if (!this.state.subMenu) {
             return (
                 <View>
@@ -175,7 +176,7 @@ export default class SideMenu extends Component {
                                 icon
                                 key={0}
                                 button={true}
-                                onPress={()=> this._gotoHomepage(0)}
+                                onPress={() => this._gotoHomepage(0)}
 
                             >
                                 <Body>
@@ -295,6 +296,7 @@ export default class SideMenu extends Component {
 
     itemClicked(item) {
         if (!item.subMenu || item.subMenu.length <= 0) {
+            console.log("============================item.id : " + item.id)
             Actions.category({id: item.id, title: item.name, reload: '1'});
             // this.fetchProductByCategoryId(item.id, item.name);
             return;

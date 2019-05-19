@@ -4,6 +4,7 @@
 
 // React native and others libraries imports
 import React, {Component} from 'react';
+import { ActivityIndicator} from 'react-native';
 import {Container, Content, View, Left, Right, Button, Icon, Grid, Col} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 
@@ -48,6 +49,7 @@ export default class Orders extends Component {
     }
 
     fetchOrderByUserId(){
+        this.setState({items: [], loading: true});
         global.WooCommerceAPI.get('orders', {
             orderby: 'date',
             // customer: this.state.userId
@@ -93,6 +95,17 @@ export default class Orders extends Component {
                     <Content padder contentContainerStyle={{
                         backgroundColor: '#f3f9ff'
                     }}>
+                        <View style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            display: this.state.loading == true ? 'flex' : 'none'
+                        }}>
+                            <ActivityIndicator
+                                animating={this.state.loading}
+                                color='#bc2b78'
+                                size="large"
+                            />
+                        </View>
                         {this.renderOrders()}
                     </Content>
                 </Container>

@@ -26,6 +26,7 @@ import {Actions} from 'react-native-router-flux';
 
 // Our custom files and classes import
 import Colors from '../Colors';
+import Config from '../Config';
 import Text from '../component/Text';
 import Navbar from '../component/Navbar';
 
@@ -127,13 +128,13 @@ export default class Cart extends Component {
 
     upfateStorageData(tempCartItem) {
         AsyncStorage.getItem("CART", (err, res) => {
-            if (res){
+            if (res) {
                 var itemArr = JSON.parse(res);
                 for (var index = 0; index < tempCartItem.length; ++index) {
                     var item = tempCartItem[index];
                     var objIndex = itemArr.findIndex((obj => obj.name == item.name && obj.userId == this.state.userId));
                     if (objIndex != -1) {
-                        itemArr[objIndex].quantity  = item.quantity;
+                        itemArr[objIndex].quantity = item.quantity;
                     } else {
                         itemArr.push(item);
                     }
@@ -162,7 +163,11 @@ export default class Cart extends Component {
                         }}>{item.quantity > 1 ? item.quantity + " x " : null}</Text>
                         {item.name}
                     </Text>
-                    <Text style={{fontSize: 16, fontWeight: 'bold', marginBottom: 10}}>{item.price}</Text>
+                    <Text style={{
+                        fontSize: 16,
+                        fontWeight: 'bold',
+                        marginBottom: 10
+                    }}>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} {Config.vnd}</Text>
                     {/*<Text style={{fontSize: 14 ,fontStyle: 'italic'}}>Tên: {item.name}</Text>*/}
                     {/*<Text style={{fontSize: 14 ,fontStyle: 'italic'}}>Size: {item.size}</Text>*/}
 
@@ -210,7 +215,7 @@ export default class Cart extends Component {
                                 fontWeight: 'bold',
                                 color: '#BE0026',
                                 textAlign: 'right'
-                            }}>{this.state.total}</Text>
+                            }}>{this.state.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} {Config.vnd}</Text>
                         </Col>
                     </Grid>
 

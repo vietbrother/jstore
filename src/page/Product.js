@@ -17,6 +17,7 @@ import {
     Item,
     Grid,
     Col,
+    Row,
     Toast,
     Text as NBText
 } from 'native-base';
@@ -26,6 +27,7 @@ import HTML from 'react-native-render-html';
 
 // Our custom files and classes import
 import Colors from '../Colors';
+import Config from '../Config';
 import Text from '../component/Text';
 import Navbar from '../component/Navbar';
 import {default as ProductComponent} from '../component/Product';
@@ -48,21 +50,25 @@ export default class Product extends Component {
     componentWillMount() {
         //get the product with id of this.props.product.id from your server
         this.setState({product: this.props.product});
-        AsyncStorage.getItem('userId',(err, res) => {
+        AsyncStorage.getItem('userId', (err, res) => {
             console.log("Product userId " + res);
-            if(res){
+            if (res) {
                 this.setState({userId: res});
+                //
+                AsyncStorage.getItem("WISHLIST", (err, res) => {
+                    if (res) {
+                        var items = JSON.parse(res);
+                        var product = this.state.product;
+                        var objIndex = items.findIndex((obj => obj.id == product.id && obj.name == product.name
+                            && obj.userId == this.state.userId));
+                        if (objIndex != -1) {
+                            this.setState({isWhislist: 'green'});
+                        }
+                    }
+                });
             }
         });
 
-        AsyncStorage.getItem("WISHLIST", (err, res) => {
-            if (res){
-                var items = JSON.parse(res);
-                if (this.search(items, product)) {
-                    this.setState({isWhislist: 'green'});
-                }
-            }
-        });
     }
 
     componentDidMount() {
@@ -75,6 +81,11 @@ export default class Product extends Component {
         // });
     }
 
+    componentWillReceiveProps(nextProps) {
+        console.log("====componentWillReceiveProps========================== newProps.product: " + nextProps.product);
+        this.setState({product: nextProps.product})
+    }
+
     render() {
         var left = (
             <Left style={{flex: 1}}>
@@ -85,9 +96,9 @@ export default class Product extends Component {
         );
         var right = (
             <Right style={{flex: 1}}>
-                <Button onPress={() => Actions.search()} transparent>
-                    <Icon name='ios-search-outline'/>
-                </Button>
+                {/*<Button onPress={() => Actions.search()} transparent>*/}
+                    {/*<Icon name='ios-search-outline'/>*/}
+                {/*</Button>*/}
                 <Button onPress={() => Actions.cart()} transparent>
                     <Icon name='ios-cart'/>
                 </Button>
@@ -145,17 +156,20 @@ export default class Product extends Component {
                         backgroundColor: '#fdfdfd',
                         paddingTop: 10,
                         paddingBottom: 10,
-                        paddingLeft: 12,
-                        paddingRight: 12,
-                        alignItems: 'center'
+                        paddingLeft: 15,
+                        paddingRight: 15,
+                        // alignItems: 'center'
                     }}>
-                        <Grid>
-                            <Col size={3}>
+                        <Grid style={{textAlign: 'left'}}>
+                            <Row>
                                 <Text style={{fontSize: 18}}>{this.state.product.name}</Text>
-                            </Col>
-                            <Col>
-                                <Text style={{fontSize: 20, fontWeight: 'bold'}}>{this.state.product.price}</Text>
-                            </Col>
+                            </Row>
+                            <Row>
+                                <Text style={{
+                                    fontSize: 20,
+                                    fontWeight: 'bold'
+                                }}>{this.state.product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} {Config.vnd}</Text>
+                            </Row>
                         </Grid>
 
                         <Grid>
@@ -220,7 +234,7 @@ export default class Product extends Component {
                                 marginLeft: 7,
                                 marginBottom: 10
                             }}/>
-                            <HTML html={this.state.product.description == null ? '' : this.state.product.description }
+                            <HTML html={this.state.product.description == null ? '' : this.state.product.description}
                                   imagesMaxWidth={Dimensions.get('window').width}/>
                             {/*<NBText note>*/}
                             {/*{this.state.product.description}*/}
@@ -311,7 +325,7 @@ export default class Product extends Component {
     }
 
     addToCart() {
-        if(this.state.userId == null || this.state.userId == ''){
+        if (this.state.userId == null || this.state.userId == '') {
             //alert('Bạn cần đăng nhập trước khi thêm đồ vào giỏ hàng!');
             Alert.alert(
                 '',
@@ -335,8 +349,8 @@ export default class Product extends Component {
 
                 //Find index of specific object using findIndex method.
                 //check product name is existed in cart -> increase quatity
-                var objIndex = items.findIndex((obj => obj.name == product.name && obj.userId == this.state.userId ));
-                if(objIndex != -1){
+                var objIndex = items.findIndex((obj => obj.name == product.name && obj.userId == this.state.userId));
+                if (objIndex != -1) {
                     //Log object to Console.
                     console.log("Before update: ", items[objIndex])
 
@@ -362,7 +376,7 @@ export default class Product extends Component {
     }
 
     addToWishlist() {
-        if(this.state.userId == null || this.state.userId == ''){
+        if (this.state.userId == null || this.state.userId == '') {
             Alert.alert(
                 '',
                 'Bạn cần đăng nhập trước khi thêm danh sách yêu thích!', // <- this part is optional, you can pass an empty string
@@ -388,6 +402,7 @@ export default class Product extends Component {
                 }
             }
             if (success) {
+                this.setState({isWhislist: 'green'});
                 Toast.show({
                     text: 'Đã thêm sản phảm vào danh sách yêu thích!',
                     position: 'bottom',

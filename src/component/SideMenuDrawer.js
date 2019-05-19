@@ -35,7 +35,7 @@ export default class SideMenuDrawer extends Component {
   }
   _renderSideMenu(){
     console.log("render SideMenu in SideMenuDrawer");
-    return (<SideMenu sessionLoginKey={this.props.sessionLoginKey} />);
+    return (<SideMenu sessionLoginKey={this.props.sessionLoginKey} fetchData={this.props.fetchData} />);
   }
 
   close() {

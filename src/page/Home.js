@@ -94,7 +94,9 @@ export default class Home extends Component {
         const {categories, loading} = this.state;
         if (this.state.loading == false) {
             return (
-                <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref}  key={new Date().valueOf()}  sessionLoginKey={this.props.sessionLoginKey}>
+                <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref} key={new Date().valueOf()}
+                                fetchData={'1'}
+                                sessionLoginKey={this.props.sessionLoginKey}>
                     <Container>
                         <Navbar left={left} right={right} title="ONNI"/>
                         <Content>

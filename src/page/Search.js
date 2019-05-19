@@ -4,6 +4,7 @@
 
 // React native and others libraries imports
 import React, {Component} from 'react';
+import { ActivityIndicator} from 'react-native';
 import {
     Container,
     Content,
@@ -58,7 +59,7 @@ export default class Search extends Component {
                             <Icon name="ios-close" size={32} style={{fontSize: 32}}/>
                         </Button>
                         <Input
-                            placeholder="Search..."
+                            placeholder="Tìm kiếm sản phẩm..."
                             value={this.state.searchText}
                             onChangeText={(text) => this.setState({searchText: text})}
                             onSubmitEditing={() => this.search(this.state.searchText)}
@@ -67,16 +68,27 @@ export default class Search extends Component {
                         <Icon name="ios-search" onPress={() => this.search(this.state.searchText)}/>
                     </Item>
                 </Header>
-                {this.state.items.length <= 0 ?
-                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                        <Icon name="ios-search" size={38} style={{fontSize: 38, color: '#95a5a6', marginBottom: 7}}/>
-                        <Text style={{color: '#95a5a6'}}>Đang tìm kiếm sản phẩm...</Text>
-                    </View>
-                    :
+                {/*{this.state.items.length <= 0 ?*/}
+                    {/*<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>*/}
+                        {/*<Icon name="ios-search" size={38} style={{fontSize: 38, color: '#95a5a6', marginBottom: 7}}/>*/}
+                        {/*<Text style={{color: '#95a5a6'}}>Đang tìm kiếm sản phẩm...</Text>*/}
+                    {/*</View>*/}
+                    {/*:*/}
                     <Content padder>
+                        <View style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            display: this.state.loading == true ? 'flex' : 'none'
+                        }}>
+                            <ActivityIndicator
+                                animating={this.state.loading}
+                                color='#bc2b78'
+                                size="large"
+                            />
+                        </View>
                         {this.renderResult()}
                     </Content>
-                }
+                {/*}*/}
             </Container>
         );
     }
@@ -108,6 +120,7 @@ export default class Search extends Component {
     }
 
     search(text) {
+        this.setState({items: [], loading: true});
         global.WooCommerceAPI.get('products', {
             //per_page: 20,
             //page: 1,
@@ -116,7 +129,8 @@ export default class Search extends Component {
             .then(data => {
                 console.log("search API-----------------");
                 console.log(data);
-                this.setState({items: data});
+                // this.setState({items: data});
+                this.setState({items: data, loading: false});
             }).catch(error => {
             // error will return any errors that occur
             console.log(error);

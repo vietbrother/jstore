@@ -4,6 +4,7 @@
 
 // React native and others libraries imports
 import React, {Component} from 'react';
+import { ActivityIndicator} from 'react-native';
 import {Container, Content, View, Left, Right, Button, Icon, Grid, Col} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 
@@ -73,15 +74,15 @@ export default class Category extends Component {
             // {id: 29, title: 'White Shirt', categoryId: 2, categoryTitle: 'WOMEN', price: '12$', image: 'http://res.cloudinary.com/atf19/image/upload/c_scale,w_300/v1500284127/pexels-photo-497848_yenhuf.jpg', description: "Hello there, i'm a cool product with a heart of gold."},
             // {id: 16, title: 'Tie', categoryId: 1, categoryTitle: 'KIDS', price: '2$', image: 'http://res.cloudinary.com/atf19/image/upload/c_scale,w_300/v1500284127/pexels-photo-497848_yenhuf.jpg', description: "Hello there, i'm a cool product with a heart of gold."},
         ];
-        console.log("==================================== this.props.id : " + this.props.id);
         global.WooCommerceAPI.get('products', {
             //per_page: 20,
             //page: 1,
             category: this.props.id
         })
             .then(data => {
-                console.log("API-----------------");
-                console.log(data);
+                console.log("==================================== this.props.id : " + this.props.id);
+                console.log("componentWillMount Category API-----------------");
+                // console.log(data);
                 this.setState({items: data, loading: false});
             }).catch(error => {
             // error will return any errors that occur
@@ -116,15 +117,15 @@ export default class Category extends Component {
         //this.setState({items: products});
     }
 
-    fetchDataToList() {
+    fetchDataToList(id) {
+        this.setState({items: [], loading: true});
         global.WooCommerceAPI.get('products', {
             //per_page: 20,
             //page: 1,
-            category: this.props.id
+            category: id
         })
             .then(data => {
-                console.log("API-----------------");
-                console.log(data);
+                console.log("Category Fetch API-----------------");
                 this.setState({items: data, loading: false});
             }).catch(error => {
             // error will return any errors that occur
@@ -133,19 +134,19 @@ export default class Category extends Component {
     }
 
     componentWillUpdate() {
-        setTimeout(() => {
-            this.fetchDataToList()
-        }, 3000);
+        // setTimeout(() => {
+        //     // this.setState({items: [], loading: true});
+        //     this.fetchDataToList();
+        // }, 1000);
         // if (this.props.data != null) {
         //     this.setState({items: this.props.data, loading: false});
         // }
     }
 
-    // componentWillReceiveProps() {
-    //     if (this.props.data != null) {
-    //         this.setState({items: this.props.data, loading: false});
-    //     }
-    // }
+    componentWillReceiveProps(nextProps) {
+        console.log("====componentWillReceiveProps========================== newProps.field: " + nextProps.id);
+        this.fetchDataToList(nextProps.id);
+    }
 
     render() {
         var left = (
@@ -171,6 +172,17 @@ export default class Category extends Component {
                 <Container style={{backgroundColor: '#fdfdfd'}}>
                     <Navbar left={left} right={right} title={this.props.title}/>
                     <Content padder>
+                        <View style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            display: this.state.loading == true ? 'flex' : 'none'
+                        }}>
+                            <ActivityIndicator
+                                animating={this.state.loading}
+                                color='#bc2b78'
+                                size="large"
+                                />
+                        </View>
                         {this.renderProducts()}
                     </Content>
                 </Container>
@@ -185,6 +197,11 @@ export default class Category extends Component {
     // }
     renderProducts() {
         let items = [];
+        if(this.props.isReload == '1' && this.state.isReload == false){
+            console.log("======================REload");
+            this.setState({isReload : true});
+            this.fetchDataToList();
+        }
         if (this.state.items != null && this.state.items.length > 0) {
             let stateItems = this.state.items;
             for (var i = 0; i < stateItems.length; i += 2) {

@@ -34,6 +34,7 @@ import Navbar from '../component/Navbar';
 
 import WooCommerceAPI_ from 'react-native-woocommerce-api';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Config from "../Config";
 
 export default class Checkout extends Component {
     constructor(props) {
@@ -198,7 +199,7 @@ export default class Checkout extends Component {
                                     fontSize: 18,
                                     fontWeight: 'bold',
                                     color: 'red'
-                                }}>{this.state.total + "VND"}</Text>
+                                }}>{this.state.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} {Config.vnd}</Text>
                             </Col>
                         </Grid>
                     </View>
@@ -268,7 +269,7 @@ export default class Checkout extends Component {
             if (this.state.sessionKey !== null) {
                 // We have data!!
                 console.log(this.state.sessionKey);
-                items.push(<View style={{width : '100%', marginTop: 20, marginBottom: 10, paddingBottom: 7}}>
+                items.push(<View style={{width: '100%', marginTop: 20, marginBottom: 10, paddingBottom: 7}}>
 
                     <Grid style={{marginTop: 20, marginBottom: 10}}>
                         <Col style={{paddingLeft: 10, paddingRight: 5}}>
@@ -331,10 +332,10 @@ export default class Checkout extends Component {
                     key={i}
                     style={{marginLeft: 0}}
                 >
-                    <Body style={{paddingLeft: 10}}>
-                    <Text style={{fontSize: 18}}>
+                    <Body style={{paddingLeft: 5}}>
+                    <Text style={{fontSize: 14}}>
                         <Text style={{
-                            fontSize: 18,
+                            fontSize: 14,
                             color: 'red'
                         }}>{item.quantity > 1 ? item.quantity + " x " : null}</Text>
                         {item.name}
@@ -343,7 +344,11 @@ export default class Checkout extends Component {
                     {/*<Text style={{fontSize: 14 ,fontStyle: 'italic'}}>Size: {item.size}</Text>*/}
                     </Body>
                     <Right>
-                        <Text style={{fontSize: 16, fontWeight: 'bold', marginBottom: 10}}>{item.price}</Text>
+                        <Text style={{
+                            fontSize: 15,
+                            fontWeight: 'bold',
+                            marginBottom: 10
+                        }}>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
                     </Right>
                 </ListItem>
             );

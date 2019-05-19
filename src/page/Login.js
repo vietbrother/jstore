@@ -39,6 +39,7 @@ export default class Login extends Component {
                 console.log(userSessionKeyLogin);
                 await AsyncStorage.removeItem('cookieUserFromApi');
                 await AsyncStorage.removeItem('userId');
+                console.log("remove session key");
             }
         } catch (error) {
             // Handle errors here
@@ -58,24 +59,24 @@ export default class Login extends Component {
     render() {
         var left = (
             <Left style={{flex: 1}}>
-                <Button onPress={() => Actions.pop()} transparent>
+                <Button onPress={() => Actions.home({sessionLoginKey: null})} transparent>
                     <Icon name='ios-arrow-back'/>
                 </Button>
             </Left>
         );
         var right = (
             <Right style={{flex: 1}}>
-                <Button onPress={() => Actions.search()} transparent>
-                    <Icon name='ios-search-outline'/>
-                </Button>
-                <Button onPress={() => Actions.cart()} transparent>
-                    <Icon name='ios-cart'/>
-                </Button>
+                {/*<Button onPress={() => Actions.search()} transparent>*/}
+                    {/*<Icon name='ios-search-outline'/>*/}
+                {/*</Button>*/}
+                {/*<Button onPress={() => Actions.cart()} transparent>*/}
+                    {/*<Icon name='ios-cart'/>*/}
+                {/*</Button>*/}
             </Right>
         );
         return (
             <Container style={{backgroundColor: '#fdfdfd'}}>
-                {/*<Navbar left={left} right={right} title="Đăng nhập" />*/}
+                <Navbar left={left} right={right} title="Đăng nhập" />
                 <Spinner
                     //visibility of Overlay Loading Spinner
                     visible={this.state.isLoading}
