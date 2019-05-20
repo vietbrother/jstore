@@ -32,6 +32,10 @@ import Text from '../component/Text';
 import Navbar from '../component/Navbar';
 import {default as ProductComponent} from '../component/Product';
 
+import Star from 'react-native-star-view';
+import ReviewSend from '../component/ReviewSend'
+import ReviewBlock from '../component/ReviewBlock'
+
 export default class Product extends Component {
 
     constructor(props) {
@@ -97,7 +101,7 @@ export default class Product extends Component {
         var right = (
             <Right style={{flex: 1}}>
                 {/*<Button onPress={() => Actions.search()} transparent>*/}
-                    {/*<Icon name='ios-search-outline'/>*/}
+                {/*<Icon name='ios-search-outline'/>*/}
                 {/*</Button>*/}
                 <Button onPress={() => Actions.cart()} transparent>
                     <Icon name='ios-cart'/>
@@ -170,6 +174,9 @@ export default class Product extends Component {
                                     fontWeight: 'bold'
                                 }}>{this.state.product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} {Config.vnd}</Text>
                             </Row>
+                            <Row>
+                                {this.renderStar()}
+                            </Row>
                         </Grid>
 
                         <Grid>
@@ -220,13 +227,14 @@ export default class Product extends Component {
                         </Grid>
                         <View style={{
                             marginTop: 15,
+                            marginBottom: 15,
                             padding: 10,
                             borderWidth: 1,
                             borderRadius: 3,
                             width: '100%',
                             borderColor: 'rgba(149, 165, 166, 0.3)'
                         }}>
-                            <Text style={{marginBottom: 5, marginLeft: 10}}>Mô tả</Text>
+                            <Text style={{marginBottom: 5, marginLeft: 10, fontWeight: 'bold'}}>Mô tả</Text>
                             <View style={{
                                 width: '100%',
                                 height: 1,
@@ -241,6 +249,8 @@ export default class Product extends Component {
 
                             {/*</NBText>*/}
                         </View>
+                        <ReviewBlock product={this.props.product}></ReviewBlock>
+                        <ReviewSend product={this.props.product} userId={this.state.userId}></ReviewSend>
                     </View>
                     {/*<View style={{marginTop: 15, paddingLeft: 12, paddingRight: 12}}>*/}
                     {/*<Text style={{marginBottom: 5}}>Sản phẩm khác </Text>*/}
@@ -275,6 +285,18 @@ export default class Product extends Component {
             );
         });
         return images;
+    }
+
+    renderStar() {
+        return (
+            <View>
+                <Grid>
+                    <Row>
+                        <Star score={this.props.product.average_rating} style={styles.starStyle}/>
+                        <Text style={styles.starCountStyle}> ( {this.props.product.rating_count} đánh giá )</Text>
+                    </Row>
+                </Grid>
+            </View>);
     }
 
     // renderColors() {
@@ -432,7 +454,26 @@ export default class Product extends Component {
         return false;
     }
 
+    renderRatingReview() {
+
+    }
 }
+const styles = {
+    invoice: {
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingBottom: 15
+    },
+    starStyle: {
+        width: 80,
+        height: 18,
+        // marginBottom: 10,
+    },
+    starCountStyle: {
+        color: '#00a0e5',
+        fontSize: 14
+    },
+};
 
 // const dummyProduct = {
 //     id: 2,

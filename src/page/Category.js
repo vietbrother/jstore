@@ -126,6 +126,7 @@ export default class Category extends Component {
         })
             .then(data => {
                 console.log("Category Fetch API-----------------");
+                console.log(data);
                 this.setState({items: data, loading: false});
             }).catch(error => {
             // error will return any errors that occur

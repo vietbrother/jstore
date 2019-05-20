@@ -200,8 +200,7 @@ export default class SideMenu extends Component {
                     </View>
                     <View style={styles.line}/>
                     <View style={{paddingRight: 15, paddingLeft: 15, paddingBottom: 15}}>
-                        <Icon active name='ios-call'/>
-                        <Text>Hotline : 1900 0091</Text>
+                        <Text><Icon active name='ios-call'/> Hotline : 1900 0091</Text>
                         {/*<Text style={{marginBottom: 7}}>Follow us</Text>*/}
                         {/*<Grid>*/}
                             {/*<Col style={{alignItems: 'center'}}><Icon style={{fontSize: 18}} name='logo-facebook'*/}

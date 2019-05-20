@@ -109,9 +109,9 @@ export default class Checkout extends Component {
         );
         var right = (
             <Right style={{flex: 1}}>
-                <Button onPress={() => Actions.search()} transparent>
-                    <Icon name='ios-search-outline'/>
-                </Button>
+                {/*<Button onPress={() => Actions.search()} transparent>*/}
+                {/*<Icon name='ios-search-outline'/>*/}
+                {/*</Button>*/}
             </Right>
         );
         return (
@@ -168,7 +168,7 @@ export default class Checkout extends Component {
                             <Text style={styles.label}>Thành phố </Text>
                             <Text style={styles.require}>* </Text>
                             <Input placeholder='Thành phố' value={this.state.city}
-                                // onChangeText={(text) => this.setState({city: text})}
+                                   onChangeText={(text) => this.setState({city: text})}
                                    placeholderTextColor="#99b5bb"/>
                         </Item>
                         {this.state.hasError ? <Text style={{
@@ -364,6 +364,11 @@ export default class Checkout extends Component {
         }
         if (this.state.phone == null || this.state.phone == '') {
             msgErr = 'Chưa nhập số điện thoại';
+        } else {
+            var reg = /^((09|03|07|08|05)+([0-9]{8})\b)$/;
+            if(reg.test(this.state.phone) == false){
+                msgErr = 'Số điện thoại không chính xác';
+            }
         }
         if (this.state.address == null || this.state.address == '') {
             msgErr = 'Chưa nhập địa chỉ';
@@ -371,6 +376,11 @@ export default class Checkout extends Component {
         if (this.state.district == null || this.state.district == '') {
             msgErr = 'Chưa nhập quận';
         }
+        if (this.state.city == null || this.state.city == '') {
+            msgErr = 'Chưa nhập thành phố';
+        }
+
+
         if (msgErr != '') {
             this.setState({hasError: true, errorText: msgErr});
             // alert(msgErr);
@@ -390,7 +400,7 @@ export default class Checkout extends Component {
             billingObj['phone'] = this.state.phone;
             billingObj['address_1'] = this.state.address;
             billingObj['address_2'] = this.state.district;
-            billingObj['city'] = 'Hà Nội';
+            billingObj['city'] = this.state.city;
             billingObj['state'] = '';
             billingObj['postcode'] = '100000';
             billingObj['country'] = 'VN';

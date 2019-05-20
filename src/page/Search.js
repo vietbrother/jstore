@@ -4,7 +4,7 @@
 
 // React native and others libraries imports
 import React, {Component} from 'react';
-import { ActivityIndicator} from 'react-native';
+import { ActivityIndicator, Keyboard} from 'react-native';
 import {
     Container,
     Content,
@@ -55,15 +55,16 @@ export default class Search extends Component {
                     noShadow={true}
                 >
                     <Item>
-                        <Button transparent onPress={() => Actions.pop()}>
-                            <Icon name="ios-close" size={32} style={{fontSize: 32}}/>
-                        </Button>
+                        {/*<Button transparent onPress={() => Actions.pop()}>*/}
+                            {/*<Icon name="ios-close" size={32} style={{fontSize: 32}}/>*/}
+                        {/*</Button>*/}
+                        <Icon name="ios-close" onPress={() => Actions.pop()}/>
                         <Input
                             placeholder="Tìm kiếm sản phẩm..."
                             value={this.state.searchText}
                             onChangeText={(text) => this.setState({searchText: text})}
                             onSubmitEditing={() => this.search(this.state.searchText)}
-                            style={{marginTop: 9}}
+                            // style={{marginTop: 9}}
                         />
                         <Icon name="ios-search" onPress={() => this.search(this.state.searchText)}/>
                     </Item>
@@ -120,6 +121,7 @@ export default class Search extends Component {
     }
 
     search(text) {
+        Keyboard.dismiss();
         this.setState({items: [], loading: true});
         global.WooCommerceAPI.get('products', {
             //per_page: 20,
