@@ -147,7 +147,7 @@ export default class OrderItem extends Component {
                                     fontSize: 20,
                                     fontWeight: 'bold',
                                     textAlign: 'right'
-                                }}>{this.state.order.total_tax} {Config.vnd}</Text>
+                                }}>{parseInt(this.state.order.total_tax).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} {Config.vnd}</Text>
                             </Col>
                         </CardItem>
                         <CardItem>
@@ -159,7 +159,7 @@ export default class OrderItem extends Component {
                                     fontSize: 20,
                                     fontWeight: 'bold',
                                     textAlign: 'right'
-                                }}>{this.state.order.shipping_total} {Config.vnd}</Text>
+                                }}>{parseInt(this.state.order.shipping_total).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} {Config.vnd}</Text>
                             </Col>
                         </CardItem>
                         <CardItem>
@@ -176,7 +176,7 @@ export default class OrderItem extends Component {
                                         fontWeight: 'bold',
                                         color: '#BE0026',
                                         textAlign: 'right'
-                                    }}>{this.state.order.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} {Config.vnd}</Text>
+                                    }}>{parseInt(this.state.order.total).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} {Config.vnd}</Text>
                                 </Col>
                             </Grid>
                         </CardItem>

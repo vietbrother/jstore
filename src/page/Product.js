@@ -349,7 +349,7 @@ export default class Product extends Component {
 
                 //Find index of specific object using findIndex method.
                 //check product name is existed in cart -> increase quatity
-                var objIndex = items.findIndex((obj => obj.name == product.name && obj.userId == this.state.userId));
+                var objIndex = items.findIndex((obj => obj.id == product.id && obj.name == product.name && obj.userId == this.state.userId));
                 if (objIndex != -1) {
                     //Log object to Console.
                     console.log("Before update: ", items[objIndex])
@@ -394,7 +394,10 @@ export default class Product extends Component {
             if (!res) AsyncStorage.setItem("WISHLIST", JSON.stringify([product]));
             else {
                 var items = JSON.parse(res);
-                if (this.search(items, product)) {
+                //search product in whislist
+                var objIndex = items.findIndex((obj => obj.id == product.id && obj.name == product.name && obj.userId == this.state.userId));
+                if (objIndex != -1) {
+                    //if (this.search(items, product)) {
                     success = false
                 } else {
                     items.push(product);
