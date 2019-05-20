@@ -117,7 +117,7 @@ export default class WishList extends Component {
 
     removeItemPressed(item) {
         Alert.alert(
-            'Remove ' + item.name,
+            'Xóa ' + item.name,
             'Bạn có muốn xóa sản phẩm này khỏi danh sách yêu thích ?',
             [
                 {text: 'Không', onPress: () => console.log('No Pressed'), style: 'cancel'},
