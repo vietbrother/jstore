@@ -174,9 +174,9 @@ export default class Product extends Component {
                                     fontWeight: 'bold'
                                 }}>{this.state.product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} {Config.vnd}</Text>
                             </Row>
-                            <Row>
-                                {this.renderStar()}
-                            </Row>
+                            {/*<Row>*/}
+                                {/*{this.renderStar()}*/}
+                            {/*</Row>*/}
                         </Grid>
 
                         <Grid>
@@ -241,13 +241,13 @@ export default class Product extends Component {
 
                             {/*</NBText>*/}
                         </View>
-                        <View style={styles.borderView}>
-                            <ReviewBlock product={this.props.product}></ReviewBlock>
-                        </View>
-                        <View style={styles.borderView}>
-                            <ReviewSend product={this.props.product} userId={this.state.userId}
-                                        categoryId={this.props.categoryId} categoryName={this.props.title}></ReviewSend>
-                        </View>
+                        {/*<View style={styles.borderView}>*/}
+                            {/*<ReviewBlock product={this.props.product}></ReviewBlock>*/}
+                        {/*</View>*/}
+                        {/*<View style={styles.borderView}>*/}
+                            {/*<ReviewSend product={this.props.product} userId={this.state.userId}*/}
+                                        {/*categoryId={this.props.categoryId} categoryName={this.props.title}></ReviewSend>*/}
+                        {/*</View>*/}
                     </View>
                     {/*<View style={{marginTop: 15, paddingLeft: 12, paddingRight: 12}}>*/}
                     {/*<Text style={{marginBottom: 5}}>Sản phẩm khác </Text>*/}
