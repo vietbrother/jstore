@@ -29,6 +29,7 @@ import Text from './Text';
 import Colors from "../Colors";
 
 import Spinner from 'react-native-loading-spinner-overlay';
+import Config from "../Config";
 
 export default class SideMenu extends Component {
     constructor(props) {
@@ -200,7 +201,7 @@ export default class SideMenu extends Component {
                     </View>
                     <View style={styles.line}/>
                     <View style={{paddingRight: 15, paddingLeft: 15, paddingBottom: 15}}>
-                        <Text><Icon active name='ios-call'/> Hotline : 1900 0091</Text>
+                        <Text><Icon active name='ios-call'/> Hotline : {Config.hotline}</Text>
                         {/*<Text style={{marginBottom: 7}}>Follow us</Text>*/}
                         {/*<Grid>*/}
                             {/*<Col style={{alignItems: 'center'}}><Icon style={{fontSize: 18}} name='logo-facebook'*/}
@@ -438,6 +439,12 @@ const menusSecondaryItems = [
         title: 'Liên hệ',
         icon: 'md-phone-portrait',
         key: 'contact'
+    },
+    {
+        id: 22,
+        title: 'Tài khoản',
+        icon: 'ios-contact',
+        key: 'profile'
     },
     {
         id: 24,

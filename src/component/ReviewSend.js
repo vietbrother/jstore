@@ -23,7 +23,7 @@ import {
 } from 'native-base';
 
 import StarRating from 'react-native-star-rating';
-import {Alert} from "react-native";
+import {Alert, AsyncStorage} from "react-native";
 
 export default class ReviewItem extends Component {
 
@@ -32,8 +32,18 @@ export default class ReviewItem extends Component {
         this.state = {
             generalStarCount: 0,
             name: '',
-            description: ''
+            description: '',
+            sessionKey: ''
         };
+    }
+    componentWillMount() {
+        AsyncStorage.getItem("cookieUserFromApi", (err, res) => {
+            console.log("get cookieUserFromApi ReviewItem ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            console.log("res : " + res);
+            console.log("this.props.sessionLoginKey : " + this.props.sessionLoginKey);
+            this.setState({sessionKey: res});
+            console.log("state : " + this.state.sessionKey);
+        });
     }
 
     onGeneralStarRatingPress(rating) {
@@ -71,6 +81,7 @@ export default class ReviewItem extends Component {
                     </Row>
                     <Row style={{textAlign:'center', paddingTop: 5}}>
                         <Button onPress={() => this.sendReviewProduct()}
+                                {this.state.sessionKey == null || this.state.sessionKey == '' ? 'disabled' : ''}
                                 style={{backgroundColor: '#c40521'}} block iconLeft>
                             <Icon name='ios-send'/>
                             <Text style={{color: '#fdfdfd'}}> Gửi bình luận </Text>
@@ -118,7 +129,8 @@ const styles = {
     },
     label: {
         fontWeight: 'bold',
-        fontSize: 16
+        fontSize: 16,
+        color: '#b2b2b2',
     },
     require: {
         fontWeight: 'bold',

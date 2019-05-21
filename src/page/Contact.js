@@ -11,6 +11,7 @@ import {Actions} from 'react-native-router-flux';
 import Text from '../component/Text';
 import Navbar from '../component/Navbar';
 import Colors from '../Colors';
+import Config from '../Config';
 import {Linking} from "react-native";
 
 export default class Contact extends Component {
@@ -39,12 +40,13 @@ export default class Contact extends Component {
                     flex: 1,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    paddingLeft: 50,
-                    paddingRight: 50
+                    paddingTop: 50,
+                    // paddingLeft: 50,
+                    // paddingRight: 50
                 }}>
                     <Item>
                         <Icon active name='ios-call'/>
-                        <Text>Hotline : 0372937607</Text>
+                        <Text>Hotline : {Config.hotline}</Text>
                     </Item>
                     <Item>
                         <Icon style={{fontSize: 18}} name='logo-facebook'

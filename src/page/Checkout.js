@@ -61,10 +61,14 @@ export default class Checkout extends Component {
         };
 
         global.WooCommerceAPI_ = new WooCommerceAPI_({
-            url: 'http://103.94.18.249/jstore', // Your store URL
-            ssl: false,
-            consumerKey: 'ck_155068b58dd6614b3ace920437df62399bb94503', // Your consumer secret
-            consumerSecret: 'cs_9fb0b186ea0024bd6d9d497715e88e43b1bf2b6e', // Your consumer secret
+            // url: 'http://103.94.18.249/jstore', // Your store URL
+            //ssl: false,
+            // consumerKey: 'ck_155068b58dd6614b3ace920437df62399bb94503', // Your consumer secret
+            // consumerSecret: 'cs_9fb0b186ea0024bd6d9d497715e88e43b1bf2b6e', // Your consumer secret
+            url: Config.url, // Your store URL
+            ssl: Config.ssl,
+            consumerKey: Config.consumerKey, // Your consumer secret
+            consumerSecret: Config.consumerSecret, // Your consumer secret
             //consumerKey: 'ck_29b281d2af61df58dadbeead327b06dd9a53f1be', // Your consumer secret
             //consumerSecret: 'cs_a6d53b6572240d483749ee0123d48c76332c0e0d', // Your consumer secret
             wpAPI: true, // Enable the WP REST API integration
@@ -245,19 +249,19 @@ export default class Checkout extends Component {
             <View style={styles.invoice}>
                 <Item>
                     <Text style={styles.label}>Tên : </Text>
-                    <Text style={styles.require}> Nguyễn Văn A </Text>
+                    <Text style={styles.require}> {Config.bankUserName} </Text>
                 </Item>
                 <Item>
                     <Text style={styles.label}>Số tài khoản : </Text>
-                    <Text style={styles.require}> xxxxxxxxxxx </Text>
+                    <Text style={styles.require}> {Config.bankNumber} </Text>
                 </Item>
                 <Item>
                     <Text style={styles.label}>Ngân hàng : </Text>
-                    <Text style={styles.require}> Vietcombank </Text>
+                    <Text style={styles.require}> {Config.bankName} </Text>
                 </Item>
                 <Item>
                     <Text style={styles.label}>Chi nhánh : </Text>
-                    <Text style={styles.require}> Đống Đa </Text>
+                    <Text style={styles.require}> {Config.bankDepartment} </Text>
                 </Item>
             </View>
         );

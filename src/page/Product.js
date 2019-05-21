@@ -249,8 +249,12 @@ export default class Product extends Component {
 
                             {/*</NBText>*/}
                         </View>
-                        <ReviewBlock product={this.props.product}></ReviewBlock>
-                        <ReviewSend product={this.props.product} userId={this.state.userId}></ReviewSend>
+                        <View style={styles.borderView}>
+                            <ReviewBlock product={this.props.product}></ReviewBlock>
+                        </View>
+                        <View style={styles.borderView}>
+                            <ReviewSend product={this.props.product} userId={this.state.userId}></ReviewSend>
+                        </View>
                     </View>
                     {/*<View style={{marginTop: 15, paddingLeft: 12, paddingRight: 12}}>*/}
                     {/*<Text style={{marginBottom: 5}}>Sản phẩm khác </Text>*/}
@@ -473,6 +477,15 @@ const styles = {
         color: '#00a0e5',
         fontSize: 14
     },
+    borderView: {
+        marginTop: 15,
+        marginBottom: 15,
+        padding: 10,
+        borderWidth: 1,
+        borderRadius: 3,
+        width: '100%',
+        borderColor: 'rgba(149, 165, 166, 0.3)'
+    }
 };
 
 // const dummyProduct = {

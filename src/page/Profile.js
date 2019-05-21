@@ -4,7 +4,7 @@
 
 // React native and others libraries imports
 import React, {Component} from 'react';
-import {ScrollView} from 'react-native';
+import {AsyncStorage, ScrollView} from 'react-native';
 import {Container, View, Left, Right, Button, Icon, Item, Input} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 
@@ -16,7 +16,7 @@ import Navbar from '../component/Navbar';
 
 import Spinner from 'react-native-loading-spinner-overlay';
 
-export default class Signup extends Component {
+export default class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -27,10 +27,38 @@ export default class Signup extends Component {
             rePassword: '',
             hasError: false,
             errorText: '',
-            isLoading: false
+            hasSuccess: false,
+            successText: '',
+            isLoading: false,
+            cookie: ''
         };
     }
 
+    componentWillMount() {
+        //get the product with id of this.props.product.id from your server
+        this.setState({product: this.props.product});
+        AsyncStorage.getItem('userInfo', (err, res) => {
+            console.log("userInfo " + JSON.parse(res));
+            if (res) {
+
+                var userInfo = JSON.parse(res);
+                this.setState({name: userInfo.displayname});
+                this.setState({username: userInfo.username});
+                this.setState({email: userInfo.email});
+                this.setState({password: userInfo.pass});
+                this.setState({rePassword: userInfo.pass});
+                //
+
+            }
+        });
+        AsyncStorage.getItem('cookieUserFromApi', (err, res) => {
+            if (res) {
+                this.setState({cookie: res});
+                //
+            }
+        });
+
+    }
 
     render() {
         var left = (
@@ -52,19 +80,19 @@ export default class Signup extends Component {
         );
         return (
             <Container style={{backgroundColor: '#fdfdfd'}}>
-                <Navbar left={left} right={right} title="Đăng ký"/>
+                <Navbar left={left} right={right} title="Thông tin tài khoản"/>
                 <Spinner
                     //visibility of Overlay Loading Spinner
                     visible={this.state.isLoading}
                     //Text with the Spinner
-                    textContent={'Đang đăng ký ...'}
+                    textContent={'Đang cập nhật thông tin ...'}
                     //Text style of the Spinner Text
                     textStyle={styles.spinnerTextStyle}
                 />
                 <ScrollView contentContainerStyle={{flexGrow: 1}}>
                     <View style={{
                         flex: 1,
-                        justifyContent: 'center',
+                        // justifyContent: 'center',
                         alignItems: 'center',
                         paddingLeft: 50,
                         paddingRight: 50
@@ -76,32 +104,38 @@ export default class Signup extends Component {
                                 textAlign: 'left',
                                 width: '100%',
                                 color: Colors.navbarBackgroundColor
-                            }}>Tạo mới tài khoản </Text>
+                            }}>Cập nhật thông tin tài khoản </Text>
                             <Text style={{fontSize: 18, textAlign: 'left', width: '100%', color: '#687373'}}> </Text>
                         </View>
                         <Item>
+                            <Icon active name='ios-person' style={{color: '#00a0e5',}}/>
+                            <Text style={{color: '#00a0e5',}}>{this.state.username}</Text>
+                            {/*<Input placeholder='Tên đăng nhập' onChangeText={(text) => this.setState({username: text})}*/}
+                                   {/*placeholderTextColor="#687373"/>*/}
+                        </Item>
+                        <Item>
                             <Icon active name='ios-mail' style={{color: '#687373'}}/>
                             <Input placeholder='Email' onChangeText={(text) => this.setState({email: text})}
+                                   value={this.state.email}
                                    keyboardType="email-address" placeholderTextColor="#687373"/>
                         </Item>
                         <Item>
                             <Icon active name='ios-paper' style={{color: '#687373'}}/>
                             <Input placeholder='Tên hiển thị' onChangeText={(text) => this.setState({name: text})}
+                                   value={this.state.name}
                                    placeholderTextColor="#687373"/>
                         </Item>
-                        <Item>
-                            <Icon active name='ios-person' style={{color: '#687373'}}/>
-                            <Input placeholder='Tên đăng nhập' onChangeText={(text) => this.setState({username: text})}
-                                   placeholderTextColor="#687373"/>
-                        </Item>
+
                         <Item>
                             <Icon active name='ios-lock' style={{color: '#687373'}}/>
                             <Input placeholder='Mật khẩu' onChangeText={(text) => this.setState({password: text})}
+                                   value={this.state.password}
                                    secureTextEntry={true} placeholderTextColor="#687373"/>
                         </Item>
                         <Item>
                             <Icon active name='ios-lock' style={{color: '#687373'}}/>
                             <Input placeholder='Nhập lại mật khẩu'
+                                   value={this.state.rePassword}
                                    onChangeText={(text) => this.setState({rePassword: text})} secureTextEntry={true}
                                    placeholderTextColor="#687373"/>
                         </Item>
@@ -110,10 +144,15 @@ export default class Signup extends Component {
                             textAlign: 'center',
                             marginTop: 10
                         }}>{this.state.errorText}</Text> : null}
+                        {this.state.hasSuccess ? <Text style={{
+                            color: "green",
+                            textAlign: 'center',
+                            marginTop: 10
+                        }}>{this.state.successText}</Text> : null}
                         <View style={{alignItems: 'center', width: '100%',}}>
-                            <Button onPress={() => this.signup()}
+                            <Button onPress={() => this.updateProfile()}
                                     style={styles.buttonLogin}>
-                                <Text style={{color: '#fdfdfd'}}> Đăng ký </Text>
+                                <Text style={{color: '#fdfdfd'}}> Cập nhật </Text>
                             </Button>
                         </View>
                     </View>
@@ -122,7 +161,7 @@ export default class Signup extends Component {
         );
     }
 
-    async signup() {
+    async updateProfile() {
         if (this.state.email === "" || this.state.name === "" || this.state.username === "" || this.state.password === "" || this.state.rePassword === "") {
             this.setState({hasError: true, errorText: 'Cần nhập đủ các trường thông tin !'});
             return;
@@ -147,13 +186,13 @@ export default class Signup extends Component {
         let nonceKey;
         try {
             this.setState({isLoading: true});
-            await fetch('http://103.94.18.249/jstore/api/core/get_nonce/?insecure=cool&controller=user&method=register')
+            await fetch(Config.url + '/api/core/get_nonce/?insecure=cool&controller=user&method=register')
                 .then((response) => response.json())
                 .then((responseJson) => {
                     console.log(responseJson);
                     nonceKey = responseJson.nonce;
                     if (responseJson.status == 'ok') {
-                        this.register(nonceKey);
+                        this.setState({hasSuccess: true, successText: 'Cập nhật thành công'});
                     } else {
                         this.setState({hasError: true, errorText: 'Có lỗi xảy ra xin thử lại sau'});
                         return;
@@ -164,6 +203,8 @@ export default class Signup extends Component {
                     this.setState({hasError: true, errorText: 'Có lỗi xảy ra xin thử lại sau'});
                     return;
                 });
+
+
         } catch (error) {
             console.error(error);
         }
@@ -177,7 +218,11 @@ export default class Signup extends Component {
 
     async register(nonceKey) {
         try {
-            await fetch(Config.url + '/api/user/register/?username=' + this.state.username + '&display_name=' + this.state.name + '&email=' + this.state.email + '&user_pass=' + this.state.password + '&nonce=' + nonceKey + '&insecure=cool&notify=both')
+            await fetch('http://103.94.18.249/jstore/api/user/register/?username=' + this.state.username
+                + '&display_name=' + this.state.name
+                + '&email=' + this.state.email
+                + '&user_pass=' + this.state.password
+                + '&nonce=' + nonceKey + '&insecure=cool&notify=both')
                 .then((response) => response.json())
                 .then((responseJson) => {
                     console.log(responseJson);
