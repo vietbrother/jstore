@@ -225,15 +225,7 @@ export default class Product extends Component {
                                 </Button>
                             </Col>
                         </Grid>
-                        <View style={{
-                            marginTop: 15,
-                            marginBottom: 15,
-                            padding: 10,
-                            borderWidth: 1,
-                            borderRadius: 3,
-                            width: '100%',
-                            borderColor: 'rgba(149, 165, 166, 0.3)'
-                        }}>
+                        <View style={styles.borderView}>
                             <Text style={{marginBottom: 5, marginLeft: 10, fontWeight: 'bold'}}>Mô tả</Text>
                             <View style={{
                                 width: '100%',
@@ -253,7 +245,8 @@ export default class Product extends Component {
                             <ReviewBlock product={this.props.product}></ReviewBlock>
                         </View>
                         <View style={styles.borderView}>
-                            <ReviewSend product={this.props.product} userId={this.state.userId}></ReviewSend>
+                            <ReviewSend product={this.props.product} userId={this.state.userId}
+                                        categoryId={this.props.categoryId} categoryName={this.props.title}></ReviewSend>
                         </View>
                     </View>
                     {/*<View style={{marginTop: 15, paddingLeft: 12, paddingRight: 12}}>*/}
@@ -297,7 +290,8 @@ export default class Product extends Component {
                 <Grid>
                     <Row>
                         <Star score={this.props.product.average_rating} style={styles.starStyle}/>
-                        <Text style={styles.starCountStyle}> ( {this.props.product.rating_count} đánh giá )</Text>
+                        {/*<Text style={styles.starCountStyle}> ( {this.props.product.rating_count} đánh giá )</Text>*/}
+                        <Text style={styles.starCountStyle}> ( {parseInt(this.props.product.average_rating)}/5 )</Text>
                     </Row>
                 </Grid>
             </View>);
@@ -478,8 +472,8 @@ const styles = {
         fontSize: 14
     },
     borderView: {
-        marginTop: 15,
-        marginBottom: 15,
+        marginTop: 5,
+        marginBottom: 5,
         padding: 10,
         borderWidth: 1,
         borderRadius: 3,

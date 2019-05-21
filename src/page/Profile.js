@@ -94,12 +94,12 @@ export default class Profile extends Component {
                         flex: 1,
                         // justifyContent: 'center',
                         alignItems: 'center',
-                        paddingLeft: 50,
-                        paddingRight: 50
+                        paddingLeft: 40,
+                        paddingRight: 40
                     }}>
-                        <View style={{marginBottom: 35, width: '100%'}}>
+                        <View style={{marginTop: 10, marginBottom: 10, width: '100%'}}>
                             <Text style={{
-                                fontSize: 24,
+                                fontSize: 22,
                                 fontWeight: 'bold',
                                 textAlign: 'left',
                                 width: '100%',
@@ -111,7 +111,7 @@ export default class Profile extends Component {
                             <Icon active name='ios-person' style={{color: '#00a0e5',}}/>
                             <Text style={{color: '#00a0e5',}}>{this.state.username}</Text>
                             {/*<Input placeholder='Tên đăng nhập' onChangeText={(text) => this.setState({username: text})}*/}
-                                   {/*placeholderTextColor="#687373"/>*/}
+                            {/*placeholderTextColor="#687373"/>*/}
                         </Item>
                         <Item>
                             <Icon active name='ios-mail' style={{color: '#687373'}}/>
@@ -120,7 +120,7 @@ export default class Profile extends Component {
                                    keyboardType="email-address" placeholderTextColor="#687373"/>
                         </Item>
                         <Item>
-                            <Icon active name='ios-paper' style={{color: '#687373'}}/>
+                            <Icon active name='ios-contact' style={{color: '#687373'}}/>
                             <Input placeholder='Tên hiển thị' onChangeText={(text) => this.setState({name: text})}
                                    value={this.state.name}
                                    placeholderTextColor="#687373"/>
@@ -186,11 +186,17 @@ export default class Profile extends Component {
         let nonceKey;
         try {
             this.setState({isLoading: true});
-            await fetch(Config.url + '/api/core/get_nonce/?insecure=cool&controller=user&method=register')
+            console.log(this.state.cookie);
+            await fetch(Config.url + '/api/user/xprofile_update/?cookie=' + this.state.cookie
+                + '&display_name=' + this.state.name
+                + '&email=' + this.state.email
+                + '&user_pass=' + this.state.password
+                + '&insecure=cool&notify=both'
+            )
                 .then((response) => response.json())
                 .then((responseJson) => {
                     console.log(responseJson);
-                    nonceKey = responseJson.nonce;
+                    this.setState({isLoading: false});
                     if (responseJson.status == 'ok') {
                         this.setState({hasSuccess: true, successText: 'Cập nhật thành công'});
                     } else {
@@ -214,32 +220,6 @@ export default class Profile extends Component {
     verifyEmail(email) {
         var reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return reg.test(email);
-    }
-
-    async register(nonceKey) {
-        try {
-            await fetch('http://103.94.18.249/jstore/api/user/register/?username=' + this.state.username
-                + '&display_name=' + this.state.name
-                + '&email=' + this.state.email
-                + '&user_pass=' + this.state.password
-                + '&nonce=' + nonceKey + '&insecure=cool&notify=both')
-                .then((response) => response.json())
-                .then((responseJson) => {
-                    console.log(responseJson);
-                    this.setState({isLoading: false});
-                    if (responseJson.status == 'ok') {
-                        Actions.home();
-                    } else {
-                        this.setState({hasError: true, errorText: 'Có lỗi xảy ra : ' + responseJson.error});
-                        return;
-                    }
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        } catch (error) {
-            console.error(error);
-        }
     }
 
 }

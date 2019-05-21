@@ -38,15 +38,19 @@ export default class Contact extends Component {
                 <Navbar left={left} title="Liên hệ"/>
                 <View style={{
                     flex: 1,
-                    justifyContent: 'center',
+                    // justifyContent: 'center',
                     alignItems: 'center',
-                    paddingTop: 50,
+                    paddingTop: 20,
                     // paddingLeft: 50,
                     // paddingRight: 50
                 }}>
                     <Item>
                         <Icon active name='ios-call'/>
-                        <Text>Hotline : {Config.hotline}</Text>
+                        {/*<Text>Hotline : {Config.hotline}</Text>*/}
+                        <Text>Hotline : <Text style={{
+                            color: "#c0392b",
+                            fontSize: 20,
+                        }}>{Config.hotline}</Text></Text>
                     </Item>
                     <Item>
                         <Icon style={{fontSize: 18}} name='logo-facebook'

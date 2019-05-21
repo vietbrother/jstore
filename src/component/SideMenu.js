@@ -201,19 +201,23 @@ export default class SideMenu extends Component {
                     </View>
                     <View style={styles.line}/>
                     <View style={{paddingRight: 15, paddingLeft: 15, paddingBottom: 15}}>
-                        <Text><Icon active name='ios-call'/> Hotline : {Config.hotline}</Text>
+
+                        <Text> <Icon style={{fontSize: 18}} name={'ios-call'}/> Hotline : <Text style={{
+                            color: "#c0392b",
+                            fontSize: 20,
+                        }}>{Config.hotline}</Text></Text>
                         {/*<Text style={{marginBottom: 7}}>Follow us</Text>*/}
                         {/*<Grid>*/}
-                            {/*<Col style={{alignItems: 'center'}}><Icon style={{fontSize: 18}} name='logo-facebook'*/}
-                                                                      {/*onPress={() => Linking.openURL('http://www.facebook.com/').catch(err => console.error('An error occurred', err))}/></Col>*/}
-                            {/*<Col style={{alignItems: 'center'}}><Icon style={{fontSize: 18}} name='logo-instagram'*/}
-                                                                      {/*onPress={() => Linking.openURL('http://www.instagram.com/').catch(err => console.error('An error occurred', err))}/></Col>*/}
-                            {/*<Col style={{alignItems: 'center'}}><Icon style={{fontSize: 18}} name='logo-twitter'*/}
-                                                                      {/*onPress={() => Linking.openURL('http://www.twitter.com/').catch(err => console.error('An error occurred', err))}/></Col>*/}
-                            {/*<Col style={{alignItems: 'center'}}><Icon style={{fontSize: 18}} name='logo-youtube'*/}
-                                                                      {/*onPress={() => Linking.openURL('http://www.youtube.com/').catch(err => console.error('An error occurred', err))}/></Col>*/}
-                            {/*<Col style={{alignItems: 'center'}}><Icon style={{fontSize: 18}} name='logo-snapchat'*/}
-                                                                      {/*onPress={() => Linking.openURL('http://www.snapchat.com/').catch(err => console.error('An error occurred', err))}/></Col>*/}
+                        {/*<Col style={{alignItems: 'center'}}><Icon style={{fontSize: 18}} name='logo-facebook'*/}
+                        {/*onPress={() => Linking.openURL('http://www.facebook.com/').catch(err => console.error('An error occurred', err))}/></Col>*/}
+                        {/*<Col style={{alignItems: 'center'}}><Icon style={{fontSize: 18}} name='logo-instagram'*/}
+                        {/*onPress={() => Linking.openURL('http://www.instagram.com/').catch(err => console.error('An error occurred', err))}/></Col>*/}
+                        {/*<Col style={{alignItems: 'center'}}><Icon style={{fontSize: 18}} name='logo-twitter'*/}
+                        {/*onPress={() => Linking.openURL('http://www.twitter.com/').catch(err => console.error('An error occurred', err))}/></Col>*/}
+                        {/*<Col style={{alignItems: 'center'}}><Icon style={{fontSize: 18}} name='logo-youtube'*/}
+                        {/*onPress={() => Linking.openURL('http://www.youtube.com/').catch(err => console.error('An error occurred', err))}/></Col>*/}
+                        {/*<Col style={{alignItems: 'center'}}><Icon style={{fontSize: 18}} name='logo-snapchat'*/}
+                        {/*onPress={() => Linking.openURL('http://www.snapchat.com/').catch(err => console.error('An error occurred', err))}/></Col>*/}
                         {/*</Grid>*/}
                     </View>
                 </View>

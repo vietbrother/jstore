@@ -4,7 +4,7 @@
 
 // React native and others libraries imports
 import React, {Component} from 'react';
-import { ActivityIndicator} from 'react-native';
+import {ActivityIndicator} from 'react-native';
 import {Container, Content, View, Left, Right, Button, Icon, Grid, Col} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 
@@ -182,7 +182,7 @@ export default class Category extends Component {
                                 animating={this.state.loading}
                                 color='#bc2b78'
                                 size="large"
-                                />
+                            />
                         </View>
                         {this.renderProducts()}
                     </Content>
@@ -198,9 +198,9 @@ export default class Category extends Component {
     // }
     renderProducts() {
         let items = [];
-        if(this.props.isReload == '1' && this.state.isReload == false){
-            console.log("======================REload");
-            this.setState({isReload : true});
+        if (this.props.isReload == '1' && this.state.isReload == false) {
+            console.log("======================Reload");
+            this.setState({isReload: true});
             this.fetchDataToList();
         }
         if (this.state.items != null && this.state.items.length > 0) {
@@ -209,14 +209,17 @@ export default class Category extends Component {
                 if (stateItems[i + 1]) {
                     items.push(
                         <Grid key={i}>
-                            <Product key={stateItems[i].id} product={stateItems[i]}/>
-                            <Product key={stateItems[i + 1].id} product={stateItems[i + 1]} isRight/>
+                            <Product key={stateItems[i].id} product={stateItems[i]} categoryId={this.props.id}
+                                     categoryName={this.props.title}/>
+                            <Product key={stateItems[i + 1].id} product={stateItems[i + 1]} categoryId={this.props.id}
+                                     categoryName={this.props.title}
+                                     isRight/>
                         </Grid>
                     );
                 } else {
                     items.push(
                         <Grid key={i}>
-                            <Product key={stateItems[i].id} product={stateItems[i]}/>
+                            <Product key={stateItems[i].id} product={stateItems[i]} categoryId={this.props.id}/>
                             <Col key={i + 1}/>
                         </Grid>
                     );

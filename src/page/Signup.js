@@ -69,7 +69,7 @@ export default class Signup extends Component {
                         paddingLeft: 50,
                         paddingRight: 50
                     }}>
-                        <View style={{marginBottom: 35, width: '100%'}}>
+                        <View style={{marginTop: 10, marginBottom: 10, width: '100%'}}>
                             <Text style={{
                                 fontSize: 24,
                                 fontWeight: 'bold',
@@ -85,7 +85,7 @@ export default class Signup extends Component {
                                    keyboardType="email-address" placeholderTextColor="#687373"/>
                         </Item>
                         <Item>
-                            <Icon active name='ios-paper' style={{color: '#687373'}}/>
+                            <Icon active name='ios-contact' style={{color: '#687373'}}/>
                             <Input placeholder='Tên hiển thị' onChangeText={(text) => this.setState({name: text})}
                                    placeholderTextColor="#687373"/>
                         </Item>
@@ -177,7 +177,9 @@ export default class Signup extends Component {
 
     async register(nonceKey) {
         try {
-            await fetch(Config.url + '/api/user/register/?username=' + this.state.username + '&display_name=' + this.state.name + '&email=' + this.state.email + '&user_pass=' + this.state.password + '&nonce=' + nonceKey + '&insecure=cool&notify=both')
+            await fetch(Config.url + '/api/user/register/?username=' + this.state.username + '&display_name='
+                + this.state.name + '&email=' + this.state.email + '&user_pass='
+                + this.state.password + '&nonce=' + nonceKey + '&insecure=cool&notify=both')
                 .then((response) => response.json())
                 .then((responseJson) => {
                     console.log(responseJson);

@@ -12,17 +12,18 @@ export default class ReviewItem extends Component {
 
     render() {
         console.log('..........................................................');
-        console.log(this.props.review);
+        // console.log(this.props.review);
         return (
             <View style={styles.container}>
-                <View style={[false && {alignItems: 'flex-end'}]}><Text style={styles.name}>{this.props.review.comment_author}</Text></View>
-                <View style={{flexDirection: false ? "row-reverse" : "row", justifyContent: "space-between"}}>
+                {/*<View style={[false && {alignItems: 'flex-end'}]}></View>*/}
+                <View style={{flexDirection: "row", justifyContent: "space-between"}}>
+                    <Text style={styles.name}>{this.props.review.comment_author}</Text>
                     <Text style={styles.date_created}>{this.dateFormat(this.props.review.comment_date)}</Text>
                     {/*<Rating rating={review.rating} style={styles.rating}/>*/}
                 </View>
                 <View style={[false && {alignItems: 'flex-end'}]}><Text
                     style={styles.review}>{this.props.review.comment_content}</Text></View>
-                <View style={styles.separator}/>
+                {/*<View style={styles.separator}/>*/}
             </View>
         );
     }
@@ -41,19 +42,19 @@ const styles = {
         backgroundColor: "white"
     },
     name: {
-        fontSize: 17,
-        margin: 10,
+        // fontSize: 17,
+        margin: 5,
         color: "#2e97e5"
     },
     review: {
-        marginLeft: 10,
-        marginRight: 10,
+        marginLeft: 5,
+        marginRight: 5,
         fontSize: 16,
         color: "gray"
     },
     date_created: {
-        margin: 10,
-        fontSize: 15,
+        margin: 5,
+        // fontSize: 15,
         color: "#b2b2b2"
     },
     rating: {
