@@ -57,7 +57,6 @@ export default class Home extends Component {
                 .then(data => {
                     // data will contain the body content from the request
                     console.log("get category");
-                    // console.log(data);
                     this.setState({categories: data, loading: false});
                 })
                 .catch(error => {
@@ -115,7 +114,7 @@ export default class Home extends Component {
         console.log("render category")
         for (var i = 0; i < categories.length; i++) {
             //console.log(categories[i]);
-            if (categories[i].parent != '0') {
+            if (categories[i].parent != '0' &&  categories[i].parent == '15') {
                 cat.push(
                     <CategoryBlock key={categories[i].id} id={categories[i].id} image={categories[i].image.src}
                                    title={categories[i].name}/>

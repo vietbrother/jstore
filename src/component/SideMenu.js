@@ -121,7 +121,7 @@ export default class SideMenu extends Component {
                     //visibility of Overlay Loading Spinner
                     visible={this.state.isLoading}
                     //Text with the Spinner
-                    textContent={'Đang lấy dữ liệu...'}
+                    //textContent={'Đang lấy dữ liệu...'}
                     //Text style of the Spinner Text
                     textStyle={styles.spinnerTextStyle}
                 />
@@ -149,7 +149,7 @@ export default class SideMenu extends Component {
         console.log("this.props.fetchData " + this.props.fetchData);
         if (!this.state.subMenu) {
             return (
-                <View>
+                <View style={{color: Colors.navbarBackgroundColor}}>
                     {/*<View style={{paddingLeft: 15, paddingRight: 15}}>*/}
                     {/*<Item error={this.state.searchError}>*/}
                     {/*<Input*/}
@@ -181,7 +181,7 @@ export default class SideMenu extends Component {
 
                             >
                                 <Body>
-                                <Text>Trang chủ</Text>
+                                <Text style={{color: Colors.navbarBackgroundColor}}>Trang chủ</Text>
                                 </Body>
                                 {/*<Right>*/}
                                 {/*<Icon name="ios-arrow-forward"/>*/}
@@ -252,8 +252,9 @@ export default class SideMenu extends Component {
             if (mappedArr.hasOwnProperty(id)) {
                 mappedElem = mappedArr[id];
                 // If the element is not at the root level, add it to its parent array of children.
-                if (mappedElem.parentid) {
-                    mappedArr[mappedElem['parent']]['subMenu'].push(mappedElem);
+                if (mappedElem.parent != '' && mappedElem.parent != '15') {
+                    console.log(mappedElem.parent);
+                    mappedArr[mappedElem.parent]['subMenu'].push(mappedElem);
                 }
                 // If the element is at the root level, add it to first level elements array.
                 else {
@@ -261,12 +262,15 @@ export default class SideMenu extends Component {
                 }
             }
         }
+        console.log("===========================tree");
+        console.log(tree);
         return tree;
     }
 
     renderMenuItems() {
         if (this.state.menuItems != null && this.state.menuItems.length > 0) {
-            // console.log("___________________________________________this.state.menuItems");
+            console.log("___________________________________________this.state.menuItems");
+            // console.log(this.state.menuItems);
             let items = [];
             try {
                 var treeList = this.unflatten(this.state.menuItems);
@@ -284,10 +288,10 @@ export default class SideMenu extends Component {
                             onPress={() => this.itemClicked(item)}
                         >
                             <Body>
-                            <Text>{item.name}</Text>
+                            <Text onPress={() => this._searchProductByCategoryId(item)}>{item.name}</Text>
                             </Body>
                             <Right>
-                                <Icon name="ios-arrow-forward"/>
+                                <Icon name="ios-arrow-forward" onPress={() => this.itemClicked(item)} />
                             </Right>
                         </ListItem>
                     );
@@ -300,25 +304,32 @@ export default class SideMenu extends Component {
 
     }
 
+    _searchProductByCategoryId(item){
+        console.log("============================item.id : " + item.id)
+        Actions.category({id: item.id, title: item.name, reload: '1'});
+    }
     itemClicked(item) {
-        if (!item.subMenu || item.subMenu.length <= 0) {
-            console.log("============================item.id : " + item.id)
-            Actions.category({id: item.id, title: item.name, reload: '1'});
-            // this.fetchProductByCategoryId(item.id, item.name);
-            return;
+        console.log(item.subMenu);
+        // if (!item.subMenu || item.subMenu.length <= 0) {
+        //     console.log("============================item.id : " + item.id)
+        //     Actions.category({id: item.id, title: item.name, reload: '1'});
+        //     // this.fetchProductByCategoryId(item.id, item.name);
+        //     return;
+        // }
+        if (!item.subMenu || item.subMenu.length > 0) {
+            var animationConfig = {
+                duration: 150,
+                create: {
+                    type: LayoutAnimation.Types.easeInEaseOut,
+                    property: LayoutAnimation.Properties.scaleXY,
+                },
+                update: {
+                    type: LayoutAnimation.Types.easeInEaseOut,
+                },
+            };
+            LayoutAnimation.configureNext(animationConfig);
+            this.setState({subMenu: true, subMenuItems: item.subMenu, clickedItem: item.name});
         }
-        var animationConfig = {
-            duration: 150,
-            create: {
-                type: LayoutAnimation.Types.easeInEaseOut,
-                property: LayoutAnimation.Properties.scaleXY,
-            },
-            update: {
-                type: LayoutAnimation.Types.easeInEaseOut,
-            },
-        };
-        LayoutAnimation.configureNext(animationConfig);
-        this.setState({subMenu: true, subMenuItems: item.subMenu, clickedItem: item.title});
     }
 
     back() {
@@ -359,7 +370,7 @@ export default class SideMenu extends Component {
                         <Icon style={{fontSize: 18}} name={item.icon}/>
                     </Left>
                     <Body style={{marginLeft: -15}}>
-                    <Text style={{fontSize: 16}}>{item.title}</Text>
+                    <Text style={{fontSize: 16, color: Colors.navbarBackgroundColor,fontFamily: 'Roboto',}}>{item.title}</Text>
                     </Body>
                 </ListItem>
             );

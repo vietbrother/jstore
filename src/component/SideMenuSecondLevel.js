@@ -10,15 +10,16 @@ import { Actions } from 'react-native-router-flux';
 
 // Our custom files and classes import
 import Text from './Text';
+import Colors from "../Colors";
 
 export default class SideMenuSecondLevel extends Component {
   render() {
     return(
-      <View>
+      <View style={{color: Colors.navbarBackgroundColor}}>
         <View style={styles.header}>
           <Icon name='ios-arrow-back' style={{fontSize: 20, marginTop: 4}} onPress={() => this.props.back()} />
           <View style={{flex: 1, alignItems: 'center'}}>
-            <Text style={{textAlign: 'center', fontSize: 20}}>{this.props.title}</Text>
+            <Text style={{textAlign: 'center', fontSize: 20, color: Colors.navbarBackgroundColor, fontFamily: 'Roboto',}}>{this.props.title}</Text>
           </View>
         </View>
         <View style={{paddingRight: 15}}>
@@ -42,7 +43,7 @@ export default class SideMenuSecondLevel extends Component {
           onPress={() => this.itemClicked(item)}
         >
           <Body>
-            <Text>{item.title}</Text>
+            <Text>{item.name}</Text>
           </Body>
           <Right>
             <Icon name="ios-arrow-forward" />
@@ -54,7 +55,7 @@ export default class SideMenuSecondLevel extends Component {
   }
 
   itemClicked(item) {
-    Actions.category({id: item.id, title: item.title});
+    Actions.category({id: item.id, title: item.name});
   }
 
 }
@@ -63,6 +64,8 @@ const styles={
   header: {
     flex: 1,
     flexDirection: 'row',
-    padding: 15
+    padding: 15,
+    fontFamily: 'Roboto',
+    color: Colors.navbarBackgroundColor
   }
 };

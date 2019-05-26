@@ -4,7 +4,7 @@
 
 // React native and others libraries imports
 import React, {Component} from 'react';
-import {Image, Dimensions, TouchableWithoutFeedback, AsyncStorage, WebView, Alert} from 'react-native';
+import {Image, Dimensions, TouchableWithoutFeedback, AsyncStorage, WebView, Alert, StyleSheet} from 'react-native';
 import {
     View,
     Container,
@@ -35,6 +35,8 @@ import {default as ProductComponent} from '../component/Product';
 import Star from 'react-native-star-view';
 import ReviewSend from '../component/ReviewSend'
 import ReviewBlock from '../component/ReviewBlock'
+import SliderEntry from '../component/SliderEntry'
+import {sliderWidth, itemWidth, IS_IOS, slideHeight, itemHorizontalMargin} from '../Config'
 
 export default class Product extends Component {
 
@@ -113,49 +115,51 @@ export default class Product extends Component {
                 <Navbar left={left} right={right} title={this.props.product.name}/>
                 <Content>
 
-                    {this.renderImages()}
-                    <Carousel
-                        ref={c => this._slider1Ref = c}
-                        data={this.renderImages()}
-                        //renderItem={this._renderItemWithParallax}
-                        sliderWidth={Dimensions.get('window').width}
-                        itemWidth={Dimensions.get('window').width}
-                        hasParallaxImages={true}
-                        firstItem={1}
-                        inactiveSlideScale={0.94}
-                        inactiveSlideOpacity={0.7}
-                        // inactiveSlideShift={20}
-                        //containerCustomStyle={styles.slider}
-                        //contentContainerCustomStyle={styles.sliderContentContainer}
-                        loop={true}
-                        loopClonesPerSide={2}
-                        autoplay={true}
-                        autoplayDelay={500}
-                        autoplayInterval={3000}
-                        onSnapToItem={(index) => this.setState({slider1ActiveSlide: index})}
-                    >
-                        {this.renderImages()}
-                    </Carousel>
+                    {/*{this.renderImages()}*/}
+                    {/*<Carousel*/}
+                    {/*ref={c => this._slider1Ref = c}*/}
+                    {/*data={this.renderImages()}*/}
+                    {/*//renderItem={this._renderItemWithParallax}*/}
+                    {/*sliderWidth={Dimensions.get('window').width}*/}
+                    {/*itemWidth={Dimensions.get('window').width}*/}
+                    {/*hasParallaxImages={true}*/}
+                    {/*firstItem={1}*/}
+                    {/*inactiveSlideScale={0.94}*/}
+                    {/*inactiveSlideOpacity={0.7}*/}
+                    {/*// inactiveSlideShift={20}*/}
+                    {/*//containerCustomStyle={styles.slider}*/}
+                    {/*//contentContainerCustomStyle={styles.sliderContentContainer}*/}
+                    {/*loop={true}*/}
+                    {/*loopClonesPerSide={2}*/}
+                    {/*autoplay={true}*/}
+                    {/*autoplayDelay={500}*/}
+                    {/*autoplayInterval={3000}*/}
+                    {/*onSnapToItem={(index) => this.setState({slider1ActiveSlide: index})}*/}
+                    {/*>*/}
+                    {/*{this.renderImages()}*/}
+                    {/*</Carousel>*/}
 
-                    <Pagination
-                        dotsLength={this.state.product.images.length}
-                        activeDotIndex={this.state.activeSlide}
-                        containerStyle={{
-                            backgroundColor: 'transparent',
-                            paddingTop: 0,
-                            paddingBottom: 0,
-                            marginTop: -15
-                        }}
-                        dotStyle={{
-                            width: 10,
-                            height: 10,
-                            borderRadius: 5,
-                            marginHorizontal: 2,
-                            backgroundColor: 'rgba(255, 255, 255, 0.92)'
-                        }}
-                        inactiveDotOpacity={0.4}
-                        inactiveDotScale={0.6}
-                    />
+                    {/*<Pagination*/}
+                    {/*dotsLength={this.state.product.images.length}*/}
+                    {/*activeDotIndex={this.state.activeSlide}*/}
+                    {/*containerStyle={{*/}
+                    {/*backgroundColor: 'transparent',*/}
+                    {/*paddingTop: 0,*/}
+                    {/*paddingBottom: 0,*/}
+                    {/*marginTop: -15*/}
+                    {/*}}*/}
+                    {/*dotStyle={{*/}
+                    {/*width: 10,*/}
+                    {/*height: 10,*/}
+                    {/*borderRadius: 5,*/}
+                    {/*marginHorizontal: 2,*/}
+                    {/*backgroundColor: 'rgba(255, 255, 255, 0.92)'*/}
+                    {/*}}*/}
+                    {/*inactiveDotOpacity={0.4}*/}
+                    {/*inactiveDotScale={0.6}*/}
+                    {/*/>*/}
+                    {this._renderImageSlider()}
+                    {/*{this.mainExample()}*/}
                     <View style={{
                         backgroundColor: '#fdfdfd',
                         paddingTop: 10,
@@ -166,16 +170,21 @@ export default class Product extends Component {
                     }}>
                         <Grid style={{textAlign: 'left'}}>
                             <Row>
-                                <Text style={{fontSize: 18}}>{this.state.product.name}</Text>
+                                <Text style={{
+                                    fontSize: 18, fontFamily: 'Roboto',
+                                    color: Colors.navbarBackgroundColor
+                                }}>{this.state.product.name}</Text>
                             </Row>
                             <Row>
                                 <Text style={{
                                     fontSize: 20,
-                                    fontWeight: 'bold'
+                                    fontWeight: 'bold',
+                                    fontFamily: 'Roboto',
+                                    color: Colors.navbarBackgroundColor
                                 }}>{this.state.product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} {Config.vnd}</Text>
                             </Row>
                             {/*<Row>*/}
-                                {/*{this.renderStar()}*/}
+                            {/*{this.renderStar()}*/}
                             {/*</Row>*/}
                         </Grid>
 
@@ -226,7 +235,10 @@ export default class Product extends Component {
                             </Col>
                         </Grid>
                         <View style={styles.borderView}>
-                            <Text style={{marginBottom: 5, marginLeft: 10, fontWeight: 'bold'}}>Mô tả</Text>
+                            <Text style={{
+                                marginBottom: 5, marginLeft: 10, fontWeight: 'bold', fontFamily: 'Roboto',
+                                color: Colors.navbarBackgroundColor
+                            }}>Mô tả</Text>
                             <View style={{
                                 width: '100%',
                                 height: 1,
@@ -235,6 +247,10 @@ export default class Product extends Component {
                                 marginBottom: 10
                             }}/>
                             <HTML html={this.state.product.description == null ? '' : this.state.product.description}
+                                  classesStyles={{
+                                      fontFamily: 'Roboto',
+                                      color: Colors.navbarBackgroundColor
+                                  }}
                                   imagesMaxWidth={Dimensions.get('window').width}/>
                             {/*<NBText note>*/}
                             {/*{this.state.product.description}*/}
@@ -242,11 +258,11 @@ export default class Product extends Component {
                             {/*</NBText>*/}
                         </View>
                         {/*<View style={styles.borderView}>*/}
-                            {/*<ReviewBlock product={this.props.product}></ReviewBlock>*/}
+                        {/*<ReviewBlock product={this.props.product}></ReviewBlock>*/}
                         {/*</View>*/}
                         {/*<View style={styles.borderView}>*/}
-                            {/*<ReviewSend product={this.props.product} userId={this.state.userId}*/}
-                                        {/*categoryId={this.props.categoryId} categoryName={this.props.title}></ReviewSend>*/}
+                        {/*<ReviewSend product={this.props.product} userId={this.state.userId}*/}
+                        {/*categoryId={this.props.categoryId} categoryName={this.props.title}></ReviewSend>*/}
                         {/*</View>*/}
                     </View>
                     {/*<View style={{marginTop: 15, paddingLeft: 12, paddingRight: 12}}>*/}
@@ -263,6 +279,94 @@ export default class Product extends Component {
                 </Content>
             </Container>
         );
+    }
+
+    _renderItemWithParallax ({item, index}, parallaxProps) {
+        return (
+            <SliderEntry
+                data={item}
+                even={(index + 1) % 2 === 0}
+                parallax={true}
+                parallaxProps={parallaxProps}
+            />
+        );
+    }
+    // mainExample() {
+    //     var data = this._getSliderItems();
+    //     var slider1ActiveSlide = 1;
+    //
+    //     return (
+    //         <View>
+    //             <Carousel
+    //                 ref={c => this._slider1Ref = c}
+    //                 data={data}
+    //                 renderItem={this._renderItemWithParallax}
+    //                 sliderWidth={sliderWidth}
+    //                 itemWidth={itemWidth}
+    //                 hasParallaxImages={true}
+    //                 firstItem={1}
+    //                 inactiveSlideScale={0.94}
+    //                 inactiveSlideOpacity={0.7}
+    //                 // inactiveSlideShift={20}
+    //                 containerCustomStyle={styles.slider}
+    //                 contentContainerCustomStyle={styles.sliderContentContainer}
+    //                 loop={true}
+    //                 loopClonesPerSide={2}
+    //                 autoplay={true}
+    //                 autoplayDelay={500}
+    //                 autoplayInterval={3000}
+    //                 onSnapToItem={(index) => this.setState({slider1ActiveSlide: index})}
+    //             />
+    //             {/*<Pagination*/}
+    //                 {/*dotsLength={data.length}*/}
+    //                 {/*activeDotIndex={slider1ActiveSlide}*/}
+    //                 {/*containerStyle={styles.paginationContainer}*/}
+    //                 {/*dotColor={'#00a0e5'}*/}
+    //                 {/*dotStyle={styles.paginationDot}*/}
+    //                 {/*inactiveDotColor={'#00a0e5'}*/}
+    //                 {/*inactiveDotOpacity={0.4}*/}
+    //                 {/*inactiveDotScale={0.6}*/}
+    //                 {/*carouselRef={this._slider1Ref}*/}
+    //                 {/*tappableDots={!!this._slider1Ref}*/}
+    //             {/*/>*/}
+    //         </View>
+    //     );
+    // }
+
+    _renderImageSlider() {
+        return (
+            <View style={{backgroundColor: 'white', paddingVertical: 5}}>
+                <Carousel
+                    data={this._getSliderItems()}
+                    renderItem={this._renderItem}
+                    sliderWidth={sliderWidth}
+                    itemWidth={itemWidth}
+                    containerCustomStyle={styles.slider}
+                    contentContainerCustomStyle={styles.sliderContentContainer}
+                    // layout={type}
+                    loop={true}
+                    autoplay={true}
+                    autoplayDelay={500}
+                    autoplayInterval={1500}
+                />
+            </View>
+        );
+    }
+
+    _getSliderItems() {
+        let images = [];
+        this.state.product.images.map((img, i) => {
+            var entity = {};
+            entity['title'] = img.name;
+            entity['subtitle'] = img.name;
+            entity['illustration'] = img.src;
+            images.push(entity);
+        });
+        return images;
+    }
+
+    _renderItem({item, index}) {
+        return <SliderEntry data={item} even={(index + 1) % 2 === 0}/>;
     }
 
     renderImages() {
@@ -479,6 +583,66 @@ const styles = {
         borderRadius: 3,
         width: '100%',
         borderColor: 'rgba(149, 165, 166, 0.3)'
+    },
+
+
+    gradient: {
+        ...StyleSheet.absoluteFillObject
+    },
+    scrollview: {
+        flex: 1
+    },
+    exampleContainer: {
+        paddingVertical: 30
+    },
+    exampleContainerDark: {
+        backgroundColor: 'black'
+    },
+    exampleContainerLight: {
+        backgroundColor: 'white'
+    },
+    title: {
+        paddingHorizontal: 30,
+        backgroundColor: 'transparent',
+        color: 'rgba(255, 255, 255, 0.9)',
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'center'
+    },
+    titleDark: {
+        color: 'black'
+    },
+    subtitle: {
+        marginTop: 5,
+        paddingHorizontal: 30,
+        backgroundColor: 'transparent',
+        color: 'rgba(255, 255, 255, 0.75)',
+        fontSize: 13,
+        fontStyle: 'italic',
+        textAlign: 'center'
+    },
+    slider: {
+        marginTop: 15,
+        overflow: 'visible', // for custom animations
+        height: 250,
+        paddingHorizontal: itemHorizontalMargin,
+    },
+    sliderContentContainer: {
+        // paddingVertical: 10, // for custom animation
+
+        resizeMode: 'cover',
+        borderRadius: IS_IOS ? 0 : 0,
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 0
+    },
+    paginationContainer: {
+        paddingVertical: 8
+    },
+    paginationDot: {
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        marginHorizontal: 8
     }
 };
 

@@ -83,7 +83,7 @@ export default class Login extends Component {
                     //visibility of Overlay Loading Spinner
                     visible={this.state.isLoading}
                     //Text with the Spinner
-                    textContent={'Đang đăng nhập ...'}
+                    //textContent={'Đang đăng nhập ...'}
                     //Text style of the Spinner Text
                     textStyle={styles.spinnerTextStyle}
                 />

@@ -1,3 +1,5 @@
+import { StyleSheet, Dimensions, Platform } from 'react-native';
+
 const Config = {
   navbarBackgroundColor: '#2c3e50',
   statusBarColor: '#233240',
@@ -18,4 +20,21 @@ const Config = {
 
 };
 
+
+const IS_IOS = Platform.OS === 'ios';
+const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
+
+function wp (percentage) {
+  const value = (percentage * viewportWidth) / 100;
+  return Math.round(value);
+}
+
+const slideHeight = viewportHeight * 0.36;
+const slideWidth = wp(80);
+const itemHorizontalMargin = wp(2);
+
+export const sliderWidth = viewportWidth;
+export const itemWidth = slideWidth + itemHorizontalMargin * 2;
+
+const entryBorderRadius = 8;
 export default Config;

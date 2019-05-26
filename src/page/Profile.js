@@ -85,7 +85,7 @@ export default class Profile extends Component {
                     //visibility of Overlay Loading Spinner
                     visible={this.state.isLoading}
                     //Text with the Spinner
-                    textContent={'Đang cập nhật thông tin ...'}
+                    //textContent={'Đang cập nhật thông tin ...'}
                     //Text style of the Spinner Text
                     textStyle={styles.spinnerTextStyle}
                 />

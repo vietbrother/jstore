@@ -124,7 +124,7 @@ export default class Checkout extends Component {
                     //visibility of Overlay Loading Spinner
                     visible={this.state.loading}
                     //Text with the Spinner
-                    textContent={'Đang xử lý...'}
+                    //textContent={'Đang xử lý...'}
                     //Text style of the Spinner Text
                     textStyle={styles.spinnerTextStyle}
                 />

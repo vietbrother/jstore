@@ -57,7 +57,7 @@ export default class Signup extends Component {
                     //visibility of Overlay Loading Spinner
                     visible={this.state.isLoading}
                     //Text with the Spinner
-                    textContent={'Đang đăng ký ...'}
+                    //textContent={'Đang đăng ký ...'}
                     //Text style of the Spinner Text
                     textStyle={styles.spinnerTextStyle}
                 />
