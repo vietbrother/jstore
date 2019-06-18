@@ -76,16 +76,18 @@ export default class SideMenu extends Component {
             if (this.props.fetchData != null && this.props.fetchData == '1') {
                 console.log("++++++++++++++ reload data ++++++++++++++++++++++++")
                 this.setState({isLoading: true});
-                global.WooCommerceAPI.get('products/categories', {})
+                global.WooCommerceAPI.get('products/categories', {
+                    per_page: 100, status: 'processing', page: 1
+                })
                     .then(data => {
                         // data will contain the body content from the request
-                        console.log("get category");
+                        console.log("get category " + data.length);
                         // console.log(data);
                         var items = [];
                         data.map((item, i) => {
-                            if (item.parent != '0') {
+                            // if (item.parent != '0') {
                                 items.push(item);
-                            }
+                            // }
                         });
                         // console.log(items);
                         this.setState({menuItems: items, isLoading: false});
@@ -245,6 +247,7 @@ export default class SideMenu extends Component {
             arrElem = arr[i];
             mappedArr[arrElem.id] = arrElem;
             mappedArr[arrElem.id]['subMenu'] = [];
+            // console.log(arrElem.id + '--mappedElem.parent ' + arrElem.parent);
         }
 
 
@@ -252,18 +255,17 @@ export default class SideMenu extends Component {
             if (mappedArr.hasOwnProperty(id)) {
                 mappedElem = mappedArr[id];
                 // If the element is not at the root level, add it to its parent array of children.
-                if (mappedElem.parent != '' && mappedElem.parent != '15') {
-                    console.log(mappedElem.parent);
+                if (mappedElem.parent != null && mappedElem.parent != '0' && mappedArr[mappedElem.parent] != null) {
                     mappedArr[mappedElem.parent]['subMenu'].push(mappedElem);
                 }
                 // If the element is at the root level, add it to first level elements array.
-                else {
+                else if(mappedElem.parent != null && mappedElem.parent == '0'){
                     tree.push(mappedElem);
                 }
             }
         }
-        console.log("===========================tree");
-        console.log(tree);
+        // console.log("===========================tree");
+        // console.log(tree);
         return tree;
     }
 
@@ -291,7 +293,7 @@ export default class SideMenu extends Component {
                             <Text onPress={() => this._searchProductByCategoryId(item)}>{item.name}</Text>
                             </Body>
                             <Right>
-                                <Icon name="ios-arrow-forward" onPress={() => this.itemClicked(item)} />
+                                <Icon name="ios-arrow-forward" onPress={() => this.itemClicked(item)}/>
                             </Right>
                         </ListItem>
                     );
@@ -304,10 +306,11 @@ export default class SideMenu extends Component {
 
     }
 
-    _searchProductByCategoryId(item){
+    _searchProductByCategoryId(item) {
         console.log("============================item.id : " + item.id)
         Actions.category({id: item.id, title: item.name, reload: '1'});
     }
+
     itemClicked(item) {
         console.log(item.subMenu);
         // if (!item.subMenu || item.subMenu.length <= 0) {
@@ -370,7 +373,11 @@ export default class SideMenu extends Component {
                         <Icon style={{fontSize: 18}} name={item.icon}/>
                     </Left>
                     <Body style={{marginLeft: -15}}>
-                    <Text style={{fontSize: 16, color: Colors.navbarBackgroundColor,fontFamily: 'Roboto',}}>{item.title}</Text>
+                    <Text style={{
+                        fontSize: 16,
+                        color: Colors.navbarBackgroundColor,
+                        fontFamily: 'Roboto',
+                    }}>{item.title}</Text>
                     </Body>
                 </ListItem>
             );

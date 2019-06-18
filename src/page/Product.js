@@ -4,7 +4,16 @@
 
 // React native and others libraries imports
 import React, {Component} from 'react';
-import {Image, Dimensions, TouchableWithoutFeedback, AsyncStorage, WebView, Alert, StyleSheet} from 'react-native';
+import {
+    Image,
+    Dimensions,
+    TouchableWithoutFeedback,
+    AsyncStorage,
+    WebView,
+    Alert,
+    StyleSheet,
+    ActivityIndicator
+} from 'react-native';
 import {
     View,
     Container,
@@ -38,18 +47,23 @@ import ReviewBlock from '../component/ReviewBlock'
 import SliderEntry from '../component/SliderEntry'
 import {sliderWidth, itemWidth, IS_IOS, slideHeight, itemHorizontalMargin} from '../Config'
 
+import ProductRelated from '../component/Product';
+
 export default class Product extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             product: {},
+            productRelated: {},
             activeSlide: 0,
             quantity: 1,
             selectedColor: '',
             selectedSize: '',
             userId: '',
-            isWhislist: Colors.navbarBackgroundColor
+            isWhislist: Colors.navbarBackgroundColor,
+            relatedProduct: [],
+            loading: false
         };
     }
 
@@ -78,13 +92,7 @@ export default class Product extends Component {
     }
 
     componentDidMount() {
-        /* Select the default color and size (first ones) */
-        // let defColor = this.state.product.colors[0];
-        // let defSize = this.state.product.sizes[0];
-        // this.setState({
-        //     selectedColor: defColor,
-        //     selectedSize: defSize
-        // });
+        this.fetchDataRelatedProducts();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -246,16 +254,31 @@ export default class Product extends Component {
                                 marginLeft: 7,
                                 marginBottom: 10
                             }}/>
-                            <HTML html={this.state.product.description == null ? '' : this.state.product.description}
-                                  classesStyles={{
-                                      fontFamily: 'Roboto',
-                                      color: Colors.navbarBackgroundColor
-                                  }}
-                                  imagesMaxWidth={Dimensions.get('window').width}/>
+                            <HTML
+                                html={this.state.product.description == null || this.state.product.description == '' ? '<p>Chưa có mô tả sản phẩm</p>' : this.state.product.description}
+                                classesStyles={{
+                                    fontFamily: 'Roboto',
+                                    color: Colors.navbarBackgroundColor
+                                }}
+                                imagesMaxWidth={Dimensions.get('window').width}/>
                             {/*<NBText note>*/}
                             {/*{this.state.product.description}*/}
 
                             {/*</NBText>*/}
+                        </View>
+                        <View style={styles.borderView}>
+                            <Text style={{
+                                marginBottom: 5, marginLeft: 10, fontWeight: 'bold', fontFamily: 'Roboto',
+                                color: Colors.navbarBackgroundColor
+                            }}>SẢN PHẨM LIÊN QUAN</Text>
+                            <View style={{
+                                width: '100%',
+                                height: 1,
+                                backgroundColor: 'rgba(44, 62, 80, 0.5)',
+                                marginLeft: 7,
+                                marginBottom: 10
+                            }}/>
+                            {this.renderRelatedProducts()}
                         </View>
                         {/*<View style={styles.borderView}>*/}
                         {/*<ReviewBlock product={this.props.product}></ReviewBlock>*/}
@@ -281,7 +304,7 @@ export default class Product extends Component {
         );
     }
 
-    _renderItemWithParallax ({item, index}, parallaxProps) {
+    _renderItemWithParallax({item, index}, parallaxProps) {
         return (
             <SliderEntry
                 data={item}
@@ -291,6 +314,7 @@ export default class Product extends Component {
             />
         );
     }
+
     // mainExample() {
     //     var data = this._getSliderItems();
     //     var slider1ActiveSlide = 1;
@@ -558,6 +582,49 @@ export default class Product extends Component {
 
     renderRatingReview() {
 
+    }
+
+
+    fetchDataRelatedProducts() {
+        this.setState({relatedProduct: [], loading: true});
+        global.WooCommerceAPI.get('products', {
+            per_page: 6,
+            page: 1,
+            category: this.props.categoryId
+        })
+            .then(data => {
+                console.log("================Related Fetch API-----------------");
+                console.log(data.size);
+                this.setState({relatedProduct: data, loading: false});
+            }).catch(error => {
+            // error will return any errors that occur
+            console.log(error);
+        });
+    }
+
+    renderRelatedProducts() {
+        let items = [];
+
+        if (this.state.loading == false) {
+            if (this.state.relatedProduct != null && this.state.relatedProduct.length > 0) {
+                let stateItems = this.state.relatedProduct;
+                var key = new Date().valueOf();
+                for (var i = 0; i < stateItems.length; i++) {
+                    if (stateItems[i].categories != null && stateItems[i].categories.length > 0 && stateItems[i].id != this.state.product.id) {
+                        items.push(
+                            <Grid key={i}>
+                                <ProductRelated key={key + '-' + stateItems[i].id} product={stateItems[i]}
+                                         categoryId={stateItems[i].categories[0].id}
+                                         categoryName={stateItems[i].categories[0].name}/>
+                            </Grid>
+                        );
+                    }
+                }
+            }
+            return items;
+        } else {
+            return <ActivityIndicator/>
+        }
     }
 }
 const styles = {
