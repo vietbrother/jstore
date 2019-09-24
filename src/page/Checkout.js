@@ -57,7 +57,10 @@ export default class Checkout extends Component {
             errorText: '',
             finishOrder: false,
             userId: this.props.userId,
-            loading: false
+            loading: false,
+
+            bankInfo: [],
+            orderNumber: ''
         };
 
         global.WooCommerceAPI_ = new WooCommerceAPI_({
@@ -79,6 +82,18 @@ export default class Checkout extends Component {
 
     componentDidMount() {
         this.getSessionKey();
+    }
+
+    _initDataBankInfo() {
+        var arr = [];
+        arr.push({name: 'MB', cardNumber: '9704229222812831'});
+        arr.push({name: 'Vietcombank', cardNumber: '0691 000 416 914'});
+        arr.push({name: 'BIDV', cardNumber: '3301 0000 421 314'});
+        arr.push({name: 'Agribank', cardNumber: '8300 205 225 789'});
+        arr.push({name: 'Vietinbank', cardNumber: '1048 6965 0038'});
+        arr.push({name: 'Lienvietpostbank', cardNumber: '0059 0816 0001'});
+        arr.push({name: 'Viettel Pay', cardNumber: '0919 829 969 (SĐT)'});
+        this.setState({bankInfo: arr});
     }
 
     async getSessionKey() {
@@ -251,18 +266,36 @@ export default class Checkout extends Component {
                     <Text style={styles.label}>Tên : </Text>
                     <Text style={styles.require}> {Config.bankUserName} </Text>
                 </Item>
-                <Item>
-                    <Text style={styles.label}>Số tài khoản : </Text>
-                    <Text style={styles.require}> {Config.bankNumber} </Text>
-                </Item>
-                <Item>
-                    <Text style={styles.label}>Ngân hàng : </Text>
-                    <Text style={styles.require}> {Config.bankName} </Text>
-                </Item>
-                <Item>
-                    <Text style={styles.label}>Chi nhánh : </Text>
-                    <Text style={styles.require}> {Config.bankDepartment} </Text>
-                </Item>
+                {/*<Item>*/}
+                    {/*<Text style={styles.label}>Số tài khoản : </Text>*/}
+                    {/*<Text style={styles.require}> {Config.bankNumber} </Text>*/}
+                {/*</Item>*/}
+                {/*<Item>*/}
+                    {/*<Text style={styles.label}>Ngân hàng : </Text>*/}
+                    {/*<Text style={styles.require}> {Config.bankName} </Text>*/}
+                {/*</Item>*/}
+                {/*<Item>*/}
+                    {/*<Text style={styles.label}>Chi nhánh : </Text>*/}
+                    {/*<Text style={styles.require}> {Config.bankDepartment} </Text>*/}
+                {/*</Item>*/}
+
+                <List dataArray={this.state.bankInfo}
+                      renderRow={(item) =>
+                          <ListItem>
+                              <Grid>
+                                  <Col>
+                                      <Text style={{fontWeight: 'bold'}}>{item.name}</Text>
+                                  </Col>
+                                  <Col>
+                                      <Text style={{
+                                          textAlign: 'center',
+                                          fontSize: 16,
+                                          color: '#BE0026'
+                                      }}>{item.cardNumber}</Text>
+                                  </Col>
+                              </Grid>
+                          </ListItem>}>
+                </List>
             </View>
         );
     }
@@ -370,7 +403,7 @@ export default class Checkout extends Component {
             msgErr = 'Chưa nhập số điện thoại';
         } else {
             var reg = /^((09|03|07|08|05)+([0-9]{8})\b)$/;
-            if(reg.test(this.state.phone) == false){
+            if (reg.test(this.state.phone) == false) {
                 msgErr = 'Số điện thoại không chính xác';
             }
         }
@@ -475,6 +508,7 @@ export default class Checkout extends Component {
                 AsyncStorage.setItem("CART", JSON.stringify([]));
                 this.setState({finishOrder: true});
                 this.setState({loading: false});
+                this.setState({orderNumber: data.number});
             }).catch(error => {
             // error will return any errors that occur
             console.log(error);
@@ -491,7 +525,11 @@ export default class Checkout extends Component {
                     paddingLeft: 20,
                     paddingRight: 20
                 }}>
-                    <Text style={{fontSize: 18}}>Cám ơn quý khách đã thanh toán. Nhân viên shop sẽ liên hệ lại với quý
+                    <Icon style={{fontSize: 25, fontWeight: 'bold', color: 'green'}}
+                          name='ios-checkmark-circle-outline'/>
+                    <Text style={{fontSize: 14}}>Mã đơn hàng : <Text
+                        style={{fontSize: 18, fontWeight: 'bold', color: 'red'}}>{this.state.orderNumber}</Text></Text>
+                    <Text style={{fontSize: 14}}>Cám ơn quý khách đã thanh toán. Nhân viên shop sẽ liên hệ lại với quý
                         khách để xác nhận đơn
                         hàng.</Text>
                     <Button onPress={() => this._finishOrder()}

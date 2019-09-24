@@ -128,15 +128,36 @@ export default class Login extends Component {
                         <View style={{alignItems: 'center', width: '100%'}}>
                             <Button onPress={() => this.login()}
                                     style={styles.buttonLogin}>
-                                <Text style={{color: '#fdfdfd'}}> Đăng nhập </Text>
+                                <Text style={{color: '#fdfdfd', fontSize: 14,}}> Đăng nhập </Text>
                             </Button>
                         </View>
+                        {/*<View style={{alignItems: 'center', width: '100%'}}>*/}
+                            {/*<Button onPress={() => Actions.signup()}*/}
+                                    {/*style={styles.buttonLogin}>*/}
+                                {/*<Text style={{color: '#fdfdfd', fontSize: 14}}> Đăng ký </Text>*/}
+                            {/*</Button>*/}
+                        {/*</View>*/}
                         <View style={{alignItems: 'center', width: '100%'}}>
                             <Button onPress={() => Actions.signup()}
                                     style={styles.buttonLogin}>
-                                <Text style={{color: '#fdfdfd'}}> Đăng ký </Text>
+                                <View style={{
+                                    flexDirection: 'row',
+                                    justifyContent: "center",
+                                    alignItems: "center"
+                                }}>
+                                    <Icon style={{color: 'white'}} name='ios-logo-facebook'/>
+                                    <Text style={{color: '#fdfdfd', fontSize: 14}}> Đăng nhập bằng Facebook </Text>
+                                </View>
                             </Button>
                         </View>
+
+                        <TouchableOpacity
+                            style={Styles.Common.ColumnCenter}
+                            onPress={() => Actions.signup()}>
+                            <Text style={styles.signUp}>
+                                Chưa có tài khoản? <Text style={styles.highlight}>Đăng ký</Text>
+                            </Text>
+                        </TouchableOpacity>
 
                     </View>
                 </ScrollView>
@@ -209,6 +230,15 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         fontSize: 14,
     },
+    buttonLoginFb: {
+        backgroundColor: '#2f55a4',
+        color: 'white',
+        marginTop: 20,
+        width: '100%',
+        justifyContent: 'center',
+        borderRadius: 10,
+        fontSize: 14,
+    },
     buttonSignup: {
         backgroundColor: "transparent",
         color: "#bcbec1",
@@ -219,5 +249,9 @@ const styles = StyleSheet.create({
         borderLeftColor: 'white',
         borderRightColor: 'white',
         borderTopColor: 'white'
+    },
+    highlight: {
+        fontWeight: 'bold',
+        color: Colors.navbarBackgroundColor
     }
 });
