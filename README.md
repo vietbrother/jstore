@@ -24,6 +24,7 @@ It works well with both IOS and Android.
 
 ### Reference
 * https://github.com/territoryfan/react-native-tabbar
+* https://github.com/ptomasroos/react-native-tab-navigator
 
 
 ## Installation
