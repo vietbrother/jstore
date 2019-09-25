@@ -33,12 +33,17 @@ function wp(percentage) {
     return Math.round(value);
 }
 
+const bannerHeight = viewportHeight * 0.26;
 const slideHeight = viewportHeight * 0.36;
 const slideWidth = wp(80);
 const itemHorizontalMargin = wp(2);
 
 export const sliderWidth = viewportWidth;
 export const itemWidth = slideWidth + itemHorizontalMargin * 2;
+
+const categoriesIconWidth = viewportWidth * 0.9/4;
+const categoriesIconHeight = viewportWidth * 0.9/4;
+const productItemHeight = wp(45);
 
 const entryBorderRadius = 8;
 export default Config;

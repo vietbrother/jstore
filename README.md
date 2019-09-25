@@ -22,8 +22,8 @@ It works well with both IOS and Android.
 * [Login](./src/page/Login.js)/[Sign up](./src/page/Signup.js)
 * [Payment](./src/page/Checkout.js)
 
-### Coming Soon
-* Profile
+### Reference
+* https://github.com/territoryfan/react-native-tabbar
 
 
 ## Installation
