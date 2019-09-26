@@ -11,7 +11,7 @@ const Config = {
     ssl: false,
     // consumerKey: 'ck_155068b58dd6614b3ace920437df62399bb94503',
     // consumerSecret: 'cs_9fb0b186ea0024bd6d9d497715e88e43b1bf2b6e',
-    consumerKey: 'ck_29b281d2af61df58dadbeead327b06dd9a53f1be',
+    consumerKey: 'ck_29b281d2af61df58dadbeead327b06dd9a53f1be',//key_admin
     consumerSecret: 'cs_a6d53b6572240d483749ee0123d48c76332c0e0d',
 
     hotline: '1900 0091',

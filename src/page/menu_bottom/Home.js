@@ -158,6 +158,7 @@ export default class Home extends Component {
                             <ProductsNew></ProductsNew>
                             <ProductsList></ProductsList>
                         </Content>
+                        <BottomMenu selectTab='home'></BottomMenu>
                     </Container>
                 </SideMenuDrawer>);
         } else {
