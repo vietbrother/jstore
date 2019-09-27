@@ -37,7 +37,7 @@ export default class Main extends Component {
 
   constructor(){
     super();
-    // global.WooCommerceAPI = new WooCommerceAPI({
+    // global.WooCommerceAPI = menu WooCommerceAPI({
     //   url: 'http://103.94.18.249/jstore', // Your store URL
     //   ssl: false,
     //   consumerKey: 'ck_155068b58dd6614b3ace920437df62399bb94503', // Your consumer secret

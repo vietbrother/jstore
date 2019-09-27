@@ -61,7 +61,7 @@ export default class Login extends Component {
     render() {
         var left = (
             <Left style={{flex: 1}}>
-                <Button onPress={() => Actions.home({sessionLoginKey: null})} transparent>
+                <Button onPress={() => Actions.pop()} transparent>
                     <Icon name='ios-arrow-back'/>
                 </Button>
             </Left>

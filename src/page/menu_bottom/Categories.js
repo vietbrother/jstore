@@ -5,18 +5,18 @@
 // React native and others libraries imports
 import React, {Component} from 'react';
 import {ActivityIndicator, Image, ScrollView} from 'react-native';
-import {View, Col, Card, CardItem, Body, Button} from 'native-base';
+import {View, Col, Card, CardItem, Body, Button, Right, Icon, Input, Container,
+    Content, Input} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 
 // Our custom files and classes import
-import Colors from '../../Colors';
-import Text from '../Text';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {IS_IOS, itemHorizontalMargin, itemWidth, sliderWidth, bannerHeight} from "../../Config";
 import Config from "../../Config";
-import CategoriesListItem from "./CategoriesListItem";
+import CategoriesListItem from "../../component/home/CategoriesListItem";
+import Navbar from '../../component/menu/Navbar';
+import BottomMenu from '../../component/menu/BottomMenu'
 
-export default class CategoriesList extends Component {
+export default class Categories extends Component {
 
     constructor(props) {
         super(props);
@@ -57,18 +57,39 @@ export default class CategoriesList extends Component {
     }
 
     render() {
-        return (
-            <Card>
-                <CardItem header active>
-                    <Text>Danh Mục Sản Phẩm</Text>
-                </CardItem>
-                <ActivityIndicator
-                    animating = {this.state.loading}
-                    color = '#bc2b78'
-                    size = "large" />
-                {this._renderCategories()}
 
-            </Card>
+        var right = (
+            <Right style={{flex: 1}}>
+                <Button onPress={() => Actions.search()} transparent>
+                    <Icon name='ios-search-outline'/>
+                </Button>
+                <Button onPress={() => Actions.cart()} transparent>
+                    <Icon name='ios-cart'/>
+                </Button>
+            </Right>
+        );
+        var center = (
+            <Input
+                style={{
+                    // height: 40,
+                    borderColor: "gray",
+                    borderWidth: 0.5,
+                    // marginTop: 8
+                }}
+                underlineColorAndroid="transparent"
+                placeholder="Tìm kiếm sản phẩm..."
+                onKeyPress={keyPress => console.log(keyPress)}
+                onFocus={() => Actions.search()}
+            />
+        );
+        return (
+            <Container>
+                <Navbar center={center} right={right} title="ONNI"/>
+                <Content>
+                    {this._renderCategories()}
+                </Content>
+                <BottomMenu selectTab='categories'></BottomMenu>
+            </Container>
         );
     }
 
@@ -77,9 +98,6 @@ export default class CategoriesList extends Component {
         var urlNotFound = Config.url + Config.imageDefaul;
         var categories = this.state.categories;
         for (var i = 0; i < categories.length; i++) {
-            if (i == 8) {
-                break;
-            }
             if (categories[i].parent == '0') {
                 if (categories[i].image == null) {
                     categories[i].image = {src: urlNotFound};

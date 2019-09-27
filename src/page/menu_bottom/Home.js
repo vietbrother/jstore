@@ -18,13 +18,13 @@ import {
     cardBody,
     Row,
     Grid,
-    Col
+    Col, Input
 } from 'native-base';
 import {Actions} from 'react-native-router-flux';
 
 // Our custom files and classes import
 import Text from '../../component/Text';
-import Navbar from '../../component/new/Navbar';
+import Navbar from '../../component/menu/Navbar';
 import SideMenu from '../../component/SideMenu';
 import SideMenuDrawer from '../../component/SideMenuDrawer';
 import CategoryBlock from '../../component/CategoryBlock';
@@ -32,6 +32,7 @@ import CategoryRootBlock from '../../component/CategoryRootBlock';
 import Colors from "../../Colors";
 import Config from "../../Config";
 import Product from '../../component/Product';
+import BottomMenu from '../../component/menu/BottomMenu'
 
 import Banner from '../../component/home/Banner';
 import AppLink from '../../component/home/AppLink';
@@ -129,7 +130,7 @@ export default class Home extends Component {
             </Right>
         );
         var center = (
-            <TextInput
+            <Input
                 style={{
                     // height: 40,
                     borderColor: "gray",
@@ -145,22 +146,19 @@ export default class Home extends Component {
         const {categories, loading} = this.state;
         if (this.state.loading == false) {
             return (
-                <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref} key={new Date().valueOf()}
-                                fetchData={'1'}
-                                sessionLoginKey={this.props.sessionLoginKey}>
-                    <Container>
-                        <Navbar center={center} right={right} title="ONNI"/>
-                        <Content>
-                            <Banner></Banner>
-                            <AppLink></AppLink>
-                            <CategoriesList></CategoriesList>
-                            <ProductsSpecial></ProductsSpecial>
-                            <ProductsNew></ProductsNew>
-                            <ProductsList></ProductsList>
-                        </Content>
-                        <BottomMenu selectTab='home'></BottomMenu>
-                    </Container>
-                </SideMenuDrawer>);
+                <Container>
+                    <Navbar center={center} right={right} title="ONNI"/>
+                    <Content>
+                        <Banner></Banner>
+                        <AppLink></AppLink>
+                        <CategoriesList></CategoriesList>
+                        <ProductsSpecial></ProductsSpecial>
+                        <ProductsNew></ProductsNew>
+                        <ProductsList></ProductsList>
+                    </Content>
+                    <BottomMenu selectTab='home'></BottomMenu>
+                </Container>
+            );
         } else {
             return <ActivityIndicator/>
         }
