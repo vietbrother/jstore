@@ -153,8 +153,8 @@ export default class Home extends Component {
                         <AppLink></AppLink>
                         <CategoriesList></CategoriesList>
                         <ProductsSpecial></ProductsSpecial>
-                        {/*<ProductsNew></ProductsNew>
-                        <ProductsList></ProductsList>*/}
+                        <ProductsNew></ProductsNew>
+                        <ProductsList></ProductsList>
                     </Content>
                     <BottomMenu selectTab='home'></BottomMenu>
                 </Container>

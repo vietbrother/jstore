@@ -5,8 +5,10 @@
 // React native and others libraries imports
 import React, {Component} from 'react';
 import {ActivityIndicator, Image, ScrollView} from 'react-native';
-import {View, Col, Card, CardItem, Body, Button, Right, Icon, Container,
-    Content, Input} from 'native-base';
+import {
+    View, Col, Card, CardItem, Body, Button, Right, Icon, Container,
+    Content, Input
+} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 
 // Our custom files and classes import
@@ -97,20 +99,22 @@ export default class Categories extends Component {
         let cat = [];
         var urlNotFound = Config.url + Config.imageDefaul;
         var categories = this.state.categories;
-        for (var i = 0; i < categories.length; i++) {
-            if (categories[i].parent == '0') {
-                if (categories[i].image == null) {
-                    categories[i].image = {src: urlNotFound};
+        if (categories != null && categories.length > 0) {
+            for (var i = 0; i < categories.length; i++) {
+                if (categories[i].parent == '0' && categories[i].name.indexOf('banner') < 0) {
+                    if (categories[i].image == null) {
+                        categories[i].image = {src: urlNotFound};
+                    }
+                    cat.push(
+                        <View style={style.item}>
+                            <CategoriesListItem
+                                key={categories[i].id} id={categories[i].id} image={categories[i].image.src}
+                                title={categories[i].name}/>
+                        </View>
+                    );
                 }
-                cat.push(
-                    <View style={style.item}>
-                        <CategoriesListItem
-                            key={categories[i].id} id={categories[i].id} image={categories[i].image.src}
-                            title={categories[i].name}/>
-                    </View>
-                );
-            }
 
+            }
         }
         return (
             <View style={style.container}>
@@ -128,6 +132,7 @@ const style = {
         alignItems: 'flex-start' // if you want to fill rows left to right
     },
     item: {
+        marginTop: 10,
         width: '25%' // is 50% of container width
     },
     button: {flex: 1, height: 250, paddingLeft: 4, paddingRight: 4},

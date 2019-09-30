@@ -48,7 +48,8 @@ const styles = {
         // color: '#164e9c',
         // fontSize: 32,
         textAlign: 'center',
-        width: Dimensions.get('window').width/4
+        width: Dimensions.get('window').width/4 - 10,
+        marginBottom: 10,
     },
     subtitle: {
         textAlign: 'center',
@@ -75,10 +76,12 @@ const styles = {
         borderColor: 'rgba(253, 253, 253, 0.2)'
     },
     image: {
-        width: categoriesIconWidth,
-        height: categoriesIconHeight,
+        width: Dimensions.get('window').width * 0.8/4,
+        height: Dimensions.get('window').width * 0.9/4,
         borderRadius: 10,
         marginRight: 5,
+        marginBottom: 5,
+        marginLeft: 5,
         borderColor: '#93b1c7',
         borderWidth: 0.5
     }

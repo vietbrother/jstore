@@ -24,4 +24,20 @@ allprojects {
         }
         google()
     }
+    configurations.all {
+        resolutionStrategy.force "com.facebook.android:facebook-share:5.5.1"
+        resolutionStrategy.force "com.facebook.android:facebook-common:5.5.1"
+        resolutionStrategy.force "com.facebook.android:facebook-login:5.5.1"
+        resolutionStrategy.force "com.facebook.android:facebook-core:5.5.1"
+
+        resolutionStrategy.force "androidx.lifecycle:lifecycle-viewmodel:2.0.0"
+        resolutionStrategy.force "androidx.arch.core:core-runtime:2.0.0"
+        resolutionStrategy.force "androidx.documentfile:documentfile:1.0.0"
+        resolutionStrategy.force "androidx.vectordrawable:vectordrawable:1.0.1"
+        resolutionStrategy.force "androidx.core:core:1.0.1"
+        resolutionStrategy.force "androidx.slidingpanelayout:slidingpanelayout:1.0.0"
+        resolutionStrategy.force "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+        resolutionStrategy.force "androidx.fragment:fragment:1.0.0"
+        resolutionStrategy.force "androidx.appcompat:appcompat:1.0.0-rc01"
+    }
 }

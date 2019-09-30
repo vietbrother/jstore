@@ -5,7 +5,7 @@
 // React native and others libraries imports
 import React, {Component} from 'react';
 import {ActivityIndicator, Image, ScrollView} from 'react-native';
-import {View, Col, Card, CardItem, Body, Button} from 'native-base';
+import {View, Col, Card, CardItem, Body, Button, Right, Icon} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 
 // Our custom files and classes import
@@ -27,7 +27,7 @@ export default class CategoriesList extends Component {
     }
 
     componentWillMount(): void {
-        //this._fetchCategorieData();
+        this._fetchCategorieData();
     }
 
     _fetchCategorieData() {
@@ -60,13 +60,18 @@ export default class CategoriesList extends Component {
     render() {
         return (
             <Card>
-                <CardItem header active>
-                    <Text>Danh Mục Sản Phẩm</Text>
+                <CardItem>
+                    <Text style={{fontWeight: 'bold', fontSize: 18}}>Danh Mục Sản Phẩm</Text>
+                    <Right style={{flex: 1}}>
+                        <Button onPress={() => Actions.categories()} transparent>
+                            <Text style={{fontWeight: 'bold', fontSize: 16}}>Xem thêm</Text>
+                        </Button>
+                    </Right>
                 </CardItem>
                 <ActivityIndicator
-                    animating = {this.state.loading}
-                    color = '#bc2b78'
-                    size = "large" />
+                    animating={this.state.loading}
+                    color='#bc2b78'
+                    size="large"/>
                 {this._renderCategories()}
 
             </Card>
@@ -77,25 +82,31 @@ export default class CategoriesList extends Component {
         let cat = [];
         var urlNotFound = Config.url + Config.imageDefaul;
         var categories = this.state.categories;
-
-        for (var i = 0; i < categories.length; i++) {
-            if (i == 8) {
-                break;
-            }
-            if (categories[i].parent == '0') {
-                if (categories[i].image == null) {
-                    categories[i].image = {src: urlNotFound};
+        if (categories != null && categories.length > 0) {
+            var count = 0;
+            for (var i = 0; i < categories.length; i++) {
+                // console.log(categories[i]);
+                if (count >= 8) {
+                    break;
                 }
-                cat.push(
-                    <View style={style.item}>
-                        <CategoriesListItem
-                            key={categories[i].id} id={categories[i].id} image={categories[i].image.src}
-                            title={categories[i].name}/>
-                    </View>
-                );
-            }
+                if (categories[i].parent == '0' && categories[i].name.indexOf('banner') < 0) {
+                    if (categories[i].image == null) {
+                        categories[i].image = {src: urlNotFound};
+                    }
+                    cat.push(
+                        <View style={style.item}>
+                            <CategoriesListItem
+                                key={new Date() + '_' + categories[i].id}
+                                id={categories[i].id} image={categories[i].image.src}
+                                title={categories[i].name}/>
+                        </View>
+                    );
+                    count++;
+                }
 
+            }
         }
+
         return (
             <View style={style.container}>
                 {cat}
@@ -107,6 +118,9 @@ export default class CategoriesList extends Component {
 const style = {
     container: {
         flex: 1,
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 0,
         flexDirection: 'row',
         flexWrap: 'wrap',
         alignItems: 'flex-start' // if you want to fill rows left to right

@@ -49,8 +49,8 @@ export default class ProductsList extends Component {
     render() {
         return (
             <Card>
-                <CardItem header active>
-                    <Text>Sản Phẩm </Text>
+                <CardItem>
+                    <Text style={{fontWeight: 'bold', fontSize: 18}}>Sản Phẩm</Text>
                 </CardItem>
                 <ActivityIndicator
                     animating = {this.state.loading}

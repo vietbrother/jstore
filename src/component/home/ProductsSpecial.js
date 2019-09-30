@@ -35,11 +35,12 @@ export default class ProductsSpecial extends Component {
         this.setState({loading: true});
         try {
             global.WooCommerceAPI.get('products', {
-                featured: true
+                featured: true,
+                per_page: 4
             })
                 .then(data => {
                     console.log("=============================ProductsSpecial Fetch API-----------------");
-                    console.log(data);
+                    //console.log(data);
                     this.setState({products: data, loading: false});
                 }).catch(error => {
                 // error will return any errors that occur
@@ -47,7 +48,7 @@ export default class ProductsSpecial extends Component {
             });
         } catch (e) {
             console.log(e);
-            this.setState({ loading: false});
+            this.setState({loading: false});
         }
 
     }
@@ -55,8 +56,8 @@ export default class ProductsSpecial extends Component {
     render() {
         return (
             <Card>
-                <CardItem header active>
-                    <Text>Sản Phẩm Nổi Bật</Text>
+                <CardItem>
+                    <Text style={{fontWeight: 'bold', fontSize: 18}}>Sản Phẩm Nổi Bật</Text>
                 </CardItem>
                 <ActivityIndicator
                     animating={this.state.loading}
@@ -76,14 +77,11 @@ export default class ProductsSpecial extends Component {
                 if (stateItems[i].categories != null && stateItems[i].categories.length > 0) {
                     items.push(
                         <View style={style.item}>
-                            <Product key={stateItems[i].id} product={stateItems[i]}
+                            <Product key={new Date() + '_' + stateItems[i].id} product={stateItems[i]}
                                      categoryId={stateItems[i].categories[0].id}
                                      categoryName={stateItems[i].categories[0].name}/>
                         </View>
                     );
-                }
-                if (items.length >= 4) {
-                    break;
                 }
             }
         }
@@ -167,6 +165,6 @@ const style = {
         paddingBottom: 20
     },
     item: {
-        width: '50%' // is 50% of container width
+        width: 160 // is 50% of container width
     },
 }

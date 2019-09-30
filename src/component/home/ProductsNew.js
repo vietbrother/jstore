@@ -50,8 +50,8 @@ export default class ProductsNew extends Component {
     render() {
         return (
             <Card>
-                <CardItem header active>
-                    <Text>Sản Phẩm Mới</Text>
+                <CardItem>
+                    <Text style={{fontWeight: 'bold', fontSize: 18}}>Sản Phẩm Mới</Text>
                 </CardItem>
                 <ActivityIndicator
                     animating = {this.state.loading}

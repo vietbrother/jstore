@@ -24,7 +24,7 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-import {LoginButton, AccessToken, GraphRequest, GraphRequestManager} from 'react-native-fbsdk';
+import {LoginButton, AccessToken, GraphRequest, GraphRequestManager, LoginManager} from 'react-native-fbsdk';
 
 
 export default class Login extends Component {
@@ -40,7 +40,20 @@ export default class Login extends Component {
     }
 
     componentWillMount() {
+
         this.removeSessionKey();
+        this.getFbSessionKey();
+    }
+
+    async getFbSessionKey() {
+        try {
+            const value = await AsyncStorage.getItem('_fbAccessToken');
+            console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            console.log(value);
+        } catch (error) {
+            // Handle errors here
+            console.error(error);
+        }
     }
 
     async removeSessionKey() {
@@ -149,44 +162,45 @@ export default class Login extends Component {
                         {/*</Button>*/}
                         {/*</View>*/}
                         <View style={{alignItems: 'center', width: '100%'}}>
-                            {/*<Button onPress={() => Actions.signup()}*/}
-                            {/*style={styles.buttonLoginFb}>*/}
-                            {/*<View style={{*/}
-                            {/*flexDirection: 'row',*/}
-                            {/*justifyContent: "center",*/}
-                            {/*alignItems: "center"*/}
-                            {/*}}>*/}
-                            {/*<Icon style={{color: 'white'}} name='logo-facebook'/>*/}
-                            {/*<Text style={{color: '#fdfdfd', fontSize: 14}}> Đăng nhập bằng Facebook </Text>*/}
-                            {/*</View>*/}
-                            {/*</Button>*/}
-                            <LoginButton
-                                style={styles.buttonLoginFb}
-                                readPermissions={['public_profile']}
-                                onLoginFinished={(error, result) => {
-                                    if (error) {
-                                        console.log(error.message);
-                                        console.log('login has error: ' + result.error);
-                                    } else if (result.isCancelled) {
-                                        console.log('login is cancelled.');
-                                    } else {
-                                        alert("Login was successful with permissions: " + result.grantedPermissions);
-                                        AccessToken.getCurrentAccessToken().then(data => {
-                                            console.log(data.accessToken.toString());
-                                            this._fbSaveAccessToken(data.accessToken.toString());
-                                            const processRequest = new GraphRequest(
-                                                '/me?fields=name,picture.type(large)',
-                                                null,
-                                                this._fbGetResponseInfo
-                                            );
-                                            // Start the graph request.
-                                            new GraphRequestManager().addRequest(processRequest).start();
+                            <Button onPress={() => this.facebookLogin()}
+                                    style={styles.buttonLoginFb}>
+                                <View style={{
+                                    flexDirection: 'row',
+                                    justifyContent: "center",
+                                    alignItems: "center"
+                                }}>
+                                    <Icon style={{color: 'white'}} name='logo-facebook'/>
+                                    <Text style={{color: '#fdfdfd', fontSize: 14}}> Đăng nhập bằng Facebook </Text>
+                                </View>
+                            </Button>
+                            {/*<LoginButton*/}
 
-                                        });
-                                    }
-                                }}
-                                onLogoutFinished={this._fbLogOut}
-                            />
+                            {/*readPermissions={['public_profile']}*/}
+                            {/*onLoginFinished={(error, result) => {*/}
+                            {/*alert('123');*/}
+                            {/*if (error) {*/}
+                            {/*console.log(error.message);*/}
+                            {/*console.log('login has error: ' + result.error);*/}
+                            {/*} else if (result.isCancelled) {*/}
+                            {/*console.log('login is cancelled.');*/}
+                            {/*} else {*/}
+                            {/*alert("Login was successful with permissions: " + result.grantedPermissions);*/}
+                            {/*AccessToken.getCurrentAccessToken().then(data => {*/}
+                            {/*console.log(data.accessToken.toString());*/}
+                            {/*this._fbSaveAccessToken(data.accessToken.toString());*/}
+                            {/*const processRequest = new GraphRequest(*/}
+                            {/*'/me?fields=name,picture.type(large)',*/}
+                            {/*null,*/}
+                            {/*this._fbGetResponseInfo.bind()*/}
+                            {/*);*/}
+                            {/*// Start the graph request.*/}
+                            {/*new GraphRequestManager().addRequest(processRequest).start();*/}
+
+                            {/*});*/}
+                            {/*}*/}
+                            {/*}}*/}
+                            {/*onLogoutFinished={this._fbLogOut.bind()}*/}
+                            {/*/>*/}
                         </View>
 
                         <TouchableOpacity
@@ -255,11 +269,13 @@ export default class Login extends Component {
 
     }
 
+
     async _fbGetResponseInfo(error, result) {
         if (error) {
             alert('Error fetching data: ' + error.toString());
         } else {
             console.log(result);
+            alert(result);
             this.setState({user_name: 'Welcome' + ' ' + result.name});
             this.setState({avatar_url: result.picture.data.url});
             this.setState({avatar_show: true});
@@ -273,9 +289,76 @@ export default class Login extends Component {
         }
     }
 
+    async fetchProfile() {
+        return new Promise((resolve, reject) => {
+            const request = new GraphRequest(
+                '/me',
+                null,
+                (error, result) => {
+                    if (error) {
+                        alert('Error fetching data: ' + error.toString());
+                    } else {
+                        console.log(result);
+                        alert(result);
+                        try {
+                            this.setState({user_name: 'Welcome' + ' ' + result.name});
+                            this.setState({avatar_url: result.picture.data.url});
+                            this.setState({avatar_show: true});
+                            AsyncStorage.setItem('_fbName', result.name);
+                            AsyncStorage.setItem('_fbAvatar', result.picture.data.url);
+                        } catch (error) {
+                            // Handle errors here
+                            console.error(error);
+                        }
+                    }
+                }
+            )
+
+            new GraphRequestManager().addRequest(request).start()
+        })
+    }
+
+    async facebookLogin() {
+        try {
+            // Attempt a login using the Facebook login dialog,
+            // asking for default permissions.
+            LoginManager.logInWithPermissions(['public_profile']).then(
+                function (result) {
+                    if (result.isCancelled) {
+                        alert('Login was cancelled');
+                    } else {
+                        alert('Login was successful with permissions: '
+                            + result.grantedPermissions.toString());
+
+                        AccessToken.getCurrentAccessToken().then(data => {
+                            var token = data.accessToken.toString();
+                            console.log(token);
+                            AsyncStorage.setItem('_fbAccessToken', token);
+                            this.fetchProfile.bind();
+                        });
+                    }
+                },
+                function (error) {
+                    alert('Login failed with error: ' + error);
+                }
+            );
+
+            // // get the access token
+            // const data = await AccessToken.getCurrentAccessToken();
+            //
+
+
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+
     _fbLogOut() {
         console.log("Log out");
+        alert("Log out");
     }
+
     async _fbSaveAccessToken(token) {
         try {
             await AsyncStorage.setItem('_fbAccessToken', token);

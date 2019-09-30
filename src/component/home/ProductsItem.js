@@ -12,7 +12,7 @@ import {Actions} from 'react-native-router-flux';
 import Colors from '../../Colors';
 import Config from '../../Config';
 import Text from '../Text';
-import {IS_IOS, itemHorizontalMargin, itemWidth, productItemHeight, bannerHeight} from "../../Config";
+import {IS_IOS, itemHorizontalMargin, itemWidth, productItemWidth, bannerHeight} from "../../Config";
 
 
 export default class ProductsItem extends Component {
@@ -21,25 +21,20 @@ export default class ProductsItem extends Component {
             this.props.product.images.push({src: Config.url + Config.imageDefaul});
         }
         return (
-            <Col style={this.props.isRight ? style.leftMargin : style.rightMargin}>
-                <TouchableOpacity style={style.content} onPress={() => this.pressed()}>
-                    <Col>
-                        <Image source={{uri: this.props.product.images[0].src}} style={style.image}/>
-                        <View style={style.border}/>
-                        <View style={{flex: 1, width: '100%', alignItems: 'center'}}>
-                            <Text
-                                style={{fontSize: 16}}
-                                numberOfLines={2}
-                            >{this.props.product.name}</Text>
-                            <View style={{flex: 1, width: '100%', alignItems: 'center'}}>
-                                <Text
-                                    style={style.price}>{this.props.product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} {Config.vnd}</Text>
-                            </View>
-                        </View>
-                    </Col>
-                </TouchableOpacity>
-
-            </Col>
+            <TouchableOpacity style={style.content} onPress={() => this.pressed()}>
+                <Image source={{uri: this.props.product.images[0].src}} style={style.image}/>
+                <View style={style.border}/>
+                <View style={{flex: 1, width: 120, alignItems: 'center'}}>
+                    <Text
+                        style={{fontSize: 16}}
+                        numberOfLines={2}
+                    >{this.props.product.name}</Text>
+                    <View style={{flex: 1, alignItems: 'center'}}>
+                        <Text
+                            style={style.price}>{this.props.product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} {Config.vnd}</Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
         );
     }
 
@@ -50,7 +45,7 @@ export default class ProductsItem extends Component {
 
 const style = {
     button: {flex: 1, height: 250, paddingLeft: 4, paddingRight: 4},
-    image: {height: productItemHeight, width: null, flex: 1, borderRadius: 10,},
+    image: {height: 150, width: 145, flex: 1, borderRadius: 10, borderWidth: 0.5, borderColor: 'grey'},
     leftMargin: {
         marginLeft: 7,
         marginRight: 0,
@@ -86,8 +81,8 @@ const style = {
         top: '52%'
     },
     content: {
-        flexDirection: "row",
-        marginTop: 10,
+        // flexDirection: "row",
+        // marginTop: 10,
         marginRight: 10,
         marginBottom: 10,
         marginLeft: 10
