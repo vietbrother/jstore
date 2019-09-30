@@ -35,12 +35,11 @@ export default class ProductsSpecial extends Component {
         this.setState({loading: true});
         try {
             global.WooCommerceAPI.get('products', {
-                featured: true,
-                per_page: 4
+                featured: true
             })
                 .then(data => {
                     console.log("=============================ProductsSpecial Fetch API-----------------");
-                    // console.log(data);
+                    console.log(data);
                     this.setState({products: data, loading: false});
                 }).catch(error => {
                 // error will return any errors that occur

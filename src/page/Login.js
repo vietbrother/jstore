@@ -13,8 +13,19 @@ import Config from '../Config';
 import Text from '../component/Text';
 import Navbar from '../component/Navbar';
 
-import {StyleSheet, Image, AsyncStorage, ScrollView, Keyboard, TouchableWithoutFeedback, TouchableOpacity} from 'react-native';
+import {
+    StyleSheet,
+    Image,
+    AsyncStorage,
+    ScrollView,
+    Keyboard,
+    TouchableWithoutFeedback,
+    TouchableOpacity
+} from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
+
+import {LoginButton, AccessToken, GraphRequest, GraphRequestManager} from 'react-native-fbsdk';
+
 
 export default class Login extends Component {
     constructor(props) {
@@ -132,23 +143,50 @@ export default class Login extends Component {
                             </Button>
                         </View>
                         {/*<View style={{alignItems: 'center', width: '100%'}}>*/}
-                            {/*<Button onPress={() => Actions.signup()}*/}
-                                    {/*style={styles.buttonLogin}>*/}
-                                {/*<Text style={{color: '#fdfdfd', fontSize: 14}}> Đăng ký </Text>*/}
-                            {/*</Button>*/}
+                        {/*<Button onPress={() => Actions.signup()}*/}
+                        {/*style={styles.buttonLogin}>*/}
+                        {/*<Text style={{color: '#fdfdfd', fontSize: 14}}> Đăng ký </Text>*/}
+                        {/*</Button>*/}
                         {/*</View>*/}
                         <View style={{alignItems: 'center', width: '100%'}}>
-                            <Button onPress={() => Actions.signup()}
-                                    style={styles.buttonLoginFb}>
-                                <View style={{
-                                    flexDirection: 'row',
-                                    justifyContent: "center",
-                                    alignItems: "center"
-                                }}>
-                                    <Icon style={{color: 'white'}} name='logo-facebook'/>
-                                    <Text style={{color: '#fdfdfd', fontSize: 14}}> Đăng nhập bằng Facebook </Text>
-                                </View>
-                            </Button>
+                            {/*<Button onPress={() => Actions.signup()}*/}
+                            {/*style={styles.buttonLoginFb}>*/}
+                            {/*<View style={{*/}
+                            {/*flexDirection: 'row',*/}
+                            {/*justifyContent: "center",*/}
+                            {/*alignItems: "center"*/}
+                            {/*}}>*/}
+                            {/*<Icon style={{color: 'white'}} name='logo-facebook'/>*/}
+                            {/*<Text style={{color: '#fdfdfd', fontSize: 14}}> Đăng nhập bằng Facebook </Text>*/}
+                            {/*</View>*/}
+                            {/*</Button>*/}
+                            <LoginButton
+                                style={styles.buttonLoginFb}
+                                readPermissions={['public_profile']}
+                                onLoginFinished={(error, result) => {
+                                    if (error) {
+                                        console.log(error.message);
+                                        console.log('login has error: ' + result.error);
+                                    } else if (result.isCancelled) {
+                                        console.log('login is cancelled.');
+                                    } else {
+                                        alert("Login was successful with permissions: " + result.grantedPermissions);
+                                        AccessToken.getCurrentAccessToken().then(data => {
+                                            console.log(data.accessToken.toString());
+                                            this._fbSaveAccessToken(data.accessToken.toString());
+                                            const processRequest = new GraphRequest(
+                                                '/me?fields=name,picture.type(large)',
+                                                null,
+                                                this._fbGetResponseInfo
+                                            );
+                                            // Start the graph request.
+                                            new GraphRequestManager().addRequest(processRequest).start();
+
+                                        });
+                                    }
+                                }}
+                                onLogoutFinished={this._fbLogOut}
+                            />
                         </View>
 
                         <TouchableOpacity
@@ -217,7 +255,35 @@ export default class Login extends Component {
 
     }
 
+    async _fbGetResponseInfo(error, result) {
+        if (error) {
+            alert('Error fetching data: ' + error.toString());
+        } else {
+            console.log(result);
+            this.setState({user_name: 'Welcome' + ' ' + result.name});
+            this.setState({avatar_url: result.picture.data.url});
+            this.setState({avatar_show: true});
+            try {
+                await AsyncStorage.setItem('_fbName', result.name);
+                await AsyncStorage.setItem('_fbAvatar', result.picture.data.url);
+            } catch (error) {
+                // Handle errors here
+                console.error(error);
+            }
+        }
+    }
 
+    _fbLogOut() {
+        console.log("Log out");
+    }
+    async _fbSaveAccessToken(token) {
+        try {
+            await AsyncStorage.setItem('_fbAccessToken', token);
+        } catch (error) {
+            // Handle errors here
+            console.error(error);
+        }
+    }
 }
 
 const styles = StyleSheet.create({

@@ -59,9 +59,9 @@ gradlew assembleRelease
 ```
 
 
-## Screenshots
+## Reference
 
-Click [here](screenshots/README.md)
+https://github.com/facebook/react-native-fbsdk
 
 ## Documentation
 
@@ -83,3 +83,17 @@ To contribute your changes to the main repository, create a pull request from yo
 - gen unique key={new Date().valueOf()} to re-render menu
 
 react-native bundle --platform android --dev true --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
+
+### gen key login facebook
+> debug
+- C:\Program Files\Java\jdk1.8.0_201\bin>keytool -exportcert -alias androiddebugkey -keystore "C:\Users\ADMIN\.android\debug.keystore" | "E:\SetUp\openssl-0.9.8k_WIN32\bin\openssl" sha1 -binary | "E:\SetUp\openssl-0.9.8k_WIN32\bin\openssl" base64
+Enter keystore password:  123456
+ga0RGNYHvNM5d0SLGQfpQWAPGJ8=
+
+> Release
+- C:\Program Files\Java\jdk1.8.0_201\bin>keytool -exportcert -alias mykeyalias -keystore "E:\MyWorks\Project\5_JStore\source\github\jstore\android\app\mykeystore.keystore" | "E:\SetUp\openssl-0.9.8k_WIN32\bin\openssl" sha1 -binary | "E:\SetUp\openssl-0.9.8k_WIN32\bin\openssl" base64
+Enter keystore password:  123456
+IH9WoU4WiPX94ZzadSnt21MA2w8=
+
+Warning:
+The JKS keystore uses a proprietary format. It is recommended to migrate to PKCS12 which is an industry standard format using "keytool -importkeystore -srckeystore E:\MyWorks\Project\5_JStore\source\github\jstore\android\app\mykeystore.keystore -destkeystore E:\MyWorks\Project\5_JStore\source\github\jstore\android\app\mykeystore.keystore -deststoretype pkcs12".
