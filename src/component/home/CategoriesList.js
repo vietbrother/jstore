@@ -21,13 +21,13 @@ export default class CategoriesList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            categories: {},
+            categories: [],
             loading: false
         };
     }
 
     componentWillMount(): void {
-        this._fetchCategorieData();
+        //this._fetchCategorieData();
     }
 
     _fetchCategorieData() {
@@ -53,6 +53,7 @@ export default class CategoriesList extends Component {
                 });
         } catch (err) {
             console.log("Error fetching data-----------", err);
+            this.setState({loading: false});
         }
     }
 
@@ -76,6 +77,7 @@ export default class CategoriesList extends Component {
         let cat = [];
         var urlNotFound = Config.url + Config.imageDefaul;
         var categories = this.state.categories;
+
         for (var i = 0; i < categories.length; i++) {
             if (i == 8) {
                 break;

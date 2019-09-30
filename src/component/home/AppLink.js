@@ -4,7 +4,16 @@
 
 // React native and others libraries imports
 import React, {Component} from 'react';
-import {Image, ActivityIndicator, AsyncStorage, ScrollView, StyleSheet, TouchableOpacity, Linking} from 'react-native';
+import {
+    Image,
+    ActivityIndicator,
+    AsyncStorage,
+    ScrollView,
+    StyleSheet,
+    TouchableOpacity,
+    Linking,
+    Dimensions
+} from 'react-native';
 import {View, Col, Icon, Card, CardItem, Body, Button} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 
@@ -45,19 +54,19 @@ export default class AppLink extends Component {
         for (var i = 0; i < this.state.categories.length; i++) {
             var item = this.state.categories[i];
             cat.push(
-                <View style={{
-                    // flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}>
-                    <TouchableOpacity
-                        onPress={() => Linking.openURL('http://www.facebook.com/').catch(err => console.error('An error occurred', err))}
-                        // activeOpacity={0.9}
-                    >
-                        <Icon name={item.icon} style={{fontSize: 40, fontWeight: 'bold',  color: item.color}}/>
-                        <Text style={style.title}>{item.name}</Text>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                    style={{
+                        // flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        textAlign: 'center'
+                    }}
+                    onPress={() => Linking.openURL('http://www.facebook.com/').catch(err => console.error('An error occurred', err))}
+                    // activeOpacity={0.9}
+                >
+                    <Icon name={item.icon} style={{fontSize: 30, fontWeight: 'bold', color: item.color}}/>
+                    <Text style={style.title}>{item.name}</Text>
+                </TouchableOpacity>
             );
         }
         return (
@@ -79,7 +88,8 @@ export default class AppLink extends Component {
 const style = {
     button: {flex: 1, height: 250, paddingLeft: 4, paddingRight: 4},
     title: {
-        textAlign: 'center', width: 150
+        textAlign: 'center',
+        width: Dimensions.get('window').width / 5
     },
 
     image: {

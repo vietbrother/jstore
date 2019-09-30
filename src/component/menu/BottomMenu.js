@@ -17,8 +17,7 @@ import Config from '../../Config';
 import {
     AppRegistry,
     StyleSheet,
-    Text,
-    View, Dimensions, UIManager
+    View, Dimensions, UIManager, TouchableOpacity
 } from 'react-native';
 import {Actions} from "react-native-router-flux";
 
@@ -48,43 +47,46 @@ export default class BottomMenu extends Component {
 
         menus.map((item, i) => {
             bottomMenus.push(
-                <Button vertical
-                        onPress={Actions[item.key]}
-                        {this.state.selectTab == item.key ? '' : 'active'} >
-                    <Icon name={item.icon}/>
-                    <Text style={{
-                        fontSize: 14,
-                        fontFamily: 'Roboto',
-                    }}>{item.title}</Text>
-                </Button>
+                <TouchableOpacity
+                    style={styles.menu}
+                    onPress={Actions[item.key]}>
+                    <Icon style={this.state.selectTab == item.key ? styles.activeIcon : styles.inactiveIcon}
+                          name={item.icon}/>
+                    <Text style={this.state.selectTab == item.key ? styles.active : styles.inactive}>
+                        {item.title}
+                    </Text>
+                </TouchableOpacity>
             );
         });
         return bottomMenus;
     }
+
     render() {
         return (
-            <Footer>
-                <FooterTab>
+            <Footer style={{
+                backgroundColor: 'white'
+            }}>
+                <FooterTab style={{backgroundColor: 'white', borderTop: 1, borderTopColor: 'grey', marginLeft: 10, marginRight: 10, marginTop: 5, marginBottom: 5}}>
                     {this.renderMenu()}
                     {/*<Button vertical {this.state.selectTab == 'home' ? '' : 'active'} >*/}
-                        {/*<Icon name="home"/>*/}
-                        {/*<Text>Trang chủ</Text>*/}
+                    {/*<Icon name="home"/>*/}
+                    {/*<Text>Trang chủ</Text>*/}
                     {/*</Button>*/}
                     {/*<Button vertical {this.state.selectTab == 'categories' ? '' : 'active'} >*/}
-                        {/*<Icon name="apps"/>*/}
-                        {/*<Text>Danh mục</Text>*/}
+                    {/*<Icon name="apps"/>*/}
+                    {/*<Text>Danh mục</Text>*/}
                     {/*</Button>*/}
                     {/*<Button vertical {this.state.selectTab == 'orders' ? '' : 'active'} >*/}
-                        {/*<Icon name="camera"/>*/}
-                        {/*<Text>Đơn hàng</Text>*/}
+                    {/*<Icon name="camera"/>*/}
+                    {/*<Text>Đơn hàng</Text>*/}
                     {/*</Button>*/}
                     {/*<Button vertical {this.state.selectTab == 'wishlist' ? '' : 'active'} >*/}
-                        {/*<Icon active name="heart"/>*/}
-                        {/*<Text>Yêu thích</Text>*/}
+                    {/*<Icon active name="heart"/>*/}
+                    {/*<Text>Yêu thích</Text>*/}
                     {/*</Button>*/}
                     {/*<Button vertical {this.state.selectTab == 'profile' ? '' : 'active'} >>*/}
-                        {/*<Icon name="person"/>*/}
-                        {/*<Text>Contact</Text>*/}
+                    {/*<Icon name="person"/>*/}
+                    {/*<Text>Contact</Text>*/}
                     {/*</Button>*/}
                 </FooterTab>
             </Footer>
@@ -135,5 +137,45 @@ const styles = {
     title: {
         fontFamily: 'Roboto',
         fontWeight: '100'
+    },
+    iconStyle: {
+        fontSize: 18
+    },
+    menu: {
+        textAlign: 'center',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    active: {
+        color: Config.mainColor,
+        backgroundColor: 'white',
+        textAlign: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: 14
+    },
+    inactive: {
+        color: 'grey',
+        backgroundColor: 'white',
+        textAlign: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: 14
+    },
+    activeIcon: {
+        color: Config.mainColor,
+        backgroundColor: 'white',
+        textAlign: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        // fontSize: 18
+    },
+    inactiveIcon: {
+        color: 'grey',
+        backgroundColor: 'white',
+        textAlign: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        // fontSize: 14
     }
 };

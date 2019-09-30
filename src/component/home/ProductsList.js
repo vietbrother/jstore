@@ -56,13 +56,13 @@ export default class ProductsList extends Component {
                     animating = {this.state.loading}
                     color = '#bc2b78'
                     size = "large" />
-                {this._renderCategories()}
+                {this._renderListProducts()}
 
             </Card>
         );
     }
 
-    renderFeatureProducts() {
+    _renderListProducts() {
         let items = [];
         if (this.state.products != null && this.state.products.length > 0) {
             let stateItems = this.state.products;

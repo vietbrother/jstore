@@ -5,7 +5,7 @@
 // React native and others libraries imports
 import React, {Component} from 'react';
 import {ActivityIndicator, Image, ScrollView} from 'react-native';
-import {View, Col, Card, CardItem, Body, Button, Right, Icon, Input, Container,
+import {View, Col, Card, CardItem, Body, Button, Right, Icon, Container,
     Content, Input} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 
@@ -21,7 +21,7 @@ export default class Categories extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            categories: {},
+            categories: [],
             loading: false
         };
     }

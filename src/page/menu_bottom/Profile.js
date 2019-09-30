@@ -65,7 +65,7 @@ export default class Profile extends Component {
         var items = []
         if (this.state.cookie == null || this.state.cookie == '') {
             items.push(
-                <TouchableOpacity style={style.content} onPress={() => Actions.login()}>
+                <TouchableOpacity style={styles.content} onPress={() => Actions.login()}>
                     <CardItem bordered>
                         <Icon style={{fontSize: 18}} name='ios-log-out'/>
                         <Text>Đăng xuất</Text>
@@ -174,7 +174,7 @@ export default class Profile extends Component {
                     textStyle={styles.spinnerTextStyle}
                 />
                 {this._renderMainContent()}
-                <BottomMenu selectTab='wishlist'></BottomMenu>
+                <BottomMenu selectTab='profile'></BottomMenu>
             </Container>
         );
     }

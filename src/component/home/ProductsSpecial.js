@@ -33,18 +33,24 @@ export default class ProductsSpecial extends Component {
 
     _fetchProductsData() {
         this.setState({loading: true});
-        global.WooCommerceAPI.get('products', {
-            featured: true,
-            per_page: 4
-        })
-            .then(data => {
-                console.log("=============================ProductsSpecial Fetch API-----------------");
-                // console.log(data);
-                this.setState({products: data, loading: false});
-            }).catch(error => {
-            // error will return any errors that occur
-            console.log(error);
-        });
+        try {
+            global.WooCommerceAPI.get('products', {
+                featured: true,
+                per_page: 4
+            })
+                .then(data => {
+                    console.log("=============================ProductsSpecial Fetch API-----------------");
+                    // console.log(data);
+                    this.setState({products: data, loading: false});
+                }).catch(error => {
+                // error will return any errors that occur
+                console.log(error);
+            });
+        } catch (e) {
+            console.log(e);
+            this.setState({ loading: false});
+        }
+
     }
 
     render() {
@@ -54,16 +60,16 @@ export default class ProductsSpecial extends Component {
                     <Text>Sản Phẩm Nổi Bật</Text>
                 </CardItem>
                 <ActivityIndicator
-                    animating = {this.state.loading}
-                    color = '#bc2b78'
-                    size = "large" />
-                {this._renderCategories()}
+                    animating={this.state.loading}
+                    color='#bc2b78'
+                    size="large"/>
+                {this._renderFeatureProducts()}
 
             </Card>
         );
     }
 
-    renderFeatureProducts() {
+    _renderFeatureProducts() {
         let items = [];
         if (this.state.products != null && this.state.products.length > 0) {
             let stateItems = this.state.products;
@@ -77,7 +83,7 @@ export default class ProductsSpecial extends Component {
                         </View>
                     );
                 }
-                if(items.length >= 4){
+                if (items.length >= 4) {
                     break;
                 }
             }

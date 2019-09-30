@@ -11,7 +11,7 @@ import {Actions} from 'react-native-router-flux';
 // Our custom files and classes import
 import Colors from '../../Colors';
 import Text from '../../component/Text';
-import Navbar from '../../component/Navbar';
+// import Navbar from '../../component/Navbar';
 import SideMenu from '../../component/SideMenu';
 import SideMenuDrawer from '../../component/SideMenuDrawer';
 import Product from '../../component/Product';

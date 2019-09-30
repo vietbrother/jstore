@@ -11,11 +11,11 @@ import { Scene, Router, Actions } from 'react-native-router-flux';
 
 
 // Our custom files and classes import
-import Home from './page/Home';
+
 import Homepage from './page/Homepage';
 import Search from './page/Search';
 import Cart from './page/Cart';
-import WishList from './page/WishList';
+
 import Map from './page/Map';
 import Newsletter from './page/Newsletter';
 import Contact from './page/Contact';
@@ -25,13 +25,23 @@ import ImageGallery from './page/ImageGallery';
 import Login from './page/Login';
 import Signup from './page/Signup';
 import Checkout from './page/Checkout';
-import Profile from './page/Profile';
+
 
 // import WooCommerceAPI from 'react-native-woocommerce-api';
 import WooCommerceAPI from './WooCommerce/WooCommerceAPI';
 import OrderItem from "./component/OrderItem";
-import Orders from "./page/Orders";
+
 import Config from "./Config";
+
+// import Home from './page/Home';
+// import Orders from "./page/Orders";
+// import WishList from './page/WishList';
+// import Profile from './page/Profile';
+import Home from './page/menu_bottom/Home';
+import Orders from "./page/menu_bottom/Orders";
+import Categories from "./page/menu_bottom/Categories";
+import WishList from './page/menu_bottom/WishList';
+import Profile from './page/menu_bottom/Profile';
 
 export default class Main extends Component {
 
@@ -91,6 +101,7 @@ export default class Main extends Component {
             <Scene key="orders" component={Orders} hideNavBar />
             <Scene key="orderItem" component={OrderItem} hideNavBar />
             <Scene key="profile" component={Profile} hideNavBar />
+            <Scene key="categories" component={Categories} hideNavBar />
           </Scene>
         </Router>
       </Root>

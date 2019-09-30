@@ -13,7 +13,7 @@ import Config from '../Config';
 import Text from '../component/Text';
 import Navbar from '../component/Navbar';
 
-import {StyleSheet, Image, AsyncStorage, ScrollView, Keyboard, TouchableWithoutFeedback} from 'react-native';
+import {StyleSheet, Image, AsyncStorage, ScrollView, Keyboard, TouchableWithoutFeedback, TouchableOpacity} from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class Login extends Component {
@@ -139,20 +139,20 @@ export default class Login extends Component {
                         {/*</View>*/}
                         <View style={{alignItems: 'center', width: '100%'}}>
                             <Button onPress={() => Actions.signup()}
-                                    style={styles.buttonLogin}>
+                                    style={styles.buttonLoginFb}>
                                 <View style={{
                                     flexDirection: 'row',
                                     justifyContent: "center",
                                     alignItems: "center"
                                 }}>
-                                    <Icon style={{color: 'white'}} name='ios-logo-facebook'/>
+                                    <Icon style={{color: 'white'}} name='logo-facebook'/>
                                     <Text style={{color: '#fdfdfd', fontSize: 14}}> Đăng nhập bằng Facebook </Text>
                                 </View>
                             </Button>
                         </View>
 
                         <TouchableOpacity
-                            style={Styles.Common.ColumnCenter}
+                            style={{flex: 1, justifyContent: 'center'}}
                             onPress={() => Actions.signup()}>
                             <Text style={styles.signUp}>
                                 Chưa có tài khoản? <Text style={styles.highlight}>Đăng ký</Text>

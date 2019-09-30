@@ -81,3 +81,5 @@ To contribute your changes to the main repository, create a pull request from yo
 
 > note
 - gen unique key={new Date().valueOf()} to re-render menu
+
+react-native bundle --platform android --dev true --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
