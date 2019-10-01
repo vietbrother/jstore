@@ -31,7 +31,9 @@ export default class Profile extends Component {
             hasSuccess: false,
             successText: '',
             isLoading: false,
-            cookie: ''
+            cookie: '',
+
+            accessToken: ''
         };
     }
 
@@ -58,19 +60,35 @@ export default class Profile extends Component {
                 //
             }
         });
-
+        AsyncStorage.getItem('_fbAccessToken', (err, res) => {
+            if (res) {
+                this.setState({accessToken: res});
+            }
+        });
     }
 
     _renderMainContent() {
         var items = []
-        if (this.state.cookie == null || this.state.cookie == '') {
-            items.push(
-                <TouchableOpacity style={styles.content} onPress={() => Actions.login()}>
-                    <CardItem bordered>
-                        <Icon style={{fontSize: 18}} name='ios-log-out'/>
-                        <Text>Đăng xuất</Text>
+        if ((this.state.cookie == null || this.state.cookie == '') && (this.state.accessToken == null || this.state.accessToken == '')) {
+            return (
+                <Button style={styles.buttonLogin} onPress={() => Actions.login()}>
+                    <CardItem>
+                        <Icon style={{fontSize: 18}} name='md-log-in'/>
+                        <Text>Đăng nhập</Text>
                     </CardItem>
-                </TouchableOpacity>
+                </Button>
+            );
+
+        } else {
+            items.push(
+                <CardItem bordered>
+                    <Right>
+                        <TouchableOpacity style={styles.content} onPress={() => Actions.login()}>
+                            <Icon style={{fontSize: 20, color: Config.mainColor}} name='ios-power'/>
+                            <Text>Đăng xuất</Text>
+                        </TouchableOpacity>
+                    </Right>
+                </CardItem>
             );
             items.push(
                 <ScrollView contentContainerStyle={{flexGrow: 1}}>
@@ -82,7 +100,7 @@ export default class Profile extends Component {
                         paddingRight: 40
                     }}>
                         <Item>
-                            <Icon name='ios-person' />
+                            <Icon name='ios-person'/>
                             <Text>{this.state.username}</Text>
                         </Item>
                         <Item>
@@ -132,15 +150,6 @@ export default class Profile extends Component {
             );
             return items;
 
-        } else {
-            return (
-                <TouchableOpacity style={style.content} onPress={() => Actions.login()}>
-                    <CardItem bordered>
-                        <Icon style={{fontSize: 18}} name='ios-log-in'/>
-                        <Text>Đăng nhập</Text>
-                    </CardItem>
-                </TouchableOpacity>
-            );
         }
     }
 

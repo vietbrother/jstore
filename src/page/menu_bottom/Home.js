@@ -146,7 +146,7 @@ export default class Home extends Component {
         const {categories, loading} = this.state;
         if (this.state.loading == false) {
             return (
-                <Container>
+                <Container key={new Date()}>
                     <Navbar center={center} right={right} title="ONNI"/>
                     <Content>
                         <Banner></Banner>

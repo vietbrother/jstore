@@ -4,7 +4,7 @@
 
 // React native and others libraries imports
 import React, {Component} from 'react';
-import {Image} from 'react-native';
+import {ActivityIndicator, Image} from 'react-native';
 import {View, Col, Card, CardItem, Body, Button} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 
@@ -13,6 +13,7 @@ import Colors from '../../Colors';
 import Text from '../Text';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {IS_IOS, itemHorizontalMargin, itemWidth, sliderWidth, bannerHeight} from "../../Config";
+import Config from "../../Config";
 
 export default class Banner extends Component {
 
@@ -25,6 +26,51 @@ export default class Banner extends Component {
 
     componentDidMount(): void {
         // this.setState({images: this.props.lstBanner});
+    }
+
+    componentWillMount(): void {
+        this._fetchCategorieData();
+    }
+
+    _fetchCategorieData() {
+        //Have a try and catch block for catching errors.
+        try {
+            //this.getSessionKey();
+            this.setState({loading: true});
+            global.WooCommerceAPI.get('products/categories', {
+                per_page: 100, status: 'processing', search: 'banner'
+            })
+                .then(data => {
+                    // data will contain the body content from the request
+                    console.log("get banner");
+                    this.setState({categories: data, loading: false});
+
+                    if (data != null && data.length > 0) {
+                        var temp = [];
+                        var urlNotFound = Config.url + Config.imageDefaul;
+                        for (var i = 0; i < categories.length; i++) {
+                            if (categories[i].parent != '0' && categories[i].name.indexOf('banner') > 0) {
+                                if (categories[i].image == null) {
+                                    categories[i].image = {src: urlNotFound};
+                                }
+                                temp.push(categories[i].image);
+                            }
+
+                        }
+                    }
+                })
+                .catch(error => {
+                    // error will return any errors that occur
+                    console.log(error);
+                    this.setState({
+                        error: error.toString(),
+                        isLoading: false
+                    });
+                });
+        } catch (err) {
+            console.log("Error fetching data-----------", err);
+            this.setState({loading: false});
+        }
     }
 
     render() {
@@ -50,6 +96,10 @@ export default class Banner extends Component {
                     autoplayDelay={500}
                     autoplayInterval={1500}
                 />
+                <ActivityIndicator
+                    animating={this.state.loading}
+                    color='#bc2b78'
+                    size="large"/>
             </View>
         );
     }

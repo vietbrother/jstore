@@ -34,7 +34,7 @@ export default class CategoriesList extends Component {
         //Have a try and catch block for catching errors.
         try {
             //this.getSessionKey();
-            this.setState({isLoading: true});
+            this.setState({loading: true});
             global.WooCommerceAPI.get('products/categories', {
                 per_page: 100, status: 'processing', page: 1
             })

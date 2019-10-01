@@ -5,7 +5,7 @@
 // React native and others libraries imports
 import React, {Component} from 'react';
 import {ActivityIndicator} from 'react-native';
-import {Container, Content, View, Left, Right, Button, Icon, Grid, Col} from 'native-base';
+import {Container, Content, View, Left, Right, Button, Icon, Grid, Col, CardItem} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 
 // Our custom files and classes import
@@ -43,7 +43,9 @@ export default class Orders extends Component {
             console.log(value);
             this.setState({userId: value});
             console.log("userId : " + this.state.userId);
-            this.fetchOrderByUserId();
+            if (this.state.userId != null && this.state.userId != '') {
+                this.fetchOrderByUserId();
+            }
         } catch (error) {
             // Handle errors here
             console.error(error);
@@ -116,15 +118,43 @@ export default class Orders extends Component {
 
 
     renderOrders() {
-        let items = [];
-        let stateItems = this.state.items;
-        for (var i = 0; i < stateItems.length; i++) {
-            items.push(
-                <Grid key={i}>
-                    <OrderBlock key={stateItems[i].id} order={stateItems[i]}/>
-                </Grid>
+        if (this.state.userId == null || this.state.userId == '') {
+            return (
+                <Button style={styles.buttonLogin} onPress={() => Actions.login()}>
+                    <CardItem>
+                        <Icon style={{fontSize: 18}} name='md-log-in'/>
+                        <Text>Đăng nhập</Text>
+                    </CardItem>
+                </Button>
             );
+
+        } else {
+            let items = [];
+            let stateItems = this.state.items;
+            for (var i = 0; i < stateItems.length; i++) {
+                items.push(
+                    <Grid key={i}>
+                        <OrderBlock key={stateItems[i].id} order={stateItems[i]}/>
+                    </Grid>
+                );
+            }
+            return items;
         }
-        return items;
+
     }
 }
+const styles = {
+    spinnerTextStyle: {
+        color: '#FFF',
+        fontWeight: 'bold'
+    },
+    buttonLogin: {
+        backgroundColor: '#c40521',
+        color: 'white',
+        marginTop: 20,
+        width: '100%',
+        justifyContent: 'center',
+        borderRadius: 10,
+        fontSize: 14,
+    },
+};

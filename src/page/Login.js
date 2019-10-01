@@ -170,7 +170,7 @@ export default class Login extends Component {
                                     alignItems: "center"
                                 }}>
                                     <Icon style={{color: 'white'}} name='logo-facebook'/>
-                                    <Text style={{color: '#fdfdfd', fontSize: 14}}> Đăng nhập bằng Facebook </Text>
+                                    <Text style={{color: '#fdfdfd', fontSize: 14, marginLeft: 5}}> Đăng nhập bằng Facebook </Text>
                                 </View>
                             </Button>
                             {/*<LoginButton*/}
@@ -334,7 +334,21 @@ export default class Login extends Component {
                             var token = data.accessToken.toString();
                             console.log(token);
                             AsyncStorage.setItem('_fbAccessToken', token);
-                            this.fetchProfile.bind();
+                            var infoRequest = new GraphRequest(
+                                '/me',
+                                {
+                                    accessToken: token,
+                                    parameters: {
+                                        fields: {
+                                            string: 'email,name,first_name,middle_name,last_name, picture'
+                                        }
+                                    }
+                                },
+                                this._fbGetResponseInfo
+                            );
+
+                            // Start the graph request.
+                            new GraphRequestManager().addRequest(infoRequest).start()
                         });
                     }
                 },
@@ -364,6 +378,56 @@ export default class Login extends Component {
             await AsyncStorage.setItem('_fbAccessToken', token);
         } catch (error) {
             // Handle errors here
+            console.error(error);
+        }
+    }
+
+
+    async signup() {
+        let nonceKey;
+        try {
+            this.setState({isLoading: true});
+            await fetch('http://103.94.18.249/jstore/api/core/get_nonce/?insecure=cool&controller=user&method=register')
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    console.log(responseJson);
+                    nonceKey = responseJson.nonce;
+                    if (responseJson.status == 'ok') {
+                        this.register(nonceKey);
+                    } else {
+                        this.setState({hasError: true, errorText: 'Có lỗi xảy ra xin thử lại sau'});
+                        return;
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                    this.setState({hasError: true, errorText: 'Có lỗi xảy ra xin thử lại sau'});
+                    return;
+                });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    async register(nonceKey) {
+        try {
+            await fetch(Config.url + '/api/user/register/?username=' + this.state.username + '&display_name='
+                + this.state.name + '&email=' + this.state.email + '&user_pass='
+                + this.state.password + '&nonce=' + nonceKey + '&insecure=cool&notify=both')
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    console.log(responseJson);
+                    this.setState({isLoading: false});
+                    if (responseJson.status == 'ok') {
+                        Actions.home();
+                    } else {
+                        this.setState({hasError: true, errorText: 'Có lỗi xảy ra : ' + responseJson.error});
+                        return;
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        } catch (error) {
             console.error(error);
         }
     }
