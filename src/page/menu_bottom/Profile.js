@@ -5,7 +5,7 @@
 // React native and others libraries imports
 import React, {Component} from 'react';
 import {AsyncStorage, ScrollView, TouchableOpacity} from 'react-native';
-import {Container, View, Left, Right, Button, Icon, Item, Input, Body, CardItem} from 'native-base';
+import {Container, View, Left, Right, Button, Icon, Item, Input, Body, CardItem, Content} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 
 // Our custom files and classes import
@@ -73,19 +73,40 @@ export default class Profile extends Component {
             return (
                 <Button style={styles.buttonLogin} onPress={() => Actions.login()}>
                     <CardItem>
-                        <Icon style={{fontSize: 18}} name='md-log-in'/>
+                        <Icon style={{fontSize: 18, color: Config.mainColor}} name='md-log-in'/>
                         <Text>Đăng nhập</Text>
                     </CardItem>
                 </Button>
             );
-
+        } else if (this.state.accessToken != null && this.state.accessToken != '') {
+            return (
+                <CardItem bordered>
+                    <Left>
+                        <TouchableOpacity style={styles.content} onPress={() => Actions.login()}>
+                            <CardItem>
+                                <Icon style={{color: '#2f55a4'}} name='logo-facebook'/>
+                            </CardItem>
+                        </TouchableOpacity>
+                    </Left>
+                    <Right>
+                        <TouchableOpacity style={styles.content} onPress={() => Actions.login()}>
+                            <CardItem>
+                                <Icon style={{fontSize: 20, color: Config.mainColor}} name='ios-power'/>
+                                <Text>Đăng xuất</Text>
+                            </CardItem>
+                        </TouchableOpacity>
+                    </Right>
+                </CardItem>
+            );
         } else {
             items.push(
                 <CardItem bordered>
                     <Right>
                         <TouchableOpacity style={styles.content} onPress={() => Actions.login()}>
-                            <Icon style={{fontSize: 20, color: Config.mainColor}} name='ios-power'/>
-                            <Text>Đăng xuất</Text>
+                            <CardItem>
+                                <Icon style={{fontSize: 20, color: Config.mainColor}} name='ios-power'/>
+                                <Text>Đăng xuất</Text>
+                            </CardItem>
                         </TouchableOpacity>
                     </Right>
                 </CardItem>
@@ -139,12 +160,12 @@ export default class Profile extends Component {
                             textAlign: 'center',
                             marginTop: 10
                         }}>{this.state.successText}</Text> : null}
-                        <View style={{alignItems: 'center', width: '100%',}}>
-                            <Button onPress={() => this.updateProfile()}
-                                    style={styles.buttonLogin}>
-                                <Text style={{color: '#fdfdfd'}}> Cập nhật </Text>
-                            </Button>
-                        </View>
+                        {/*<View style={{alignItems: 'center', width: '100%',}}>*/}
+                        {/*<Button onPress={() => this.updateProfile()}*/}
+                        {/*style={styles.buttonLogin}>*/}
+                        {/*<Text style={{color: '#fdfdfd'}}> Cập nhật </Text>*/}
+                        {/*</Button>*/}
+                        {/*</View>*/}
                     </View>
                 </ScrollView>
             );
@@ -182,7 +203,9 @@ export default class Profile extends Component {
                     //Text style of the Spinner Text
                     textStyle={styles.spinnerTextStyle}
                 />
-                {this._renderMainContent()}
+                <Content>
+                    {this._renderMainContent()}
+                </Content>
                 <BottomMenu selectTab='profile'></BottomMenu>
             </Container>
         );
@@ -256,8 +279,8 @@ const styles = {
         fontWeight: 'bold'
     },
     buttonLogin: {
-        backgroundColor: '#c40521',
-        color: 'white',
+        backgroundColor: 'white',
+        // color: 'white',
         marginTop: 20,
         width: '100%',
         justifyContent: 'center',

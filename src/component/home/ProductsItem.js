@@ -26,7 +26,7 @@ export default class ProductsItem extends Component {
                 <View style={style.border}/>
                 <View style={{flex: 1, width: 120, alignItems: 'center'}}>
                     <Text
-                        style={{fontSize: 16}}
+                        style={{fontSize: 16, textAlign: 'center'}}
                         numberOfLines={2}
                     >{this.props.product.name}</Text>
                     <View style={{flex: 1, alignItems: 'center'}}>

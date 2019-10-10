@@ -54,9 +54,9 @@ export default class ProductsNew extends Component {
                     <Text style={{fontWeight: 'bold', fontSize: 18}}>Sản Phẩm Mới</Text>
                 </CardItem>
                 <ActivityIndicator
-                    animating = {this.state.loading}
-                    color = '#bc2b78'
-                    size = "large" />
+                    animating={this.state.loading}
+                    color='#bc2b78'
+                    size="large"/>
                 {this._renderNewProducts()}
 
             </Card>
@@ -67,17 +67,18 @@ export default class ProductsNew extends Component {
         let items = [];
         if (this.state.products != null && this.state.products.length > 0) {
             let stateItems = this.state.products;
+            var key = new Date();
             for (var i = 0; i < stateItems.length; i++) {
                 if (stateItems[i].categories != null && stateItems[i].categories.length > 0) {
                     items.push(
                         <View style={style.item}>
-                            <Product key={stateItems[i].id} product={stateItems[i]}
+                            <Product key={key + '_' + stateItems[i].id} product={stateItems[i]}
                                      categoryId={stateItems[i].categories[0].id}
                                      categoryName={stateItems[i].categories[0].name}/>
                         </View>
                     );
                 }
-                if(items.length >= 4){
+                if (items.length >= 4) {
                     break;
                 }
             }
@@ -162,6 +163,6 @@ const style = {
         paddingBottom: 20
     },
     item: {
-        width: '50%' // is 50% of container width
+        width: 160 // is 50% of container width
     },
 }

@@ -14,6 +14,7 @@ import Text from '../Text';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {IS_IOS, itemHorizontalMargin, itemWidth, sliderWidth, bannerHeight} from "../../Config";
 import Config from "../../Config";
+import SliderEntry from '../SliderEntry'
 
 export default class Banner extends Component {
 
@@ -48,15 +49,16 @@ export default class Banner extends Component {
                     if (data != null && data.length > 0) {
                         var temp = [];
                         var urlNotFound = Config.url + Config.imageDefaul;
-                        for (var i = 0; i < categories.length; i++) {
-                            if (categories[i].parent != '0' && categories[i].name.indexOf('banner') > 0) {
-                                if (categories[i].image == null) {
-                                    categories[i].image = {src: urlNotFound};
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].parent != '0') {
+                                if (data[i].image == null) {
+                                    data[i].image = {src: urlNotFound};
                                 }
-                                temp.push(categories[i].image);
+                                temp.push(data[i].image);
                             }
-
                         }
+                        // console.log(temp);
+                        this.setState({images: temp});
                     }
                 })
                 .catch(error => {
@@ -93,8 +95,8 @@ export default class Banner extends Component {
                     // layout={type}
                     loop={true}
                     autoplay={true}
-                    autoplayDelay={500}
-                    autoplayInterval={1500}
+                    autoplayDelay={1000}
+                    autoplayInterval={3000}
                 />
                 <ActivityIndicator
                     animating={this.state.loading}
@@ -114,6 +116,10 @@ export default class Banner extends Component {
             images.push(entity);
         });
         return images;
+    }
+
+    _renderItem({item, index}) {
+        return <SliderEntry data={item} even={(index + 1) % 2 === 0}/>;
     }
 }
 

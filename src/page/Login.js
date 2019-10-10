@@ -65,6 +65,8 @@ export default class Login extends Component {
                 await AsyncStorage.removeItem('cookieUserFromApi');
                 await AsyncStorage.removeItem('userId');
                 await AsyncStorage.removeItem('userInfo');
+                await AsyncStorage.removeItem('cookie');
+                await AsyncStorage.removeItem('_fbAccessToken');
                 console.log("remove session key");
             }
         } catch (error) {
@@ -227,12 +229,17 @@ export default class Login extends Component {
         */
         var user = this.state.username;
         var pass = this.state.password;
-        let statusLogin;
-        let sessionLoginKey;
+
         if (user == null || user == '' || pass == '' || pass == '') {
             this.setState({hasError: true, errorText: 'Cần nhập tên đăng nhập và mật khẩu'});
             return;
         }
+        this.callApiLogin(user, pass);
+    }
+
+    async callApiLogin(user, pass){
+        let statusLogin;
+        let sessionLoginKey;
         try {
             this.setState({isLoading: true});
             await fetch(Config.url + '/api/user/generate_auth_cookie/?username=' + user + '&password=' + pass + '&insecure=cool')
@@ -267,7 +274,6 @@ export default class Login extends Component {
         } else {
             this.setState({hasError: true, errorText: 'Tên đăng nhập hoặc mật khẩu không đúng'});
         }
-
     }
 
 
@@ -276,7 +282,6 @@ export default class Login extends Component {
             alert('Error fetching data: ' + error.toString());
         } else {
             console.log(result);
-            alert(result);
             this.setState({user_name: 'Welcome' + ' ' + result.name});
             this.setState({avatar_url: result.picture.data.url});
             this.setState({avatar_show: true});
@@ -290,17 +295,23 @@ export default class Login extends Component {
         }
     }
 
-    async fetchProfile() {
+    async fetchProfile(token) {
         return new Promise((resolve, reject) => {
             const request = new GraphRequest(
                 '/me',
-                null,
+                {
+                    accessToken: token,
+                    parameters: {
+                        fields: {
+                            string: 'email,name,first_name,middle_name,last_name, picture'
+                        }
+                    }
+                },
                 (error, result) => {
                     if (error) {
                         alert('Error fetching data: ' + error.toString());
                     } else {
                         console.log(result);
-                        alert(result);
                         try {
                             this.setState({user_name: 'Welcome' + ' ' + result.name});
                             this.setState({avatar_url: result.picture.data.url});
@@ -320,38 +331,42 @@ export default class Login extends Component {
     }
 
     async facebookLogin() {
+        const _this = this;
         try {
             // Attempt a login using the Facebook login dialog,
             // asking for default permissions.
             LoginManager.logInWithPermissions(['public_profile']).then(
                 function (result) {
                     if (result.isCancelled) {
-                        alert('Login was cancelled');
+                        alert('Đăng nhập đã bị hủy bỏ');
                     } else {
-                        alert('Login was successful with permissions: '
+                        // alert('Login was successful with permissions: '
+                        //     + result.grantedPermissions.toString());
+                        console.log('Login was successful with permissions: '
                             + result.grantedPermissions.toString());
 
                         AccessToken.getCurrentAccessToken().then(data => {
                             var token = data.accessToken.toString();
                             console.log(token);
                             AsyncStorage.setItem('_fbAccessToken', token);
-                            var infoRequest = new GraphRequest(
-                                '/me',
-                                {
-                                    accessToken: token,
-                                    parameters: {
-                                        fields: {
-                                            string: 'email,name,first_name,middle_name,last_name, picture'
-                                        }
-                                    }
-                                },
-                                this._fbGetResponseInfo.bind(this)
-                            );
+                            // var infoRequest = new GraphRequest(
+                            //     '/me',
+                            //     {
+                            //         accessToken: token,
+                            //         parameters: {
+                            //             fields: {
+                            //                 string: 'email,name,first_name,middle_name,last_name, picture'
+                            //             }
+                            //         }
+                            //     },
+                            //     _this._fbGetResponseInfo
+                            // );
+                            //
+                            // // Start the graph request.
+                            // new GraphRequestManager().addRequest(infoRequest).start();
 
-                            // Start the graph request.
-                            new GraphRequestManager().addRequest(infoRequest).start();
-
-                            var key = new Date();
+                            // _this.fetchProfile(token);
+                            var key = new Date().getTime();
                             var username = '_fb_user_' + key;
                             var name = username;
                             var email = '_fb_user_' + key + '@facebook.com';
@@ -362,8 +377,9 @@ export default class Login extends Component {
                             fb_signup_info['password'] = password;
                             fb_signup_info['email'] = email;
                             AsyncStorage.setItem('_fbSignUpInfo', JSON.stringify(fb_signup_info));
-
-                            this.signup(username, name, email, password);
+                            _this.signup(username, name, email, password);
+                        }).catch(error => {
+                            console.log(error);
                         });
                     }
                 },
@@ -426,6 +442,10 @@ export default class Login extends Component {
 
     async register(nonceKey, username, name, email, password) {
         try {
+            console.log(username);
+            console.log(name);
+            console.log(email);
+            console.log(password);
             await fetch(Config.url + '/api/user/register/?username=' + username + '&display_name='
                 + name + '&email=' + email + '&user_pass='
                 + password + '&nonce=' + nonceKey + '&insecure=cool&notify=both')
@@ -434,7 +454,7 @@ export default class Login extends Component {
                     console.log(responseJson);
                     this.setState({isLoading: false});
                     if (responseJson.status == 'ok') {
-                        Actions.home();
+                        this.callApiLogin(username, password);
                     } else {
                         this.setState({hasError: true, errorText: 'Có lỗi xảy ra : ' + responseJson.error});
                         return;

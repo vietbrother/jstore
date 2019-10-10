@@ -24,7 +24,7 @@ export default class Categories extends Component {
         super(props);
         this.state = {
             categories: [],
-            loading: false
+            isLoading: false
         };
     }
 
@@ -43,7 +43,7 @@ export default class Categories extends Component {
                 .then(data => {
                     // data will contain the body content from the request
                     console.log("get category");
-                    this.setState({categories: data, loading: false});
+                    this.setState({categories: data, isLoading: false});
                 })
                 .catch(error => {
                     // error will return any errors that occur
@@ -87,6 +87,10 @@ export default class Categories extends Component {
         return (
             <Container>
                 <Navbar center={center} right={right} title="ONNI"/>
+                <ActivityIndicator
+                    animating={this.state.isLoading}
+                    color='#bc2b78'
+                    size="large"/>
                 <Content>
                     {this._renderCategories()}
                 </Content>

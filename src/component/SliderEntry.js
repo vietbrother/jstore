@@ -75,7 +75,7 @@ export default class SliderEntry extends Component {
 const styles = {
     slideInnerContainer: {
         width: itemWidth,
-        height: 250,
+        height: 200,
         paddingHorizontal: itemHorizontalMargin,
         // paddingBottom: 18 // needed for shadow
     },

@@ -4,7 +4,7 @@
 
 // React native and others libraries imports
 import React, {Component} from 'react';
-import {Image, ActivityIndicator, AsyncStorage, ScrollView, StyleSheet, TouchableOpacity, Linking} from 'react-native';
+import {Image, ActivityIndicator, AsyncStorage, ScrollView, StyleSheet, TouchableOpacity, Linking, FlatList} from 'react-native';
 import {View, Col, Icon, Card, CardItem, Body, Button, Grid} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 
@@ -34,7 +34,7 @@ export default class ProductsList extends Component {
     _fetchProductsData() {
         this.setState({loading: true});
         global.WooCommerceAPI.get('products', {
-
+            per_page: 24
         })
             .then(data => {
                 console.log("=============================ProductsList Fetch API-----------------");
@@ -57,8 +57,25 @@ export default class ProductsList extends Component {
                     color = '#bc2b78'
                     size = "large" />
                 {this._renderListProducts()}
+                {/*<View style={style.container}>*/}
+                    {/*<FlatList*/}
+                        {/*style={{width: '100%'}}*/}
+                        {/*data={this.state.products}*/}
+                        {/*renderItem={({item}) => this._renderItemResult(item)}*/}
+                    {/*/>*/}
+                {/*</View>*/}
 
             </Card>
+        );
+    }
+    _renderItemResult(item){
+        var key = new Date();
+        return (
+            <View style={style.item}>
+                <Product key={key + '_' + item.id} product={item}
+                         categoryId={item.categories[0].id}
+                         categoryName={item.categories[0].name}/>
+            </View>
         );
     }
 
@@ -153,9 +170,11 @@ const style = {
         flex: 1,
         flexDirection: 'row',
         flexWrap: 'wrap',
-        alignItems: 'flex-start' // if you want to fill rows left to right
+        alignItems: 'flex-start', // if you want to fill rows left to right,
+        paddingLeft: 10,
+        paddingRight: 10
     },
     item: {
-        width: '50%' // is 50% of container width
+        width: 160 // is 50% of container width
     },
 }

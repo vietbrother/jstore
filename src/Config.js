@@ -37,7 +37,7 @@ function wp(percentage) {
 }
 
 const bannerHeight = viewportHeight * 0.26;
-const slideHeight = viewportHeight * 0.36;
+const slideHeight = viewportHeight * 0.26;
 const slideWidth = wp(80);
 const itemHorizontalMargin = wp(2);
 

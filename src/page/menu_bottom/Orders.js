@@ -121,10 +121,9 @@ export default class Orders extends Component {
         if (this.state.userId == null || this.state.userId == '') {
             return (
                 <Button style={styles.buttonLogin} onPress={() => Actions.login()}>
-                    <CardItem>
-                        <Icon style={{fontSize: 18}} name='md-log-in'/>
-                        <Text>Đăng nhập</Text>
-                    </CardItem>
+                    <Text style={{color: 'white', fontSize: 18, alignItems: 'center'}}>
+                        <Icon style={{fontSize: 18, color: 'white'}} name='md-log-in'/>
+                        Đăng nhập</Text>
                 </Button>
             );
 
