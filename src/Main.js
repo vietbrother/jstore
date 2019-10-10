@@ -42,6 +42,7 @@ import Orders from "./page/menu_bottom/Orders";
 import Categories from "./page/menu_bottom/Categories";
 import WishList from './page/menu_bottom/WishList';
 import Profile from './page/menu_bottom/Profile';
+import CategoryDetail from './page/menu_bottom/CategoryDetail';
 
 export default class Main extends Component {
 
@@ -102,6 +103,7 @@ export default class Main extends Component {
             <Scene key="orderItem" component={OrderItem} hideNavBar />
             <Scene key="profile" component={Profile} hideNavBar />
             <Scene key="categories" component={Categories} hideNavBar />
+            <Scene key="categoryDetail" component={CategoryDetail} hideNavBar />
           </Scene>
         </Router>
       </Root>

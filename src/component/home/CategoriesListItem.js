@@ -31,7 +31,7 @@ export default class CategoriesListItem extends Component {
     }
 
     _onPress() {
-        Actions.category({id: this.props.id, title: this.props.title});
+        Actions.categoryDetail({id: this.props.id, title: this.props.title});
     }
 }
 
