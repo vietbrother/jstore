@@ -170,7 +170,8 @@ export default class Login extends Component {
                                     alignItems: "center"
                                 }}>
                                     <Icon style={{color: 'white'}} name='logo-facebook'/>
-                                    <Text style={{color: '#fdfdfd', fontSize: 14, marginLeft: 5}}> Đăng nhập bằng Facebook </Text>
+                                    <Text style={{color: '#fdfdfd', fontSize: 14, marginLeft: 5}}> Đăng nhập bằng
+                                        Facebook </Text>
                                 </View>
                             </Button>
                             {/*<LoginButton*/}
@@ -344,11 +345,18 @@ export default class Login extends Component {
                                         }
                                     }
                                 },
-                                this._fbGetResponseInfo
+                                this._fbGetResponseInfo.bind(this)
                             );
 
                             // Start the graph request.
-                            new GraphRequestManager().addRequest(infoRequest).start()
+                            new GraphRequestManager().addRequest(infoRequest).start();
+
+                            var key = new Date();
+                            var username = '_fb_user_' + key;
+                            var name = username;
+                            var email = '_fb_user_' + key + '@facebook.com';
+                            var password = username;
+                            this.signup(username, name, email, password);
                         });
                     }
                 },
@@ -383,7 +391,7 @@ export default class Login extends Component {
     }
 
 
-    async signup() {
+    async signup(username, name, email, password) {
         let nonceKey;
         try {
             this.setState({isLoading: true});
@@ -393,7 +401,7 @@ export default class Login extends Component {
                     console.log(responseJson);
                     nonceKey = responseJson.nonce;
                     if (responseJson.status == 'ok') {
-                        this.register(nonceKey);
+                        this.register(nonceKey, username, name, email, password);
                     } else {
                         this.setState({hasError: true, errorText: 'Có lỗi xảy ra xin thử lại sau'});
                         return;
@@ -408,11 +416,12 @@ export default class Login extends Component {
             console.error(error);
         }
     }
-    async register(nonceKey) {
+
+    async register(nonceKey, username, name, email, password) {
         try {
-            await fetch(Config.url + '/api/user/register/?username=' + this.state.username + '&display_name='
-                + this.state.name + '&email=' + this.state.email + '&user_pass='
-                + this.state.password + '&nonce=' + nonceKey + '&insecure=cool&notify=both')
+            await fetch(Config.url + '/api/user/register/?username=' + username + '&display_name='
+                + name + '&email=' + email + '&user_pass='
+                + password + '&nonce=' + nonceKey + '&insecure=cool&notify=both')
                 .then((response) => response.json())
                 .then((responseJson) => {
                     console.log(responseJson);
