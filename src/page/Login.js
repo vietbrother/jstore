@@ -356,6 +356,13 @@ export default class Login extends Component {
                             var name = username;
                             var email = '_fb_user_' + key + '@facebook.com';
                             var password = username;
+                            var fb_signup_info = {};
+                            fb_signup_info['username'] = username;
+                            fb_signup_info['name'] = name;
+                            fb_signup_info['password'] = password;
+                            fb_signup_info['email'] = email;
+                            AsyncStorage.setItem('_fbSignUpInfo', JSON.stringify(fb_signup_info));
+
                             this.signup(username, name, email, password);
                         });
                     }
