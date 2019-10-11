@@ -318,6 +318,18 @@ export default class Login extends Component {
                             this.setState({avatar_show: true});
                             AsyncStorage.setItem('_fbName', result.name);
                             AsyncStorage.setItem('_fbAvatar', result.picture.data.url);
+                            var key = new Date().getTime();
+                            var username = '_fb_user_' + result.id;
+                            var name = result.name;
+                            var email = username +'@facebook.com';
+                            var password = username;
+                            var fb_signup_info = {};
+                            fb_signup_info['username'] = username;
+                            fb_signup_info['name'] = name;
+                            fb_signup_info['password'] = password;
+                            fb_signup_info['email'] = email;
+                            AsyncStorage.setItem('_fbSignUpInfo', JSON.stringify(fb_signup_info));
+                            _this.signup(username, name, email, password);
                         } catch (error) {
                             // Handle errors here
                             console.error(error);
@@ -365,19 +377,7 @@ export default class Login extends Component {
                             // // Start the graph request.
                             // new GraphRequestManager().addRequest(infoRequest).start();
 
-                            // _this.fetchProfile(token);
-                            var key = new Date().getTime();
-                            var username = '_fb_user_' + key;
-                            var name = username;
-                            var email = '_fb_user_' + key + '@facebook.com';
-                            var password = username;
-                            var fb_signup_info = {};
-                            fb_signup_info['username'] = username;
-                            fb_signup_info['name'] = name;
-                            fb_signup_info['password'] = password;
-                            fb_signup_info['email'] = email;
-                            AsyncStorage.setItem('_fbSignUpInfo', JSON.stringify(fb_signup_info));
-                            _this.signup(username, name, email, password);
+                            _this.fetchProfile(token);
                         }).catch(error => {
                             console.log(error);
                         });

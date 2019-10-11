@@ -68,7 +68,13 @@ export default class Profile extends Component {
     }
 
     _renderMainContent() {
-        var items = []
+        var items = [];
+
+        AsyncStorage.getItem('_fbName', (err, res) => {
+            if (res) {
+                this.setState({name: res});
+            }
+        });
         if ((this.state.cookie == null || this.state.cookie == '') && (this.state.accessToken == null || this.state.accessToken == '')) {
             return (
                 <Button style={styles.buttonLogin} onPress={() => Actions.login()}>
@@ -85,6 +91,7 @@ export default class Profile extends Component {
                         <TouchableOpacity style={styles.content} onPress={() => Actions.login()}>
                             <CardItem>
                                 <Icon style={{color: '#2f55a4'}} name='logo-facebook'/>
+                                <Text>{this.state.name}</Text>
                             </CardItem>
                         </TouchableOpacity>
                     </Left>
