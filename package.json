@@ -11,7 +11,7 @@
     "native-base": "2.7.2",
     "oauth-1.0a": "^2.2.2",
     "react": "16.4.1",
-    "react-native": "0.55.4",
+    "react-native": "0.70.2",
     "react-native-drawer": "^2.5.0",
     "react-native-fbsdk": "^1.0.4",
     "react-native-image-gallery": "2.1.5",
